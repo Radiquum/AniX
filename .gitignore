@@ -1,0 +1,9 @@
+# Python
+__pycache__
+venv
+
+# VSCode
+.VSCode
+
+# NextJS
+node_modules

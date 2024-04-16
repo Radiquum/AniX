@@ -1,0 +1,4 @@
+requests == 2.31.0
+fastAPI == 0.110.1
+uvicorn[standard]
+pre-commit
