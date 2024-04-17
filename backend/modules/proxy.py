@@ -8,6 +8,7 @@ ENDPOINTS = {
     "release": f"{API_URL}/release",
     "profile": f"{API_URL}/profile",
     "filter": f"{API_URL}/filter",
+    "auth": f"{API_URL}/auth/signIn",
 }
 USER_AGENT = "AnixartApp/8.2.1-23121216 (Android 11; SDK 30; arm64-v8a;)"
 
