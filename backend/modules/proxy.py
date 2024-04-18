@@ -9,6 +9,14 @@ ENDPOINTS = {
     "profile": f"{API_URL}/profile",
     "filter": f"{API_URL}/filter",
     "auth": f"{API_URL}/auth/signIn",
+    "user": {
+        "history": f"{API_URL}/history",
+        "watching": f"{API_URL}/profile/list/all/1",
+        "planned": f"{API_URL}/profile/list/all/2",
+        "watched": f"{API_URL}/profile/list/all/3",
+        "delayed": f"{API_URL}/profile/list/all/4",
+        "abandoned": f"{API_URL}/profile/list/all/5",
+    },
 }
 USER_AGENT = "AnixartApp/8.2.1-23121216 (Android 11; SDK 30; arm64-v8a;)"
 

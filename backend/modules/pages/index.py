@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 from fastapi import APIRouter
 from fastapi import Request
@@ -8,10 +9,9 @@ from modules.proxy import ENDPOINTS
 router = APIRouter()
 
 
-# TODO: Add filters?
-@router.post("/index", summary="Get main page")
-async def GetMainPage(request: Request, page: int = 0):
-
+async def GetMainPageFilter(
+    request: Request, page: int = 0, status_id: Union[None, int] = None
+):
     data = json.dumps(
         {
             "country": None,
@@ -28,10 +28,29 @@ async def GetMainPage(request: Request, page: int = 0):
             "genres": [],
             "profile_list_exclusions": [],
             "start_year": None,
-            "status_id": None,
+            "status_id": status_id,
             "types": [],
             "is_genres_exclude_mode_enabled": False,
         }
     )
-
     return await apiRequest(request, ENDPOINTS["filter"], page, data=data)
+
+
+@router.post("/last", summary="Get new releases")
+async def GetMainPage(request: Request, page: int = 0):
+    return await GetMainPageFilter(request, page, None)
+
+
+@router.post("/ongoing", summary="Get ongoing releases")
+async def GetOngoingPage(request: Request, page: int = 0):
+    return await GetMainPageFilter(request, page, 2)
+
+
+@router.post("/announce", summary="Get announced releases")
+async def GetAnnouncePage(request: Request, page: int = 0):
+    return await GetMainPageFilter(request, page, 3)
+
+
+@router.post("/finished", summary="Get finished releases")
+async def GetFinishedPage(request: Request, page: int = 0):
+    return await GetMainPageFilter(request, page, 1)
