@@ -5,7 +5,10 @@ from fastapi import Request
 
 API_URL = "https://api.anixart.tv"
 ENDPOINTS = {
-    "release": f"{API_URL}/release",
+    "release": {
+        "info": f"{API_URL}/release",
+        "episode": f"{API_URL}/episode",
+    },
     "profile": f"{API_URL}/profile",
     "filter": f"{API_URL}/filter",
     "auth": f"{API_URL}/auth/signIn",
@@ -16,6 +19,11 @@ ENDPOINTS = {
         "watched": f"{API_URL}/profile/list/all/3",
         "delayed": f"{API_URL}/profile/list/all/4",
         "abandoned": f"{API_URL}/profile/list/all/5",
+    },
+    "search": f"{API_URL}/search/releases",
+    "statistic": {
+        "addHistory": f"{API_URL}/history/add",
+        "markWatched": f"{API_URL}/episode/watch",
     },
 }
 USER_AGENT = "AnixartApp/8.2.1-23121216 (Android 11; SDK 30; arm64-v8a;)"
