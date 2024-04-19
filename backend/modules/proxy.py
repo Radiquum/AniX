@@ -43,7 +43,7 @@ async def apiRequest(
         "Content-Type": "application/json; charset=UTF-8",
     }
 
-    if request.method == "POST":
+    if data is not None or request.method == "POST":
         r = requests.post(
             # noqa: E501
             f"{endpoint}/{path}{query}",

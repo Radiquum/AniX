@@ -1,16 +1,21 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+/* * {
+  margin: 0;
+  padding: 0;
+}
 
 body {
   min-height: 100dvh;
-}
+} */
 
-@layer utilities {
+/* @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
+} */
 
 body, nav.left{
   transition: background .2s;

@@ -36,21 +36,21 @@ async def GetMainPageFilter(
     return await apiRequest(request, ENDPOINTS["filter"], page, data=data)
 
 
-@router.post("/last", summary="Get new releases")
+@router.get("/last", summary="Get new releases")
 async def GetMainPage(request: Request, page: int = 0):
     return await GetMainPageFilter(request, page, None)
 
 
-@router.post("/ongoing", summary="Get ongoing releases")
+@router.get("/ongoing", summary="Get ongoing releases")
 async def GetOngoingPage(request: Request, page: int = 0):
     return await GetMainPageFilter(request, page, 2)
 
 
-@router.post("/announce", summary="Get announced releases")
+@router.get("/announce", summary="Get announced releases")
 async def GetAnnouncePage(request: Request, page: int = 0):
     return await GetMainPageFilter(request, page, 3)
 
 
-@router.post("/finished", summary="Get finished releases")
+@router.get("/finished", summary="Get finished releases")
 async def GetFinishedPage(request: Request, page: int = 0):
     return await GetMainPageFilter(request, page, 1)
