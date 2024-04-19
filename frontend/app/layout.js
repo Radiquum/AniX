@@ -1,21 +1,16 @@
 import "./globals.css";
 import "beercss";
-import "material-dynamic-colors";
-
-import { NavigationRail } from "@/components/NavigationRail";
+import {App} from "@/app/App"
 
 export const metadata = {
   title: "AniX",
-  description: "Unofficial web app for anixart",
+  description: "Неофициальное веб приложение для anixart",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <NavigationRail />
-        <main className="responsive">{children}</main>
-      </body>
+    <html lang="ru">
+      <App>{children}</App>
     </html>
   );
 }
