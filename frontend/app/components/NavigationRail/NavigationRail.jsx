@@ -45,7 +45,7 @@ export const NavigationRail = () => {
         <div>share</div>
       </a> */}
       <span className="max"></span>
-      <button className="circle transparent end-align" onClick={() => themeStore.changeTheme(themeStore.theme == "dark" ? "light" : "dark")}>
+      <button className="circle transparent" onClick={() => themeStore.changeTheme(themeStore.theme == "dark" ? "light" : "dark")}>
         <i>palette</i>
       </button>
     </nav>

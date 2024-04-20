@@ -8,8 +8,8 @@ export const ReleaseCard = (props) => {
       <article className="no-padding round fill" style={{"aspectRatio": "9/16"}}>
         <img className="responsive large top-round" src={props.poster} />
         <div className="padding">
-          <h6>{props.title}</h6>
-          <p>{props.description}</p>
+          <h6>{`${props.title.substring(0, 36)}${[...props.title].length > 36 ? "..." : ""}`}</h6>
+          <p>{`${props.description}${[...props.description].length > 160 ? "..." : ""}`}</p>
         </div>
       </article>
     </Link>
