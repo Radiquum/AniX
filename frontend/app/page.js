@@ -30,11 +30,11 @@ export default function Home() {
   useEffect(() => {
     setList(searchParams.get("list") || "last");
   }, []);
-  
+
   async function fetchData(list, page = 0) {
     const url = `${endpoints.index[list]}?page=${page}`;
     const data = await getData(url);
-  
+
     // Handle initial load (page 0) or subsequent pagination
     if (page === 0) {
       setReleases(data.content);
@@ -49,7 +49,7 @@ export default function Home() {
     setPage(0);
     fetchData(list); // Call fetchData here
   }, [list]);
-  
+
   useEffect(() => {
     if (list && releases) {
       fetchData(list, page); // Use fetchData for pagination
