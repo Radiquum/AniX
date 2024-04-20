@@ -92,22 +92,27 @@ export default function Home() {
           <span>завершено</span>
         </button>
       </div>
+      {releases ? (
+        <>
+          <div className="grid">
+            <CardList data={releases} />
+          </div>
 
-      <div className="grid">
-        {releases ? <CardList data={releases} /> : <progress></progress>}
-      </div>
-
-      <nav className="large-margin center-align">
-        <button
-          className="large"
-          onClick={() => {
-            setPage(page + 1);
-          }}
-        >
-          <i>add</i>
-          <span>загрузить ещё</span>
-        </button>
-      </nav>
+          <nav className="large-margin center-align">
+            <button
+              className="large"
+              onClick={() => {
+                setPage(page + 1);
+              }}
+            >
+              <i>add</i>
+              <span>загрузить ещё</span>
+            </button>
+          </nav>
+        </>
+      ) : (
+        <progress className="s1"></progress>
+      )}
     </>
   );
 }
