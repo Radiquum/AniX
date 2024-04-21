@@ -20,38 +20,37 @@ export const ColorPicker = (props) => {
   const [mode, setMode] = useState(ui("mode"));
 
   return (
-    <dialog className="active">
-      <h5>Выбор темы</h5>
-      <div className="grid center-align">
-        {colors.map((item) => {
-          return (
-            <button
-              key={item.color}
-              className={`circle small ${item.color} s2`}
-              onClick={() => props.theme(item.hex)}
-            ></button>
-          );
-        })}
-      </div>
-      <div className="medium-divider"></div>
-      <nav>
-        <button
-          className={`circle small transparent`}
-          onClick={() => {
-            props.mode();
-            setMode(ui("mode"));
-          }}
-        >
-          {mode == "light" ? <i>dark_mode</i> : <i>light_mode</i>}
-        </button>
-        <span className="max"></span>
-        <button
-          className={`circle small transparent `}
-          onClick={() => props.setColorPicker(!props.colorPicker)}
-        >
-          <i>close</i>
-        </button>
-      </nav>
-    </dialog>
+      <dialog className="active left round bottom small" style={{blockSize: "unset"}}>
+        <h5>Выбор темы</h5>
+        <div className="grid center-align">
+          {colors.map((item) => {
+            return (
+              <button
+                key={item.color}
+                className={`circle border small ${item.color} s2`}
+                onClick={() => props.theme(item.hex)}
+              ></button>
+            );
+          })}
+        </div>
+        <div className="medium-divider"></div>
+        <nav>
+          <button
+            className={`circle small transparent`}
+            onClick={() => {
+              props.mode();
+              setMode(ui("mode"));
+            }}
+          >
+            {mode == "light" ? <i>dark_mode</i> : <i>light_mode</i>}
+          </button>
+          <button
+            className={`circle small transparent `}
+            onClick={() => props.setColorPicker(!props.colorPicker)}
+          >
+            <i>close</i>
+          </button>
+        </nav>
+      </dialog>
   );
 };
