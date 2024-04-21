@@ -34,14 +34,21 @@ export const App = (props) => {
 
   return (
     <body>
-      <NavigationRail
-        colorPicker={colorPicker}
-        setColorPicker={setColorPicker}
-      />
-      <main className="responsive">
-        {colorPicker && <ColorPicker mode={mode} theme={theme} />}
-        {props.children}
-      </main>
+      <div>
+        <NavigationRail
+          colorPicker={colorPicker}
+          setColorPicker={setColorPicker}
+        />
+        {colorPicker && (
+          <ColorPicker
+            mode={mode}
+            theme={theme}
+            colorPicker={colorPicker}
+            setColorPicker={setColorPicker}
+          />
+        )}
+      </div>
+      <main className="responsive">{props.children}</main>
     </body>
   );
 };

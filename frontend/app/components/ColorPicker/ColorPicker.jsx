@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Styles from "./ColorPicker.module.css"
+import Styles from "./ColorPicker.module.css";
 
 export const ColorPicker = (props) => {
   const colors = [
@@ -13,15 +13,15 @@ export const ColorPicker = (props) => {
     { hex: "#9c27b0", color: "purple" },
     { hex: "#673ab7", color: "deep-purple" },
     { hex: "#ffeb3b", color: "yellow" },
-    { hex: "#ffc8ff", color: Styles["radiquum-pink"]},
-    { hex: "#0087c7", color: Styles["fuxigen-blue"]},
-    { hex: "#e54040", color: Styles["anixart-red"]},
+    { hex: "#ffc8ff", color: Styles["radiquum-pink"] },
+    { hex: "#0087c7", color: Styles["fuxigen-blue"] },
+    { hex: "#e54040", color: Styles["anixart-red"] },
   ];
   const [mode, setMode] = useState(ui("mode"));
 
   return (
     <dialog className="active">
-      <h5>Theme Select</h5>
+      <h5>Выбор темы</h5>
       <div className="grid center-align">
         {colors.map((item) => {
           return (
@@ -34,15 +34,24 @@ export const ColorPicker = (props) => {
         })}
       </div>
       <div className="medium-divider"></div>
-      <button
-        className={`circle small transparent`}
-        onClick={() => {
-          props.mode();
-          setMode(ui("mode"));
-        }}
-      >
-        {mode == "light" ? <i>dark_mode</i> : <i>light_mode</i>}
-      </button>
+      <nav>
+        <button
+          className={`circle small transparent`}
+          onClick={() => {
+            props.mode();
+            setMode(ui("mode"));
+          }}
+        >
+          {mode == "light" ? <i>dark_mode</i> : <i>light_mode</i>}
+        </button>
+        <span className="max"></span>
+        <button
+          className={`circle small transparent `}
+          onClick={() => props.setColorPicker(!props.colorPicker)}
+        >
+          <i>close</i>
+        </button>
+      </nav>
     </dialog>
   );
 };
