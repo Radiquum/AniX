@@ -3,7 +3,7 @@
 import { getData } from "@/app/api/api-utils";
 import { endpoints } from "@/app/api/config";
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CardList } from "@/app/components/CardList/CardList";
 import { useSearchParams } from "next/navigation";
 
@@ -16,10 +16,12 @@ export function getSearches() {
 
 export default function Search() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [releases, setReleases] = useState();
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
+
   const [searches, setSearches] = useState(JSON.parse(getSearches()));
 
   const searchParams = useSearchParams();
@@ -44,6 +46,14 @@ export default function Search() {
       setReleases([...releases, ...data.content]);
     }
   }
+
+  useEffect(() => {
+    const query = searchParams.get("query");
+    if (query) {
+      setQuery(query);
+      fetchData(query, 0);
+    }
+  }, []);
 
   useEffect(() => {
     if (releases) {
