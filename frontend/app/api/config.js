@@ -7,4 +7,5 @@ export const endpoints = {
         announce: `${API_URL}/index/announce`,
         finished: `${API_URL}/index/finished`,
     },
+    search: `${API_URL}/search`
 }; 

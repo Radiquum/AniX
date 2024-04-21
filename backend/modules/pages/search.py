@@ -8,7 +8,7 @@ from modules.proxy import ENDPOINTS
 router = APIRouter()
 
 
-@router.post("", summary="Search for a release")
+@router.get("", summary="Search for a release")
 async def Search(request: Request, query: str, page: int = 0):
     data = json.dumps({"query": query, "searchBy": 0})
     return await apiRequest(request, ENDPOINTS["search"], page, data=data)

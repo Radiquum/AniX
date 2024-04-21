@@ -3,9 +3,22 @@
 import "beercss";
 import "material-dynamic-colors";
 import { NavigationRail } from "@/app/components/NavigationRail/NavigationRail";
-import { setTheme, getTheme, setMode, getMode } from "./store/theme-store";
 import { useEffect, useState } from "react";
 import { ColorPicker } from "@/app/components/ColorPicker/ColorPicker";
+
+export function setMode(mode) {
+  localStorage.setItem("mode", mode);
+}
+export function getMode() {
+  return localStorage.getItem("mode");
+}
+
+export function setTheme(theme) {
+  localStorage.setItem("theme", theme);
+}
+export function getTheme() {
+  return localStorage.getItem("theme");
+}
 
 export const App = (props) => {
   const [colorPicker, setColorPicker] = useState(false);
