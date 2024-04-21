@@ -28,7 +28,12 @@ export default function Home() {
 
   // set list on initial page load
   useEffect(() => {
-    setList(searchParams.get("list") || "last");
+    const query = searchParams.get("list");
+    if (query) {
+      setList(query);
+    } else {
+      setList("last");
+    }
   }, []);
 
   async function fetchData(list, page = 0) {
@@ -44,10 +49,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    router.push(pathname + "?" + createQueryString("list", list));
-    setReleases(null);
-    setPage(0);
-    fetchData(list); // Call fetchData here
+    if (list) {
+      router.push(pathname + "?" + createQueryString("list", list));
+      setReleases(null);
+      setPage(0);
+      fetchData(list); // Call fetchData here
+    }
   }, [list]);
 
   useEffect(() => {
@@ -81,6 +88,7 @@ export default function Home() {
         {chips.map((item) => {
           return (
             <button
+              key={item.list}
               className={`chip ${list == item.list ? "fill" : ""}`}
               onClick={() => {
                 setList(item.list);

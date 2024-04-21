@@ -1,5 +1,4 @@
 import "./globals.css";
-import "beercss";
 import {App} from "@/app/App"
 
 export const metadata = {

@@ -1,12 +1,38 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useThemeStore } from "@/app/store/theme-store";
 import Link from "next/link";
 
-export const NavigationRail = () => {
+export const NavigationRail = (props) => {
   const pathname = usePathname();
-  const themeStore = useThemeStore();
+
+  const items = [
+    {
+      title: "Домашняя",
+      icon: "home",
+      path: "/",
+    },
+    {
+      title: "Поиск",
+      icon: "search",
+      path: "/search",
+    },
+    {
+      title: "Закладки",
+      icon: "bookmark",
+      path: "/bookmarks",
+    },
+    {
+      title: "Избранное",
+      icon: "favorite",
+      path: "/favorites",
+    },
+    {
+      title: "История",
+      icon: "history",
+      path: "/history",
+    },
+  ];
 
   return (
     <nav className="left">
@@ -14,40 +40,27 @@ export const NavigationRail = () => {
         <img className="responsive" src="/favicon.ico"></img>
       </button>
 
-      <Link href="/" className={pathname == "/" ? "active" : ""}>
-        <i>home</i>
-        <div>Домашняя</div>
-      </Link>
-      <Link href="/search" className={pathname == "/search" ? "active" : ""}>
-        <i>search</i>
-        <div>Поиск</div>
-      </Link>
-      <Link
-        href="/bookmarks"
-        className={pathname == "/bookmarks" ? "active" : ""}
-      >
-        <i>bookmark</i>
-        <div>Закладки</div>
-      </Link>
-      <Link
-        href="/favorites"
-        className={pathname == "/favorites" ? "active" : ""}
-      >
-        <i>favorite</i>
-        <div>Избранное</div>
-      </Link>
-      <Link href="/history" className={pathname == "/history" ? "active" : ""}>
-        <i>history</i>
-        <div>История</div>
-      </Link>
-      {/* <a>
-        <i>share</i>
-        <div>share</div>
-      </a> */}
+      {items.map((item) => {
+        return (
+          <Link
+            key={item.path}
+            href={item.path}
+            className={pathname == item.path ? "active" : ""}
+          >
+            <i>{item.icon}</i>
+            <div>{item.title}</div>
+          </Link>
+        );
+      })}
+
       <span className="max"></span>
-      <button className="circle transparent" onClick={() => themeStore.changeTheme(themeStore.theme == "dark" ? "light" : "dark")}>
+      <button
+        className="circle transparent"
+        onClick={() => props.setColorPicker(!props.colorPicker)}
+      >
         <i>palette</i>
       </button>
+
     </nav>
   );
 };
