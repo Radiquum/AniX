@@ -17,7 +17,8 @@ body {
   }
 } */
 
-body, nav.left{
+body, nav.left, main{
   transition: background .2s;
   transform-origin: left;
+  min-height: 100dvh;
 }
