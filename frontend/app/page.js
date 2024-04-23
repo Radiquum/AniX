@@ -34,6 +34,7 @@ export default function Home() {
     } else {
       setList("last");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchData(list, page = 0) {
@@ -55,12 +56,14 @@ export default function Home() {
       setPage(0);
       fetchData(list); // Call fetchData here
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
   useEffect(() => {
     if (list && releases) {
       fetchData(list, page); // Use fetchData for pagination
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const chips = [

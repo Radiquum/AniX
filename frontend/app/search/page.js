@@ -53,12 +53,14 @@ export default function Search() {
       setQuery(query);
       fetchData(query, 0);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (releases) {
       fetchData(query, page); // Use fetchData for pagination
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleInput = (e) => {

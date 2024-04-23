@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export const NavigationRail = (props) => {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ export const NavigationRail = (props) => {
   return (
     <nav className="left">
       <button className="circle transparent ">
-        <img className="responsive" src="/favicon.ico"></img>
+        <Image className="responsive" src="/favicon.ico" alt="Ваш профиль" />
       </button>
 
       {items.map((item) => {

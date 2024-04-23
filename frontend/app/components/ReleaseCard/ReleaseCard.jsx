@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export const ReleaseCard = (props) => {
   return (
@@ -9,7 +10,11 @@ export const ReleaseCard = (props) => {
         className="no-padding round fill"
         style={{ width: 284, height: 508 }}
       >
-        <img className="responsive large top-round" src={props.poster} />
+        <Image
+          className="responsive large top-round"
+          src={props.poster}
+          alt=""
+        />
         <div className="padding">
           <h6>{`${props.title.substring(0, 36)}${
             [...props.title].length > 36 ? "..." : ""
