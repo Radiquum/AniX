@@ -7,10 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { CardList } from "@/app/components/CardList/CardList";
 import { useSearchParams } from "next/navigation";
 
-export function saveSearches(search) {
+function saveSearches(search) {
   localStorage.setItem("searches", search);
 }
-export function getSearches() {
+function getSearches() {
   return localStorage.getItem("searches");
 }
 

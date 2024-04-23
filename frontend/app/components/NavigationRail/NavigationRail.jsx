@@ -38,7 +38,13 @@ export const NavigationRail = (props) => {
   return (
     <nav className="left">
       <button className="circle transparent ">
-        <Image className="responsive" src="/favicon.ico" alt="Ваш профиль" />
+        <Image
+          className="responsive"
+          src="/favicon.ico"
+          alt="Ваш профиль"
+          width="64"
+          height="64"
+        />
       </button>
 
       {items.map((item) => {
