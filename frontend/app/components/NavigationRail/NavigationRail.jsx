@@ -3,9 +3,13 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useUserStore } from "@/app/store/user-store";
+import { useRouter } from "next/navigation";
 
 export const NavigationRail = (props) => {
   const pathname = usePathname();
+  const userStore = useUserStore();
+  const router = useRouter();
 
   const items = [
     {
@@ -37,15 +41,26 @@ export const NavigationRail = (props) => {
 
   return (
     <nav className="left">
-      <button className="circle transparent ">
-        <Image
-          className="responsive"
-          src="/favicon.ico"
-          alt="Ваш профиль"
-          width="64"
-          height="64"
-        />
-      </button>
+      {userStore.isAuth && userStore.user ? (
+        <Link className="circle transparent " href="/profile">
+          <Image
+            className="responsive"
+            src={userStore.user.profile.avatar}
+            alt="Ваш профиль"
+            width="64"
+            height="64"
+          />
+        </Link>
+      ) : (
+        <button
+          className="circle transparent"
+          onClick={() => {
+            router.push("/login");
+          }}
+        >
+          <i className="responsive">login</i>
+        </button>
+      )}
 
       {items.map((item) => {
         return (
@@ -67,6 +82,17 @@ export const NavigationRail = (props) => {
       >
         <i>palette</i>
       </button>
+
+      {userStore.isAuth ? (
+        <button
+          className="circle transparent"
+          onClick={() => userStore.logout()}
+        >
+          <i>logout</i>
+        </button>
+      ) : (
+        ""
+      )}
     </nav>
   );
 };

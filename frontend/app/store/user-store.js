@@ -7,20 +7,24 @@ export const useUserStore = create((set, get) => ({
   isAuth: false,
   user: null,
   token: null,
-  login: (user, token) => {
+
+  login: (user, token, user_id) => {
     set({ isAuth: true, user, token });
-    setJWT(token);
+    setJWT(token, user_id);
   },
   logout: () => {
     set({ isAuth: false, user: null, token: null });
     removeJWT();
   },
-  checkAuth: async (user_id) => {
+  checkAuth: async () => {
     const jwt = getJWT();
     if (jwt) {
-      const me = await getMe(`${endpoints.profile}/${user_id}`, jwt);
+      const me = await getMe(
+        `${endpoints.user.profile}/${jwt.user_id}`,
+        jwt.jwt,
+      );
       if (me.is_my_profile) {
-        get().login(me, jwt);
+        get().login(me, jwt.jwt, jwt.user_id);
       } else {
         get().logout();
       }

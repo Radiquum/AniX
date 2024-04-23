@@ -8,4 +8,8 @@ export const endpoints = {
     finished: `${API_URL}/index/finished`,
   },
   search: `${API_URL}/search`,
+  user: {
+    profile: `${API_URL}/profile`,
+    auth: `${API_URL}/auth`,
+  },
 };

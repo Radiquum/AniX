@@ -1,20 +1,21 @@
-from typing import Annotated
-
 import requests
 from fastapi import APIRouter
-from fastapi import Form
-from fastapi import Request
 from modules.proxy import ENDPOINTS
 from modules.proxy import USER_AGENT
+from pydantic import BaseModel
+
+
+class User(BaseModel):
+    email: str
+    password: str
+
 
 router = APIRouter()
 
 
 @router.post("", summary="logging in")
 async def userSignIn(
-    request: Request,
-    email: Annotated[str, Form()],
-    password: Annotated[str, Form()],
+    user: User,
     short: bool = False,
 ):
     headers = {
@@ -26,7 +27,7 @@ async def userSignIn(
         # noqa: E501
         f"{ENDPOINTS['auth']}",
         headers=headers,
-        data={"login": email, "password": password},
+        data={"login": user.email, "password": user.password},
     )
     if r.status_code != 200:
         return {"error": r.text}

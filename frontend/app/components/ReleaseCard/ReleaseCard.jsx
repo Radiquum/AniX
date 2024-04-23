@@ -24,8 +24,8 @@ export const ReleaseCard = (props) => {
           <h6>{`${props.title.substring(0, 30)}${
             [...props.title].length > 30 ? "..." : ""
           }`}</h6>
-          <p>{`${props.description}${
-            [...props.description].length > 160 ? "..." : ""
+          <p>{`${props.description.substring(0, 150)}${
+            [...props.description].length > 150 ? "..." : ""
           }`}</p>
         </div>
       </article>

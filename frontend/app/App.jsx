@@ -5,23 +5,25 @@ import "material-dynamic-colors";
 import { NavigationRail } from "@/app/components/NavigationRail/NavigationRail";
 import { useEffect, useState } from "react";
 import { ColorPicker } from "@/app/components/ColorPicker/ColorPicker";
+import { useUserStore } from "./store/user-store";
 
-export function setMode(mode) {
+function setMode(mode) {
   localStorage.setItem("mode", mode);
 }
-export function getMode() {
+function getMode() {
   return localStorage.getItem("mode");
 }
 
-export function setTheme(theme) {
+function setTheme(theme) {
   localStorage.setItem("theme", theme);
 }
-export function getTheme() {
+function getTheme() {
   return localStorage.getItem("theme");
 }
 
 export const App = (props) => {
   const [colorPicker, setColorPicker] = useState(false);
+  const userStore = useUserStore();
 
   const theme = async (from) => {
     setTheme(from);
@@ -43,6 +45,11 @@ export const App = (props) => {
     if (theme != ui("theme")) {
       ui("theme", theme);
     }
+  }, []);
+
+  useEffect(() => {
+    userStore.checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

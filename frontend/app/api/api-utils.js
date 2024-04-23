@@ -1,3 +1,7 @@
+export const isResponseOk = (response) => {
+  return !(response instanceof Error);
+};
+
 export const getData = async (url) => {
   try {
     const response = await fetch(url);
@@ -14,8 +18,8 @@ export const authorize = async (url, data) => {
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: data,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
     if (response.status !== 200) {
       throw new Error("Ошибка получения данных");
@@ -28,7 +32,7 @@ export const authorize = async (url, data) => {
 
 export const getMe = async (url, jwt) => {
   try {
-    const response = await fetch(`${url}?token=${jwt}&short=True`, {
+    const response = await fetch(`${url}?token=${jwt}`, {
       method: "GET",
     });
     if (response.status !== 200) {
@@ -40,12 +44,14 @@ export const getMe = async (url, jwt) => {
   }
 };
 
-export function setJWT(jwt) {
-  localStorage.setItem("jwt", jwt);
+export function setJWT(jwt, user_id) {
+  const data = { jwt: jwt, user_id: user_id };
+  localStorage.setItem("data", JSON.stringify(data));
 }
 export function getJWT() {
-  return localStorage.getItem("jwt");
+  const data = localStorage.getItem("data");
+  return JSON.parse(data);
 }
 export function removeJWT() {
-  localStorage.removeItem("jwt");
+  localStorage.removeItem("data");
 }
