@@ -1,0 +1,25 @@
+http:
+  routers:
+    dashboard:
+      rule: Host(`traefik.test.local`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+    anix-api:
+      entryPoints:
+        - web
+      rule: Host(`anix.test.local`) && PathPrefix(`/api`)
+      service: anix-api-svc
+    anix-front:
+      entryPoints:
+        - web
+      rule: Host(`anix.test.local`)
+      service: anix-front-svc
+
+  services:
+    anix-api-svc:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8000"
+    anix-front-svc:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3000"

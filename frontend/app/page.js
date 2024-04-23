@@ -23,7 +23,7 @@ export default function Home() {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // set list on initial page load

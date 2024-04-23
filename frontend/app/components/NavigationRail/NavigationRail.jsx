@@ -60,7 +60,6 @@ export const NavigationRail = (props) => {
       >
         <i>palette</i>
       </button>
-
     </nav>
   );
 };

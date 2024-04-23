@@ -17,8 +17,8 @@ Please note that AniX is an unofficial project and is not affiliated with the de
 
 ### Prerequisites
 
-* Python 3.6 or later ([https://www.python.org/downloads/](https://www.python.org/downloads/))
-* Node.js and npm ([https://nodejs.org/en](https://nodejs.org/en))
+- Python 3.6 or later ([https://www.python.org/downloads/](https://www.python.org/downloads/))
+- Node.js and npm ([https://nodejs.org/en](https://nodejs.org/en))
 
 ### Setting Up the Backend
 
@@ -38,8 +38,6 @@ Please note that AniX is an unofficial project and is not affiliated with the de
    pip install -r ./requirements.txt
    ```
 
-5. (Optional) Create a `.env` file in the project root directory to store sensitive information like API keys.
-
 ### Setting Up the Frontend
 
 1. Navigate to the `frontend` directory.
@@ -54,26 +52,33 @@ Please note that AniX is an unofficial project and is not affiliated with the de
 1. Start the backend server:
 
    ```bash
-   cd ..  # Navigate back to the project root directory
+   cd ./backend
+   source ./venv/bin/activate
    uvicorn main:app --reload
    ```
 
 2. Start the frontend development server:
 
    ```bash
-   cd frontend
+   cd ./frontend
    npm run dev
    ```
 
-3. Start local reverse proxy server like traefik
+3. Start local traefik reverse proxy
 
-    ```to be added soon```
+   1. download a traefik binary from [github](https://github.com/traefik/traefik/releases/tag/v2.11.2)
+   2. place it in traefik directory and make it executable
+   3. add the following line to the hosts file `127.0.0.1 anix.test.local`
+   4. run `sudo ./traefik --configFile ./traefik.yml`
 
-This will start the development server for both the backend and frontend. You can access the AniX web client in your browser at ```no url for now```.
+This will start the development server for both the backend and frontend. You can access the AniX web client in your browser at `anix.test.local` via http only.
 
-<!-- ## Development
+## Development
 
-The code for both the backend and frontend is well-commented and should be easy to understand and modify. Feel free to make changes and experiment with the project. -->
+0. Install global pre-commit `pip install pre-commit`
+1. Install pre-commit hooks `pre-commit install #inside repository folder`
+
+Feel free to make changes and experiment with the project.
 
 ## Deployment
 

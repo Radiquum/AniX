@@ -11,9 +11,7 @@ async def GetReleaseById(request: Request, release_id: str):
     return await apiRequest(request, ENDPOINTS["release"]["info"], release_id)
 
 
-@router.get(
-    "/{release_id}/voiceover", summary="Get release voiceover info"
-)
+@router.get("/{release_id}/voiceover", summary="Get release voiceover info")
 async def GetReleaseVoiceover(request: Request, release_id: str):
     return await apiRequest(request, ENDPOINTS["release"]["episode"], release_id)
 

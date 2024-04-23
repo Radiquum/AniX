@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,6 +18,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "eslint-config-next": "14.2.2",
     "postcss": "^8"
   }
 }

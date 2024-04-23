@@ -31,11 +31,13 @@ TAGS = [
 ]
 
 app = FastAPI(
-            openapi_tags=TAGS, 
-            title="AniX API",
-            description="unofficial API proxy for Anixart android application.",
-            openapi_url="/api/openapi.json",
-            docs_url="/api/docs", redoc_url=None)
+    openapi_tags=TAGS,
+    title="AniX API",
+    description="unofficial API proxy for Anixart android application.",
+    openapi_url="/api/openapi.json",
+    docs_url="/api/docs",
+    redoc_url=None,
+)
 
 app.include_router(profile.router, prefix="/api/profile", tags=["Profile"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Profile"])

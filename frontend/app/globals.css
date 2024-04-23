@@ -17,8 +17,10 @@ body {
   }
 } */
 
-body, nav.left, main{
-  transition: background .2s;
+body,
+nav.left,
+main {
+  transition: background 0.2s;
   transform-origin: left;
   min-height: 100dvh;
 }

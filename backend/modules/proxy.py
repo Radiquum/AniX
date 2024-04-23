@@ -1,10 +1,22 @@
+from typing import TypedDict
 from typing import Union
 
 import requests
 from fastapi import Request
 
+
+class Endpoints(TypedDict):
+    release: dict[str, str]
+    profile: str
+    filter: str
+    auth: str
+    user: dict[str, str]
+    search: str
+    statistic: dict[str, str]
+
+
 API_URL = "https://api.anixart.tv"
-ENDPOINTS = {
+ENDPOINTS: Endpoints = {
     "release": {
         "info": f"{API_URL}/release",
         "episode": f"{API_URL}/episode",
@@ -30,10 +42,9 @@ USER_AGENT = "AnixartApp/8.2.1-23121216 (Android 11; SDK 30; arm64-v8a;)"
 
 
 async def apiRequest(
-    # noqa: E501
     request: Request = None,
-    endpoint: str = "",
-    path: str = "",
+    endpoint: Union[str, Endpoints] = "",
+    path: Union[str, int] = "",
     query: str = "",
     data: Union[None, str, dict] = None,
 ):

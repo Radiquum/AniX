@@ -32,7 +32,7 @@ export default function Search() {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   async function fetchData(query, page = 0) {
