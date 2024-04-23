@@ -5,6 +5,7 @@ venv
 
 # VSCode
 .VSCode
+*.code-workspace
 
 # NextJS
 ## dependencies
