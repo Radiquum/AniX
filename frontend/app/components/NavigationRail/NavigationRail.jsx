@@ -76,6 +76,10 @@ export const NavigationRail = (props) => {
       })}
 
       <span className="max"></span>
+      <button className="circle transparent" onClick={""}>
+        <i>settings</i>
+      </button>
+
       <button
         className="circle transparent"
         onClick={() => props.setColorPicker(!props.colorPicker)}
