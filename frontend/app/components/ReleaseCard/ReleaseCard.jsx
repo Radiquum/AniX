@@ -3,10 +3,13 @@ import Image from "next/image";
 
 export const ReleaseCard = (props) => {
   return (
-    <Link href={`/release/${props.id}`} className="s3">
+    <Link
+      href={`/release/${props.id}`}
+      className={props.className ? props.className : "s3"}
+    >
       <article
         className="no-padding round fill"
-        style={{ width: 284, height: 508 }}
+        style={{ width: 284, height: props.height ? props.height : 508 }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <div style={{ aspectRatio: "1/1" }}>

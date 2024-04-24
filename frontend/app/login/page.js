@@ -38,7 +38,7 @@ export default function LoginPage() {
   }, [userStore.user]);
 
   return (
-    <div className="absolute padding tertiary center middle round">
+    <div className="absolute padding secondary-container center middle round">
       <i className="extra">login</i>
       <h5>Вход в аккаунт anixart.</h5>
       <form onSubmit={handleSubmit}>
