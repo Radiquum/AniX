@@ -11,6 +11,13 @@ export default function LoginPage() {
   const router = useRouter();
   const [authData, setAuthData] = useState({ email: "", password: "" });
 
+  useEffect(() => {
+    if (userStore.isAuth) {
+      router.push("/profile");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleInput = (e) => {
     setAuthData({ ...authData, [e.target.name]: e.target.value });
   };

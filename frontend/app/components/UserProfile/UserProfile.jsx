@@ -3,6 +3,14 @@ import { ReleaseCard } from "../ReleaseCard/ReleaseCard";
 import { getData } from "@/app/api/api-utils";
 import { endpoints } from "@/app/api/config";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTiktok,
+  faVk,
+  faInstagram,
+  faTelegram,
+} from "@fortawesome/free-brands-svg-icons";
 
 function getNoun(number, one, two, five) {
   let n = Math.abs(number);
@@ -33,6 +41,7 @@ function convertMinutes(min) {
 
 export const UserProfile = (props) => {
   const [lastWatched, setLastWatched] = useState();
+  const router = useRouter();
 
   useEffect(() => {
     async function _getData() {
@@ -44,6 +53,39 @@ export const UserProfile = (props) => {
     _getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const hasSocials =
+    props.profile.vk_page != "" ||
+    props.profile.tg_page != "" ||
+    props.profile.tt_page != "" ||
+    props.profile.inst_page != "" ||
+    false;
+  const socials = [
+    {
+      name: "vk",
+      nickname: props.profile.vk_page,
+      icon: faVk,
+      urlPrefix: "https://vk.com",
+    },
+    {
+      name: "telegram",
+      nickname: props.profile.tg_page,
+      icon: faTelegram,
+      urlPrefix: "https://t.me",
+    },
+    {
+      name: "tiktok",
+      nickname: props.profile.tt_page,
+      icon: faTiktok,
+      urlPrefix: "https://tiktok.com",
+    },
+    {
+      name: "instagram",
+      nickname: props.profile.inst_page,
+      icon: faInstagram,
+      urlPrefix: "https://instagram.com",
+    },
+  ];
 
   return (
     <>
@@ -66,6 +108,30 @@ export const UserProfile = (props) => {
               </div>
             </div>
           </article>
+          {hasSocials ? (
+            <article className="fill">
+              <i className="extra">workspaces</i>
+              <div className="row">
+                {socials.map((item) => {
+                  return item.nickname != "" ? (
+                    <button
+                      className="large circle tertiary-container"
+                      key={item.name}
+                      onClick={() =>
+                        router.push(`${item.urlPrefix}/${item.nickname}`)
+                      }
+                    >
+                      <FontAwesomeIcon icon={item.icon} />
+                    </button>
+                  ) : (
+                    ""
+                  );
+                })}
+              </div>
+            </article>
+          ) : (
+            ""
+          )}
         </div>
         <div className="s4">
           <article className="secondary-container">
@@ -163,7 +229,7 @@ export const UserProfile = (props) => {
           </nav>
         </article>
       ) : (
-        ""
+        <progress></progress>
       )}
     </>
   );
