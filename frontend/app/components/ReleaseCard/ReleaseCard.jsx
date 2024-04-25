@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export const ReleaseCard = (props) => {
   return (
@@ -16,8 +16,7 @@ export const ReleaseCard = (props) => {
           <Image
             className="responsive large top-round"
             layout="fill"
-            objectFit="cover"
-            style={{ width: "100%", height: "100%", aspectRatio: "1/1" }}
+            style={{ aspectRatio: "1/1" }}
             src={props.poster}
             alt=""
             sizes={"100vw"}

@@ -99,13 +99,13 @@ export const UserProfile = (props) => {
               <div>
                 <p className="small">
                   Просмотрено серий:{" "}
-                  <span class="bold">
+                  <span className="bold">
                     {props.profile.watched_episode_count}
                   </span>
                 </p>
                 <p className="small">
                   Время просмотра:{" "}
-                  <span class="bold">
+                  <span className="bold">
                     {convertMinutes(props.profile.watched_time)}
                   </span>
                 </p>

@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from modules import proxy
 from modules.pages import favorites
 from modules.pages import index
 from modules.pages import search
@@ -47,6 +48,8 @@ app.include_router(release.router, prefix="/api/release", tags=["Releases"])
 app.include_router(index.router, prefix="/api/index", tags=["Index"])
 app.include_router(favorites.router, prefix="/api/favorites", tags=["Favorites"])
 app.include_router(search.router, prefix="/api/search", tags=["Search"])
+
+app.include_router(proxy.router, prefix="/api/proxy")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000)

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Styles from "./ColorPicker.module.css";
+import { useUserStore } from "@/app/store/user-store";
 
 export const ColorPicker = (props) => {
+  const userStore = useUserStore();
   const colors = [
     { hex: "#ffffff", color: "white" },
     { hex: "#e91e63", color: "pink" },
@@ -35,6 +37,21 @@ export const ColorPicker = (props) => {
             ></button>
           );
         })}
+        {userStore.user ? (
+          <button
+            className={`circle border small s2`}
+            onClick={() => {
+              props.theme(
+                `/api/proxy/image?url=${userStore.user.profile.avatar}`,
+              );
+            }}
+          >
+            {/* eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element */}
+            <img src={userStore.user.profile.avatar} alt="" />
+          </button>
+        ) : (
+          ""
+        )}
       </div>
       <div className="medium-divider"></div>
       <nav>

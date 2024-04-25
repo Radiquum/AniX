@@ -2,7 +2,9 @@ from typing import TypedDict
 from typing import Union
 
 import requests
+from fastapi import APIRouter
 from fastapi import Request
+from fastapi import Response
 
 
 class Endpoints(TypedDict):
@@ -67,3 +69,17 @@ async def apiRequest(
     if r.status_code != 200:
         return {"error": r.text}
     return r.json()
+
+
+router = APIRouter()
+
+
+@router.get(
+    "/image",
+    responses={200: {"content": {"image/jpg": {}, "image/png": {}}}},
+    response_class=Response,
+)
+async def imageProxy(url: str):
+    type = url.split(".")[-1]
+    response: bytes = requests.get(url).content
+    return Response(content=response, media_type=f"image/{type}")

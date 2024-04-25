@@ -76,7 +76,7 @@ export const NavigationRail = (props) => {
       })}
 
       <span className="max"></span>
-      <button className="circle transparent" onClick={""}>
+      <button className="circle transparent">
         <i>settings</i>
       </button>
 
