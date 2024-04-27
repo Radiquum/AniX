@@ -212,7 +212,7 @@ export const UserProfile = (props) => {
             <i>tab_recent</i>
             <h5>Недавно просмотрено</h5>
           </div>
-          <nav className="s12 scroll">
+          <nav className="s12 scroll padding">
             {lastWatched.map((item) => {
               return (
                 <ReleaseCard
@@ -222,7 +222,7 @@ export const UserProfile = (props) => {
                   title={item.title_ru}
                   poster={item.image}
                   description={item.last_view_episode.name}
-                  height={440}
+                  height={400}
                 />
               );
             })}
