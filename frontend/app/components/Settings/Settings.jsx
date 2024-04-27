@@ -6,6 +6,7 @@ import { useSettingsStore } from "@/app/store/settings-store";
 function deleteAllSettings() {
   localStorage.removeItem("mode");
   localStorage.removeItem("theme");
+  localStorage.removeItem("settings");
 }
 
 function deleteSearchHistory() {
