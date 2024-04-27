@@ -11,5 +11,13 @@ export const endpoints = {
   user: {
     profile: `${API_URL}/profile`,
     auth: `${API_URL}/auth`,
+    history: `${API_URL}/favorites/history`,
+    bookmarks: {
+      watching: `${API_URL}/favorites/watching`,
+      planned: `${API_URL}/favorites/planned`,
+      watched: `${API_URL}/favorites/watched`,
+      delayed: `${API_URL}/favorites/delayed`,
+      abandoned: `${API_URL}/favorites/abandoned`,
+    },
   },
 };

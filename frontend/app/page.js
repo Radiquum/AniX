@@ -4,8 +4,8 @@ import { getData } from "./api/api-utils";
 import { endpoints } from "./api/config";
 import { useEffect, useState, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CardList } from "./components/CardList/CardList";
 import { useSearchParams } from "next/navigation";
+import ReleasesOverview from "./components/ReleasesOverview/ReleasesOverview";
 
 export default function Home() {
   const router = useRouter();
@@ -86,44 +86,13 @@ export default function Home() {
   ];
 
   return (
-    <>
-      <div>
-        {chips.map((item) => {
-          return (
-            <button
-              key={item.list}
-              className={`chip ${list == item.list ? "fill" : ""}`}
-              onClick={() => {
-                setList(item.list);
-              }}
-            >
-              <span>{item.title}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {releases ? (
-        <>
-          <div className="grid">
-            <CardList data={releases} />
-          </div>
-
-          <nav className="large-margin center-align">
-            <button
-              className="large"
-              onClick={() => {
-                setPage(page + 1);
-              }}
-            >
-              <i>add</i>
-              <span>загрузить ещё</span>
-            </button>
-          </nav>
-        </>
-      ) : (
-        <progress className="s1"></progress>
-      )}
-    </>
+    <ReleasesOverview
+      chips={chips}
+      setList={setList}
+      page={page}
+      setPage={setPage}
+      list={list}
+      releases={releases}
+    />
   );
 }
