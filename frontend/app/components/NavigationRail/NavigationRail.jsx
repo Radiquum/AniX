@@ -77,6 +77,15 @@ export const NavigationRail = (props) => {
         );
       })}
 
+      {userStore.isAuth && (
+        <button
+          className="circle transparent"
+          onClick={() => userStore.logout()}
+        >
+          <i>logout</i>
+        </button>
+      )}
+
       <span className="max"></span>
       <button
         className="circle transparent"
@@ -91,17 +100,6 @@ export const NavigationRail = (props) => {
       >
         <i>palette</i>
       </button>
-
-      {userStore.isAuth ? (
-        <button
-          className="circle transparent"
-          onClick={() => userStore.logout()}
-        >
-          <i>logout</i>
-        </button>
-      ) : (
-        ""
-      )}
     </nav>
   );
 };

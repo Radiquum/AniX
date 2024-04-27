@@ -71,7 +71,12 @@ export const App = (props) => {
             setColorPicker={setColorPicker}
           />
         )}
-        {settingsPopup && <Settings />}
+        {settingsPopup && (
+          <Settings
+            settingsPopup={settingsPopup}
+            setSettingsPopup={setSettingsPopup}
+          />
+        )}
       </div>
       <main className="responsive">{props.children}</main>
     </body>
