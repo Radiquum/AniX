@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 export const LogInNeeded = (props) => {
   return (
     <div className="absolute padding error center middle round">

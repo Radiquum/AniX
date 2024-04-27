@@ -69,20 +69,22 @@ export default function Search() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push(pathname + "?" + createQueryString("query", query));
-    setReleases(null);
-    setPage(0);
-    fetchData(query);
+    if (query != "") {
+      router.push(pathname + "?" + createQueryString("query", query));
+      setReleases(null);
+      setPage(0);
+      fetchData(query);
 
-    // save searches and update search history
-    if (!searches) {
-      setSearches([query]);
-      saveSearches(JSON.stringify([query]));
-    } else {
-      console.log(searches);
-      if (!searches.find((element) => element == query)) {
-        setSearches([query, ...searches.slice(0, 5)]);
-        saveSearches(JSON.stringify([query, ...searches.slice(0, 5)]));
+      // save searches and update search history
+      if (!searches) {
+        setSearches([query]);
+        saveSearches(JSON.stringify([query]));
+      } else {
+        console.log(searches);
+        if (!searches.find((element) => element == query)) {
+          setSearches([query, ...searches.slice(0, 5)]);
+          saveSearches(JSON.stringify([query, ...searches.slice(0, 5)]));
+        }
       }
     }
   };
@@ -115,26 +117,37 @@ export default function Search() {
       </div>
 
       {releases ? (
-        <>
-          <div className="grid">
-            <CardList data={releases} />
-          </div>
+        releases.lenght > 0 ? (
+          <>
+            <div className="grid">
+              <CardList data={releases} />
+            </div>
 
-          <nav className="large-margin center-align">
-            <button
-              className="large"
-              onClick={() => {
-                setPage(page + 1);
-              }}
-            >
-              <i>add</i>
-              <span>загрузить ещё</span>
-            </button>
-          </nav>
-        </>
+            <nav className="large-margin center-align">
+              <button
+                className="large"
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+              >
+                <i>add</i>
+                <span>загрузить ещё</span>
+              </button>
+            </nav>
+          </>
+        ) : (
+          <div className="absolute padding primary center middle small-round">
+            <i className="extra">search</i>
+            <h5>Ничего не найдено.</h5>
+            <p>Введите другой поисковой запрос.</p>
+          </div>
+        )
       ) : (
-        // <progress className="s1"></progress>
-        ""
+        <div className="absolute padding primary center middle small-round">
+          <i className="extra">search</i>
+          <h5>Здесь пока ничего нет.</h5>
+          <p>Введите поисковой запрос для начала поиска.</p>
+        </div>
       )}
     </>
   );
