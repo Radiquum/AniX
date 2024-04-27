@@ -97,7 +97,7 @@ export const UserProfile = (props) => {
               <Image
                 className="circle"
                 src={props.profile.avatar}
-                alt="Ваш профиль"
+                alt=""
                 width="512"
                 height="512"
                 style={{ blockSize: "7rem", inlineSize: "7rem" }}

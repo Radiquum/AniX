@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "anixstatic.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.imgur.com",
+      },
     ],
   },
 };
