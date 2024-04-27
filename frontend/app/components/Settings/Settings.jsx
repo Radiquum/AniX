@@ -1,3 +1,14 @@
+"use client";
+
+function deleteAllSettings() {
+  localStorage.removeItem("mode");
+  localStorage.removeItem("theme");
+}
+
+function deleteSearchHistory() {
+  localStorage.removeItem("searches");
+}
+
 export default function Settings() {
   return (
     <>
@@ -7,21 +18,21 @@ export default function Settings() {
       >
         <h5>Настройки</h5>
         <nav className="wrap">
-          <div class="max">
+          <div className="max">
             <h6 className="small">сохранение в истории просмотров</h6>
           </div>
-          <label class="switch">
+          <label className="switch">
             <input type="checkbox" />
             <span></span>
           </label>
         </nav>
         <li className="small-divider"></li>
         <nav className="wrap small-space">
-          <button className="red">
+          <button className="red" onClick={() => deleteAllSettings()}>
             <i>delete_forever</i>
             <span>Удалить все настройки</span>
           </button>
-          <button className="red">
+          <button className="red" onClick={() => deleteSearchHistory()}>
             <i>delete_history</i>
             <span>Удалить историю поиска</span>
           </button>
