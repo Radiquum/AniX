@@ -78,7 +78,10 @@ export const NavigationRail = (props) => {
       })}
 
       <span className="max"></span>
-      <button className="circle transparent">
+      <button
+        className="circle transparent"
+        onClick={() => props.setSettingsPopup(!props.settingsPopup)}
+      >
         <i>settings</i>
       </button>
 

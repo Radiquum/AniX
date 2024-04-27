@@ -6,6 +6,7 @@ import { NavigationRail } from "@/app/components/NavigationRail/NavigationRail";
 import { useEffect, useState } from "react";
 import { ColorPicker } from "@/app/components/ColorPicker/ColorPicker";
 import { useUserStore } from "./store/user-store";
+import Settings from "./components/Settings/Settings";
 
 function setMode(mode) {
   localStorage.setItem("mode", mode);
@@ -23,6 +24,7 @@ function getTheme() {
 
 export const App = (props) => {
   const [colorPicker, setColorPicker] = useState(false);
+  const [settingsPopup, setSettingsPopup] = useState(false);
   const userStore = useUserStore();
 
   const theme = async (from) => {
@@ -57,7 +59,9 @@ export const App = (props) => {
       <div>
         <NavigationRail
           colorPicker={colorPicker}
+          settingsPopup={settingsPopup}
           setColorPicker={setColorPicker}
+          setSettingsPopup={setSettingsPopup}
         />
         {colorPicker && (
           <ColorPicker
@@ -67,6 +71,7 @@ export const App = (props) => {
             setColorPicker={setColorPicker}
           />
         )}
+        {settingsPopup && <Settings />}
       </div>
       <main className="responsive">{props.children}</main>
     </body>
