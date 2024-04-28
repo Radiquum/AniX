@@ -1,3 +1,10 @@
+## 0.2.1 (2024-04-29)
+
+### Fix
+
+- **frontend**: fix text overflow on releases cards
+- **frontend**: fix overflow of releases cards on pages with overview
+
 ## 0.2.0 (2024-04-29)
 
 ### Feat
