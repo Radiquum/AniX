@@ -13,10 +13,18 @@ export default function History() {
   const [releases, setReleases] = useState();
   const [page, setPage] = useState(0);
 
+  const [isNextPage, setIsNextPage] = useState(true);
+
   async function fetchData(page = 0) {
     if (userStore.token) {
       const url = `${endpoints.user.history}?page=${page}&token=${userStore.token}`;
       const data = await getData(url);
+
+      if (data.content.length < 25) {
+        setIsNextPage(false);
+      } else {
+        setIsNextPage(true);
+      }
 
       // Handle initial load (page 0) or subsequent pagination
       if (page === 0) {
@@ -44,7 +52,12 @@ export default function History() {
       {!userStore.isAuth ? (
         <LogInNeeded />
       ) : (
-        <ReleasesOverview page={page} setPage={setPage} releases={releases} />
+        <ReleasesOverview
+          page={page}
+          setPage={setPage}
+          releases={releases}
+          isNextPage={isNextPage}
+        />
       )}
     </>
   );

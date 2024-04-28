@@ -21,6 +21,7 @@ export default function Search() {
   const [releases, setReleases] = useState();
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const [searches, setSearches] = useState(JSON.parse(getSearches()));
 
@@ -38,6 +39,12 @@ export default function Search() {
   async function fetchData(query, page = 0) {
     const url = `${endpoints.search}?query=${query}&page=${page}`;
     const data = await getData(url);
+
+    if (data.content.length < 25) {
+      setIsNextPage(false);
+    } else {
+      setIsNextPage(true);
+    }
 
     // Handle initial load (page 0) or subsequent pagination
     if (page === 0) {
@@ -118,7 +125,12 @@ export default function Search() {
 
       {releases ? (
         releases.length > 0 ? (
-          <ReleasesOverview page={page} setPage={setPage} releases={releases} />
+          <ReleasesOverview
+            page={page}
+            setPage={setPage}
+            releases={releases}
+            isNextPage={isNextPage}
+          />
         ) : (
           <div className="absolute padding primary center middle small-round">
             <i className="extra">search</i>

@@ -27,17 +27,19 @@ export default function ReleasesOverview(props) {
             <CardList data={props.releases} />
           </div>
 
-          <nav className="large-margin center-align">
-            <button
-              className="large"
-              onClick={() => {
-                props.setPage(props.page + 1);
-              }}
-            >
-              <i>add</i>
-              <span>загрузить ещё</span>
-            </button>
-          </nav>
+          {props.isNextPage && (
+            <nav className="large-margin center-align">
+              <button
+                className="large"
+                onClick={() => {
+                  props.setPage(props.page + 1);
+                }}
+              >
+                <i>add</i>
+                <span>загрузить ещё</span>
+              </button>
+            </nav>
+          )}
         </>
       ) : (
         <progress className="s1"></progress>

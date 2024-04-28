@@ -15,6 +15,8 @@ export default function Home() {
   const [releases, setReleases] = useState();
   const [page, setPage] = useState(0);
 
+  const [isNextPage, setIsNextPage] = useState(true);
+
   const searchParams = useSearchParams();
   const createQueryString = useCallback(
     (name, value) => {
@@ -40,6 +42,12 @@ export default function Home() {
   async function fetchData(list, page = 0) {
     const url = `${endpoints.index[list]}?page=${page}`;
     const data = await getData(url);
+
+    if (data.content.length < 25) {
+      setIsNextPage(false);
+    } else {
+      setIsNextPage(true);
+    }
 
     // Handle initial load (page 0) or subsequent pagination
     if (page === 0) {
@@ -93,6 +101,7 @@ export default function Home() {
       setPage={setPage}
       list={list}
       releases={releases}
+      isNextPage={isNextPage}
     />
   );
 }

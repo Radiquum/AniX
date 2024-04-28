@@ -18,6 +18,8 @@ export default function Bookmarks() {
   const [releases, setReleases] = useState();
   const [page, setPage] = useState(0);
 
+  const [isNextPage, setIsNextPage] = useState(true);
+
   const searchParams = useSearchParams();
   const createQueryString = useCallback(
     (name, value) => {
@@ -44,6 +46,12 @@ export default function Bookmarks() {
     if (userStore.token) {
       const url = `${endpoints.user.bookmarks[list]}?page=${page}&token=${userStore.token}`;
       const data = await getData(url);
+
+      if (data.content.length < 25) {
+        setIsNextPage(false);
+      } else {
+        setIsNextPage(true);
+      }
 
       // Handle initial load (page 0) or subsequent pagination
       if (page === 0) {
@@ -106,6 +114,7 @@ export default function Bookmarks() {
           setPage={setPage}
           list={list}
           releases={releases}
+          isNextPage={isNextPage}
         />
       )}
     </>
