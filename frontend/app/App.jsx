@@ -78,7 +78,9 @@ export const App = (props) => {
           />
         )}
       </div>
-      <main className="responsive">{props.children}</main>
+      <main className="responsive padding" style={{ overflow: "hidden" }}>
+        {props.children}
+      </main>
     </body>
   );
 };
