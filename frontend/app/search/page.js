@@ -4,7 +4,7 @@ import { getData } from "@/app/api/api-utils";
 import { endpoints } from "@/app/api/config";
 import { useEffect, useState, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CardList } from "@/app/components/CardList/CardList";
+import ReleasesOverview from "../components/ReleasesOverview/ReleasesOverview";
 import { useSearchParams } from "next/navigation";
 
 function saveSearches(search) {
@@ -117,24 +117,8 @@ export default function Search() {
       </div>
 
       {releases ? (
-        releases.lenght > 0 ? (
-          <>
-            <div className="grid">
-              <CardList data={releases} />
-            </div>
-
-            <nav className="large-margin center-align">
-              <button
-                className="large"
-                onClick={() => {
-                  setPage(page + 1);
-                }}
-              >
-                <i>add</i>
-                <span>загрузить ещё</span>
-              </button>
-            </nav>
-          </>
+        releases.length > 0 ? (
+          <ReleasesOverview page={page} setPage={setPage} releases={releases} />
         ) : (
           <div className="absolute padding primary center middle small-round">
             <i className="extra">search</i>
