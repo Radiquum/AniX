@@ -23,9 +23,9 @@ export const ReleaseCard = (props) => {
           />
         </div>
         <div className="padding">
-          <h6>{`${props.title.substring(0, 30)}${
+          <h5 className="small">{`${props.title.substring(0, 30)}${
             [...props.title].length > 30 ? "..." : ""
-          }`}</h6>
+          }`}</h5>
           <p>{`${props.description.substring(0, 150)}${
             [...props.description].length > 150 ? "..." : ""
           }`}</p>
