@@ -2,6 +2,14 @@
 
 AniX is an unofficial web client for the Android application Anixart. It allows you to access and manage your Anixart account from a web browser on your desktop or laptop computer.
 
+## Screenshots
+
+user profile page
+![user profile page image](./docs/profile.jpg)
+
+main page
+![main page image](./docs/index.jpg)
+
 ## Project Structure
 
 This project consists of two main parts:
@@ -15,12 +23,29 @@ Please note that AniX is an unofficial project and is not affiliated with the de
 
 ## Getting Started
 
-### Prerequisites
+The is a two ways to run this project locally. directly and via docker compose.
+
+### Docker
+
+#### Docker Requirements
+
+- docker (>=26)
+- docker compose (>= 2.27)
+
+#### Running the project via Docker
+
+Execute `docker compose -f docker-compose.dev.yml up` command in the root of the folder.
+
+You can access the AniX web client in your browser at `http://127.0.0.1`. And API docs at `http://127.0.0.1/api/docs`
+
+### Directly
+
+#### Prerequisites
 
 - Python 3.6 or later ([https://www.python.org/downloads/](https://www.python.org/downloads/))
 - Node.js and npm ([https://nodejs.org/en](https://nodejs.org/en))
 
-### Setting Up the Backend
+#### Setting Up the Backend
 
 1. Clone this repository.
 2. Navigate to the project directory in your terminal.
@@ -38,7 +63,7 @@ Please note that AniX is an unofficial project and is not affiliated with the de
    pip install -r ./requirements.txt
    ```
 
-### Setting Up the Frontend
+#### Setting Up the Frontend
 
 1. Navigate to the `frontend` directory.
 2. Install the required frontend dependencies:
@@ -47,7 +72,7 @@ Please note that AniX is an unofficial project and is not affiliated with the de
    npm install
    ```
 
-### Running the Project
+#### Running the Project
 
 1. Start the backend server:
 
@@ -68,21 +93,32 @@ Please note that AniX is an unofficial project and is not affiliated with the de
 
    1. download a traefik binary from [github](https://github.com/traefik/traefik/releases/tag/v2.11.2)
    2. place it in traefik directory and make it executable
-   3. add the following line to the hosts file `127.0.0.1 anix.test.local`
-   4. run `sudo ./traefik --configFile ./traefik.yml`
+   3. run `sudo ./traefik --configFile ./traefik.yml`
 
-This will start the development server for both the backend and frontend. You can access the AniX web client in your browser at `anix.test.local` via http only.
+You can access the AniX web client in your browser at `http://127.0.0.1`. And API docs at `http://127.0.0.1/api/docs`
 
 ## Development
 
+To maintain code formatting it's recommended to use pre-commit hooks
+
 0. Install global pre-commit `pip install pre-commit`
-1. Install pre-commit hooks `pre-commit install #inside repository folder`
+1. Install pre-commit hooks via `pre-commit install` inside repository folder
+
+To maintain readable git commit messages it's recommended to use [commitizen](https://commitizen-tools.github.io/commitizen/)
 
 Feel free to make changes and experiment with the project.
 
+### Docker development environment
+
+To run development environment via docker you can execute the docker watch command, it will watch and copy local changes in to the running container. you will need to use the dev compose file and docker files.
+
+Execute the `docker compose -f docker-compose.dev.yml watch` command to set up the docker development environment.
+
+To access the docker logs you can use `docker compose -f docker-compose.dev.yml logs -f` command.
+
 ## Deployment
 
-### Docker
+### Docker Deployment
 
 To be added soon . . .
 
@@ -90,9 +126,9 @@ To be added soon . . .
 
 To be added soon . . .
 
-### Standalone
+<!-- ### Standalone
 
-To be added soon . . .
+To be added soon . . . -->
 
 ## Contributing
 

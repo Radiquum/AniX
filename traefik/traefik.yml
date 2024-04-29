@@ -4,7 +4,7 @@ entryPoints:
 
 api:
   insecure: false
-  dashboard: true
+  dashboard: false
 
 providers:
   file:
