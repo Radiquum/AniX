@@ -1,0 +1,54 @@
+services:
+  frontend:
+    container_name: "AniX-frontend"
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend.dev.Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.anix-frontend.rule=Host(`127.0.0.1`)"
+      - "traefik.http.routers.anix-frontend.entrypoints=web"
+    expose:
+      - 3000
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+        - action: rebuild
+          path: ./frontend/package.json
+  backend:
+    container_name: "AniX-backend"
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.dev.Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.anix-backend.rule=Host(`127.0.0.1`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.anix-backend.entrypoints=web"
+    expose:
+      - 8000
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+        - action: rebuild
+          path: ./backend/requirements.txt
+  traefik:
+    image: "traefik:v3.0"
+    container_name: "AniX-traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.dashboard=false"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"

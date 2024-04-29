@@ -16,11 +16,11 @@
     "material-dynamic-colors": "^1.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "next": "^14.2.2",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
     "eslint-config-next": "14.2.2",
-    "next": "^14.2.2",
     "postcss": "^8"
   }
 }
