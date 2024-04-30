@@ -1,7 +1,9 @@
+import requests
 from fastapi import APIRouter
 from fastapi import Request
 from modules.proxy import apiRequest
 from modules.proxy import ENDPOINTS
+from modules.proxy import USER_AGENT
 
 router = APIRouter()
 
@@ -33,40 +35,39 @@ async def GetReleaseVoiceoverPlayer(
     summary="Get available episodes for selected voiceover and a player of a release",
 )
 async def GetReleaseEpisodes(
-    request: Request, release_id: str, voiceover_id: str, source_id: str
+    request: Request,
+    release_id: str,
+    voiceover_id: str,
+    source_id: str,
+    token: str = "",
 ):
     return await apiRequest(
         request,
         ENDPOINTS["release"]["episode"],
         f"{release_id}/{voiceover_id}/{source_id}",
+        query=f"?token={token}",
     )
 
 
 @router.get(
-    "/{release_id}/{episode}/markWatched",
-    summary="mark episode of a selected voiceover as watched",
+    "/{release_id}/{source_id}/{episode}/saveToHistory",
+    summary="mark episode of a selected voiceover as watched and save it to watch history",
 )
 async def MarkEpisodeAsWatched(
     request: Request, release_id: str, source_id: str, episode: str, token: str
 ):
-    return await apiRequest(
-        request,
-        ENDPOINTS["statistic"]["markWatched"],
-        f"${release_id}/${source_id}/${episode}",
-        query=f"?token={token}",
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Content-Type": "application/json; charset=UTF-8",
+    }
+
+    requests.get(
+        f"{ENDPOINTS['statistic']['markWatched']}/{release_id}/{source_id}/{episode}?token={token}",
+        headers=headers,
+    )
+    requests.get(
+        f"{ENDPOINTS['statistic']['addHistory']}/{release_id}/{source_id}/{episode}?token={token}",
+        headers=headers,
     )
 
-
-@router.get(
-    "/{release_id}/{episode}/addHistory",
-    summary="add episode of a selected voiceover to history",
-)
-async def AddEpisodeToHistory(
-    request: Request, release_id: str, source_id: str, episode: str, token: str
-):
-    return await apiRequest(
-        request,
-        ENDPOINTS["statistic"]["addHistory"],
-        f"${release_id}/${source_id}/${episode}",
-        query=f"?token={token}",
-    )
+    return {"success"}

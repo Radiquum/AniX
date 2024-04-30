@@ -20,4 +20,5 @@ export const endpoints = {
       abandoned: `${API_URL}/favorites/abandoned`,
     },
   },
+  release: `${API_URL}/release`,
 };

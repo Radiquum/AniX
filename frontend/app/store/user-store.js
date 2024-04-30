@@ -23,11 +23,7 @@ export const useUserStore = create((set, get) => ({
         `${endpoints.user.profile}/${jwt.user_id}`,
         jwt.jwt,
       );
-      if (me.is_my_profile) {
-        get().login(me, jwt.jwt, jwt.user_id);
-      } else {
-        get().logout();
-      }
+      get().login(me, jwt.jwt, jwt.user_id);
     } else {
       get().logout();
     }
