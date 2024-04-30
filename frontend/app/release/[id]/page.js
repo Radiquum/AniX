@@ -7,6 +7,8 @@ export default function Release(props) {
   return (
     <>
       <ReleasePlayer id={props.params.id} />
+      <span style={{ marginBlock: "2rem" }}></span>
+      <ReleaseInfo id={props.params.id} />
     </>
   );
 }
