@@ -1,3 +1,10 @@
+## 0.3.0 (2024-04-30)
+
+### Feat
+
+- **frontend**: add a release page
+- **docker**: add docker compose file for development environment
+
 ## 0.2.1 (2024-04-29)
 
 ### Fix
