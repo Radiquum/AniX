@@ -155,7 +155,7 @@ export const ReleasePlayer = (props) => {
                     style={{ marginLeft: "8px" }}
                   >
                     {item.is_watched && <i className="small">check</i>}
-                    {item.name}
+                    {item.name || `${item.position + 1} серия`}
                   </button>
                 );
               })}
