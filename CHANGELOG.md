@@ -1,3 +1,13 @@
+## 0.5.0 (2024-04-30)
+
+### Feat
+
+- **frontend/releases**: add release info and related releases cards
+
+### Fix
+
+- **frontend/releases**: fix null episode name if API returning null in episode.name
+
 ## 0.4.0 (2024-04-30)
 
 ### Feat
