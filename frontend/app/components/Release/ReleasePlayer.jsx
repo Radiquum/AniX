@@ -77,87 +77,95 @@ export const ReleasePlayer = (props) => {
   }, [selectedEpisode]);
 
   return (
-    <article className="fill grid">
-      <iframe
-        src={episodeURL}
-        className="s9"
-        style={{ aspectRatio: "16/9", width: "100%", height: "auto" }}
-      />
-      <div className="s3">
-        <div className="tabs">
-          <a data-ui="#vo" className="active">
-            озвучка
-          </a>
-          <a data-ui="#src">плеер</a>
+    <>
+      {voiceoverInfo && sourcesInfo && episodeInfo ? (
+        <article className="fill grid">
+          <iframe
+            src={episodeURL}
+            className="s9"
+            style={{ aspectRatio: "16/9", width: "100%", height: "auto" }}
+          />
+          <div className="s3">
+            <div className="tabs">
+              <a data-ui="#vo" className="active">
+                озвучка
+              </a>
+              <a data-ui="#src">плеер</a>
+            </div>
+            <div
+              className="page padding active scroll"
+              style={{ Height: "438px" }}
+              id="vo"
+            >
+              {voiceoverInfo &&
+                voiceoverInfo.types.map((item) => {
+                  return (
+                    <button
+                      key={item.id}
+                      className={`small responsive ${
+                        item.id == selectedVoiceover ? "primary" : "secondary"
+                      }`}
+                      style={{ marginTop: "8px" }}
+                      onClick={() => {
+                        setSelectedVoiceover(item.id);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  );
+                })}
+            </div>
+            <div className="page center-align padding" id="src">
+              {sourcesInfo &&
+                sourcesInfo.sources.map((item) => {
+                  return (
+                    <button
+                      key={item.id}
+                      className={`small responsive ${
+                        item.id == selectedSources ? "primary" : "secondary"
+                      }`}
+                      style={{ marginTop: "8px" }}
+                      onClick={() => {
+                        setSelectedSources(item.id);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+          <nav
+            className="s12 scroll row no-margin no-space"
+            style={{ paddingBottom: "8px", height: "48px" }}
+          >
+            {episodeInfo &&
+              episodeInfo.episodes.map((item) => {
+                return (
+                  <button
+                    key={item.position}
+                    className={`${
+                      item.position == selectedEpisode ? "primary" : "secondary"
+                    }`}
+                    onClick={() => {
+                      setSelectedEpisode(item.position);
+                      setEpisodeURL(item.url);
+                      item.is_watched = true;
+                    }}
+                    style={{ marginLeft: "8px" }}
+                  >
+                    {item.is_watched && <i className="small">check</i>}
+                    {item.name}
+                  </button>
+                );
+              })}
+          </nav>
+        </article>
+      ) : (
+        <div className="center-align">
+          <progress className="circle" />
         </div>
-        <div
-          className="page padding active scroll"
-          style={{ Height: "438px" }}
-          id="vo"
-        >
-          {voiceoverInfo &&
-            voiceoverInfo.types.map((item) => {
-              return (
-                <button
-                  key={item.id}
-                  className={`small responsive ${
-                    item.id == selectedVoiceover ? "primary" : "secondary"
-                  }`}
-                  style={{ marginTop: "8px" }}
-                  onClick={() => {
-                    setSelectedVoiceover(item.id);
-                  }}
-                >
-                  {item.name}
-                </button>
-              );
-            })}
-        </div>
-        <div className="page center-align padding" id="src">
-          {sourcesInfo &&
-            sourcesInfo.sources.map((item) => {
-              return (
-                <button
-                  key={item.id}
-                  className={`small responsive ${
-                    item.id == selectedSources ? "primary" : "secondary"
-                  }`}
-                  style={{ marginTop: "8px" }}
-                  onClick={() => {
-                    setSelectedSources(item.id);
-                  }}
-                >
-                  {item.name}
-                </button>
-              );
-            })}
-        </div>
-      </div>
-      <nav
-        className="s12 scroll row no-margin no-space"
-        style={{ paddingBottom: "8px", height: "48px" }}
-      >
-        {episodeInfo &&
-          episodeInfo.episodes.map((item) => {
-            return (
-              <button
-                key={item.position}
-                className={`${
-                  item.position == selectedEpisode ? "primary" : "secondary"
-                }`}
-                onClick={() => {
-                  setSelectedEpisode(item.position);
-                  setEpisodeURL(item.url);
-                  item.is_watched = true;
-                }}
-                style={{ marginLeft: "8px" }}
-              >
-                {item.is_watched && <i className="small">check</i>}
-                {item.name}
-              </button>
-            );
-          })}
-      </nav>
-    </article>
+      )}
+    </>
   );
 };
