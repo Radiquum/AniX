@@ -90,7 +90,7 @@ export default function Release(props) {
           <a data-ui="#vo" className="active">
             озвучка
           </a>
-          {sourcesInfo && <a data-ui="#src">плеер</a>}
+          <a data-ui="#src">плеер</a>
         </div>
         <div
           className="page padding active scroll"
@@ -115,9 +115,9 @@ export default function Release(props) {
               );
             })}
         </div>
-        {sourcesInfo && (
-          <div className="page center-align padding" id="src">
-            {sourcesInfo.sources.map((item) => {
+        <div className="page center-align padding" id="src">
+          {sourcesInfo &&
+            sourcesInfo.sources.map((item) => {
               return (
                 <button
                   key={item.id}
@@ -133,10 +133,12 @@ export default function Release(props) {
                 </button>
               );
             })}
-          </div>
-        )}
+        </div>
       </div>
-      <div className="s12 scroll row" style={{ paddingBottom: "8px" }}>
+      <nav
+        className="s12 scroll row no-margin no-space"
+        style={{ paddingBottom: "8px", height: "48px" }}
+      >
         {episodeInfo &&
           episodeInfo.episodes.map((item) => {
             return (
@@ -150,13 +152,14 @@ export default function Release(props) {
                   setEpisodeURL(item.url);
                   item.is_watched = true;
                 }}
+                style={{ marginLeft: "8px" }}
               >
                 {item.is_watched && <i className="small">check</i>}
                 {item.name}
               </button>
             );
           })}
-      </div>
+      </nav>
     </article>
   );
 }
