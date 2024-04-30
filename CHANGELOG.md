@@ -1,3 +1,15 @@
+## 0.4.0 (2024-04-30)
+
+### Feat
+
+- **frontend**: add a release page
+
+### Refactor
+
+- **frontend/release**: add a loading circle for release player when fetching episodes data
+- **frontend/release**: move release player in to the component
+- **frontend/release-page**: less layout shift on player
+
 ## 0.3.0 (2024-04-30)
 
 ### Feat
