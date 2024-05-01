@@ -1,3 +1,9 @@
+## 0.6.0 (2024-05-01)
+
+### Feat
+
+- **frontend/release**: add ability to change boormarks list on releases page for authorized users
+
 ## 0.5.0 (2024-04-30)
 
 ### Feat
