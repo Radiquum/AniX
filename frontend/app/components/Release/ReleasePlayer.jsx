@@ -94,7 +94,7 @@ export const ReleasePlayer = (props) => {
             </div>
             <div
               className="page padding active scroll"
-              style={{ Height: "438px" }}
+              style={{ height: "425px" }}
               id="vo"
             >
               {voiceoverInfo &&
