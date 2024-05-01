@@ -10,6 +10,7 @@ export const ReleaseInfo = (props) => {
   const userStore = useUserStore();
   const [releaseInfo, setReleaseInfo] = useState();
   const [list, setList] = useState();
+  const [isFavorite, setIsFavorite] = useState(false);
   const [timer, seTimer] = useState();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export const ReleaseInfo = (props) => {
       setReleaseInfo(release);
       if (userStore.token) {
         setList(release.release.profile_list_status || 0);
+        setIsFavorite(release.release.is_favorite);
       }
     }
 
@@ -59,6 +61,15 @@ export const ReleaseInfo = (props) => {
     }
   }, [userStore.token, list]);
 
+  function _setFav() {
+    async function __updateFavorite() {
+      const add_url = `${endpoints.user.favorites}/list/${props.id}/add?token=${userStore.token}`;
+      const delete_url = `${endpoints.user.favorites}/list/${props.id}/delete?token=${userStore.token}`;
+      await getData(!isFavorite ? add_url : delete_url);
+    }
+    __updateFavorite();
+  }
+
   const lists = [
     { list: 0, name: "Не смотрю" },
     { list: 1, name: "Смотрю" },
@@ -86,8 +97,8 @@ export const ReleaseInfo = (props) => {
                         {releaseInfo.release.title_original}
                       </h6>
                     </div>
-                    <div className="s3 right-align">
-                      {list >= 0 && (
+                    <div className="s3 row right-align">
+                      {userStore.token && list >= 0 && (
                         <button className="responsive">
                           <span>{lists[list].name}</span>
                           <i>arrow_drop_down</i>
@@ -105,6 +116,17 @@ export const ReleaseInfo = (props) => {
                               );
                             })}
                           </menu>
+                        </button>
+                      )}
+                      {userStore.token && releaseInfo && (
+                        <button
+                          className="circle"
+                          onClick={() => {
+                            setIsFavorite(!isFavorite);
+                            _setFav();
+                          }}
+                        >
+                          <i className={isFavorite ? "fill" : ""}>favorite</i>
                         </button>
                       )}
                     </div>
