@@ -46,7 +46,7 @@ export const ReleaseInfo = (props) => {
 
   useEffect(() => {
     async function _setList() {
-      const url = `${endpoints.user.profile}/${props.id}/${list}/add?token=${userStore.token}`;
+      const url = `${endpoints.user.bookmarks.list}/${list}/${props.id}/add?token=${userStore.token}`;
       await getData(url);
     }
     if (

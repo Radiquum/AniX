@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from modules import proxy
-from modules.pages import favorites
+from modules.pages import bookmarks
 from modules.pages import index
 from modules.pages import search
 from modules.release import release
@@ -22,8 +22,8 @@ TAGS = [
         "description": "Releases API requests",
     },
     {
-        "name": "Favorites",
-        "description": "Favorites API requests",
+        "name": "Bookmarks",
+        "description": "Bookmarks API requests",
     },
     {
         "name": "Search",
@@ -46,7 +46,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Profile"])
 app.include_router(release.router, prefix="/api/release", tags=["Releases"])
 
 app.include_router(index.router, prefix="/api/index", tags=["Index"])
-app.include_router(favorites.router, prefix="/api/favorites", tags=["Favorites"])
+app.include_router(bookmarks.router, prefix="/api/bookmarks", tags=["Bookmarks"])
 app.include_router(search.router, prefix="/api/search", tags=["Search"])
 
 app.include_router(proxy.router, prefix="/api/proxy")

@@ -46,3 +46,30 @@ async def GetUserAbandoned(request: Request, token: str, page: int = 0):
     return await apiRequest(
         request, ENDPOINTS["user"]["abandoned"], page, query=f"?token={token}"
     )
+
+
+@router.get(
+    "/list/{bookmark_list_id}/{release_id}/add", summary="Add release to bookmarks list"
+)
+async def addReleaseToBookmarks(
+    request: Request, release_id: int, bookmark_list_id: int, token: str
+):
+    return await apiRequest(
+        request,
+        f"{ENDPOINTS['profile']}/list/add/{bookmark_list_id}/{release_id}",
+        query=f"?token={token}",
+    )
+
+
+@router.get(
+    "/list/{bookmark_list_id}/{release_id}/delete",
+    summary="Remove release from bookmarks list",
+)
+async def deleteReleaseFromBookmarks(
+    request: Request, release_id: int, bookmark_list_id: int, token: str
+):
+    return await apiRequest(
+        request,
+        f"{ENDPOINTS['profile']}/list/delete/{bookmark_list_id}/{release_id}",
+        query=f"?token={token}",
+    )

@@ -17,7 +17,7 @@ export default function History() {
 
   async function fetchData(page = 0) {
     if (userStore.token) {
-      const url = `${endpoints.user.history}?page=${page}&token=${userStore.token}`;
+      const url = `${endpoints.user.bookmarks.history}?page=${page}&token=${userStore.token}`;
       const data = await getData(url);
 
       if (data.content.length < 25) {

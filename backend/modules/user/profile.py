@@ -28,25 +28,3 @@ async def getUserById(
         },
         "is_my_profile": res["is_my_profile"],
     }
-
-
-@router.get("/{release_id}/{list}/add", summary="Add release to bookmarks list")
-async def addReleaseToBookmarks(
-    request: Request, release_id: int, list: int, token: str
-):
-    return await apiRequest(
-        request,
-        f"{ENDPOINTS['profile']}/list/add/{list}/{release_id}",
-        query=f"?token={token}",
-    )
-
-
-@router.get("/{release_id}/{list}/delete", summary="Remove release from bookmarks list")
-async def deleteReleaseFromBookmarks(
-    request: Request, release_id: int, list: int, token: str
-):
-    return await apiRequest(
-        request,
-        f"{ENDPOINTS['profile']}/list/delete/{list}/{release_id}",
-        query=f"?token={token}",
-    )
