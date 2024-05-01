@@ -1,3 +1,19 @@
+## 0.7.0 (2024-05-01)
+
+### Feat
+
+- **frontend/release**: add a favorite button to release page
+- **frontend**: add user favorites page
+- **backend**: add a user favorites route
+
+### Fix
+
+- **frontend/release**: fix voiceover selection overflow in player
+
+### Refactor
+
+- **backend-&-frontend**: change bookmarks api urls to /api/bookmarks/{path} from /api/favorites/{path}
+
 ## 0.6.0 (2024-05-01)
 
 ### Feat
