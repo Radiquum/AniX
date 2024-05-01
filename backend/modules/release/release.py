@@ -9,8 +9,10 @@ router = APIRouter()
 
 
 @router.get("/{release_id}", summary="Get release info")
-async def GetReleaseById(request: Request, release_id: str):
-    return await apiRequest(request, ENDPOINTS["release"]["info"], release_id)
+async def GetReleaseById(request: Request, release_id: str, token: str = ""):
+    return await apiRequest(
+        request, ENDPOINTS["release"]["info"], release_id, query=f"?token={token}"
+    )
 
 
 @router.get("/{release_id}/voiceover", summary="Get release voiceover info")

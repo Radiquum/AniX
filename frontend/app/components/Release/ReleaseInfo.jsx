@@ -4,20 +4,69 @@ import { useEffect, useState } from "react";
 import { getData } from "@/app/api/api-utils";
 import { endpoints } from "@/app/api/config";
 import { ReleaseCard } from "../ReleaseCard/ReleaseCard";
+import { useUserStore } from "@/app/store/user-store";
 
 export const ReleaseInfo = (props) => {
+  const userStore = useUserStore();
   const [releaseInfo, setReleaseInfo] = useState();
+  const [list, setList] = useState();
+  const [timer, seTimer] = useState();
 
   useEffect(() => {
     async function _fetchInfo() {
-      const release = await getData(`${endpoints.release}/${props.id}`);
+      let url = `${endpoints.release}/${props.id}`;
+
+      if (userStore.token) {
+        url = `${endpoints.release}/${props.id}?token=${userStore.token}`;
+      }
+
+      const release = await getData(url);
       setReleaseInfo(release);
+      if (userStore.token) {
+        setList(release.release.profile_list_status || 0);
+      }
+    }
+
+    // I really think it's not the way it is should be done
+    // but it works
+    // FIX: double requests, 1st without token, and second with it.
+    // now it's only 1 request with or w/o token, if page is reloaded.
+    if (userStore.token) {
+      clearTimeout(timer);
     }
     if (props.id) {
-      _fetchInfo();
+      seTimer(
+        setTimeout(() => {
+          _fetchInfo();
+        }, 1000),
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userStore.token]);
+
+  useEffect(() => {
+    async function _setList() {
+      const url = `${endpoints.user.profile}/${props.id}/${list}/add?token=${userStore.token}`;
+      await getData(url);
+    }
+    if (
+      userStore.token &&
+      releaseInfo &&
+      list != releaseInfo.release.profile_list_status
+    ) {
+      _setList();
+      releaseInfo.release.profile_list_status = list;
+    }
+  }, [userStore.token, list]);
+
+  const lists = [
+    { list: 0, name: "Не смотрю" },
+    { list: 1, name: "Смотрю" },
+    { list: 2, name: "В планах" },
+    { list: 3, name: "Просмотрено" },
+    { list: 4, name: "Отложено" },
+    { list: 5, name: "Брошено" },
+  ];
 
   return (
     <>
@@ -30,10 +79,36 @@ export const ReleaseInfo = (props) => {
               </div>
               <div className="s9">
                 <div className="padding">
-                  <h5>{releaseInfo.release.title_ru}</h5>
-                  <h6 className="small no-margin">
-                    {releaseInfo.release.title_original}
-                  </h6>
+                  <div className="grid">
+                    <div className="s9">
+                      <h5>{releaseInfo.release.title_ru}</h5>
+                      <h6 className="small no-margin">
+                        {releaseInfo.release.title_original}
+                      </h6>
+                    </div>
+                    <div className="s3 right-align">
+                      {list >= 0 && (
+                        <button className="responsive">
+                          <span>{lists[list].name}</span>
+                          <i>arrow_drop_down</i>
+                          <menu>
+                            {lists.map((item) => {
+                              return (
+                                <a
+                                  key={item.list}
+                                  onClick={() => {
+                                    setList(item.list);
+                                  }}
+                                >
+                                  {item.name}
+                                </a>
+                              );
+                            })}
+                          </menu>
+                        </button>
+                      )}
+                    </div>
+                  </div>
                   <p className="small no-margin">
                     {releaseInfo.release.country} •{" "}
                     {releaseInfo.release.status.name} •{" "}
@@ -47,30 +122,32 @@ export const ReleaseInfo = (props) => {
               </div>
             </div>
           </article>
-          <article className="grid">
-            <div className="row s12">
-              <i>hub</i>
-              <h5>Связанные релизы</h5>
-            </div>
-            <nav className="s12 scroll">
-              {releaseInfo.release.related_releases.map((item) => {
-                if (item.id == props.id) {
-                  return "";
-                }
-                return (
-                  <ReleaseCard
-                    className={"s1"}
-                    key={item.id}
-                    id={item.id}
-                    title={item.title_ru}
-                    poster={item.image}
-                    description={""}
-                    height={400}
-                  />
-                );
-              })}
-            </nav>
-          </article>
+          {releaseInfo.release.related_releases.length > 0 && (
+            <article className="grid">
+              <div className="row s12">
+                <i>hub</i>
+                <h5>Связанные релизы</h5>
+              </div>
+              <nav className="s12 scroll">
+                {releaseInfo.release.related_releases.map((item) => {
+                  if (item.id == props.id) {
+                    return "";
+                  }
+                  return (
+                    <ReleaseCard
+                      className={"s1"}
+                      key={item.id}
+                      id={item.id}
+                      title={item.title_ru}
+                      poster={item.image}
+                      description={""}
+                      height={400}
+                    />
+                  );
+                })}
+              </nav>
+            </article>
+          )}
         </>
       ) : (
         <div className="center-align">
