@@ -33,6 +33,7 @@ ENDPOINTS: Endpoints = {
         "watched": f"{API_URL}/profile/list/all/3",
         "delayed": f"{API_URL}/profile/list/all/4",
         "abandoned": f"{API_URL}/profile/list/all/5",
+        "favorite": f"{API_URL}/favorite",
     },
     "search": f"{API_URL}/search/releases",
     "statistic": {
