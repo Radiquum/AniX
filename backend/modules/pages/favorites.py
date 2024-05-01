@@ -9,7 +9,7 @@ router = APIRouter()
 @router.get("", summary="Get user favorites list")
 async def GetUserFavorites(request: Request, token: str, page: int = 0):
     return await apiRequest(
-        request, ENDPOINTS["user"]["favorite"], f"/all/{page}", query=f"?token={token}"
+        request, ENDPOINTS["user"]["favorite"], f"all/{page}", query=f"?token={token}"
     )
 
 
@@ -18,7 +18,7 @@ async def addReleaseToFavorites(request: Request, release_id: int, token: str):
     return await apiRequest(
         request,
         ENDPOINTS["user"]["favorite"],
-        f"/add/{release_id}",
+        f"add/{release_id}",
         query=f"?token={token}",
     )
 
@@ -28,6 +28,6 @@ async def deleteReleaseFromFavorites(request: Request, release_id: int, token: s
     return await apiRequest(
         request,
         ENDPOINTS["user"]["favorite"],
-        f"/delete/{release_id}",
+        f"delete/{release_id}",
         query=f"?token={token}",
     )

@@ -20,6 +20,7 @@ export const endpoints = {
       delayed: `${API_URL}/bookmarks/delayed`,
       abandoned: `${API_URL}/bookmarks/abandoned`,
     },
+    favorites: `${API_URL}/favorites`,
   },
   release: `${API_URL}/release`,
 };

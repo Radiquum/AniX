@@ -27,13 +27,13 @@ export const NavigationRail = (props) => {
       icon: "bookmark",
       path: "/bookmarks",
     },
-    //
-    // {
-    //   title: "Избранное",
-    //   icon: "favorite",
-    //   path: "/favorites",
-    // },
-    //
+
+    {
+      title: "Избранное",
+      icon: "favorite",
+      path: "/favorites",
+    },
+
     {
       title: "История",
       icon: "history",
