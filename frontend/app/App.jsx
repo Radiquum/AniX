@@ -56,31 +56,33 @@ export const App = (props) => {
 
   return (
     <body>
-      <div>
-        <NavigationRail
-          colorPicker={colorPicker}
-          settingsPopup={settingsPopup}
-          setColorPicker={setColorPicker}
-          setSettingsPopup={setSettingsPopup}
-        />
-        {colorPicker && (
-          <ColorPicker
-            mode={mode}
-            theme={theme}
+      <div style={{ display: "flex", "flex-direction": "row" }}>
+        <div style={{ "padding-inline-start": "0" }}>
+          <NavigationRail
             colorPicker={colorPicker}
-            setColorPicker={setColorPicker}
-          />
-        )}
-        {settingsPopup && (
-          <Settings
             settingsPopup={settingsPopup}
+            setColorPicker={setColorPicker}
             setSettingsPopup={setSettingsPopup}
           />
-        )}
+          {colorPicker && (
+            <ColorPicker
+              mode={mode}
+              theme={theme}
+              colorPicker={colorPicker}
+              setColorPicker={setColorPicker}
+            />
+          )}
+          {settingsPopup && (
+            <Settings
+              settingsPopup={settingsPopup}
+              setSettingsPopup={setSettingsPopup}
+            />
+          )}
+        </div>
+        <main className="responsive padding" style={{ overflow: "hidden" }}>
+          {props.children}
+        </main>
       </div>
-      <main className="responsive padding" style={{ overflow: "hidden" }}>
-        {props.children}
-      </main>
     </body>
   );
 };

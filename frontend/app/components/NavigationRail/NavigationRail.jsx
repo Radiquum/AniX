@@ -42,7 +42,18 @@ export const NavigationRail = (props) => {
   ];
 
   return (
-    <nav className="left">
+    <nav
+      className="left border round margin"
+      style={{
+        "inline-size": "unset",
+        position: "sticky",
+        top: "1rem",
+        left: "0",
+        "min-height": "calc(100vh - (var(---margin) * 2))",
+        "background-color": "var(--surface)",
+        "padding-block": "1rem",
+      }}
+    >
       {userStore.isAuth && userStore.user ? (
         <Link className="circle transparent " href="/profile">
           <Image
