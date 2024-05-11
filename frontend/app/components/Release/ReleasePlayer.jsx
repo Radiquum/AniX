@@ -81,6 +81,7 @@ export const ReleasePlayer = (props) => {
       {voiceoverInfo && sourcesInfo && episodeInfo ? (
         <article className="fill grid">
           <iframe
+            allow="fullscreen"
             src={episodeURL}
             className="s9"
             style={{ aspectRatio: "16/9", width: "100%", height: "auto" }}
