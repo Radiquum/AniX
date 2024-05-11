@@ -105,7 +105,7 @@ export const NavigationRail = (props) => {
 
       <button className="circle transparent" onClick={() => copyToClipboard()}>
         <i>{isCopied ? "done" : "content_copy"}</i>
-        <div class="tooltip right">
+        <div className="tooltip right">
           {isCopied ? "Ссылка скопирована" : "Скопировать ссылку"}
         </div>
       </button>
