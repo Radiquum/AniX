@@ -1,3 +1,15 @@
+## 0.8.0 (2024-05-11)
+
+### Feat
+
+- **Design/Navbar**: move logout button to tooltip on user avatar hover
+- **navigation**: add a copy current url button to navbar for ease of sharing
+- **Design**: navigation rail redisign
+
+### Fix
+
+- **ReleasePlayer**: fixed fullscreen view
+
 ## 0.7.0 (2024-05-01)
 
 ### Feat
