@@ -1,3 +1,13 @@
+## 0.9.0 (2024-05-11)
+
+### Feat
+
+- **ReleaseOverview**: add ability to change view modes for releases pages
+
+### Refactor
+
+- **Design/Content**: redising of the main content view
+
 ## 0.8.0 (2024-05-11)
 
 ### Feat
