@@ -65,6 +65,17 @@ export const NavigationRail = (props) => {
             width="64"
             height="64"
           />
+          <div className="tooltip bottom round">
+            {" "}
+            {userStore.isAuth && (
+              <button
+                className="circle transparent"
+                onClick={() => userStore.logout()}
+              >
+                <i>logout</i>
+              </button>
+            )}
+          </div>
         </Link>
       ) : (
         <button
@@ -89,15 +100,6 @@ export const NavigationRail = (props) => {
           </Link>
         );
       })}
-
-      {userStore.isAuth && (
-        <button
-          className="circle transparent"
-          onClick={() => userStore.logout()}
-        >
-          <i>logout</i>
-        </button>
-      )}
 
       <span className="max"></span>
 
