@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useUserStore } from "@/app/store/user-store";
 import { useRouter } from "next/navigation";
+import useCopyToClipboard from "@/app/hooks/useCopyToClipboard";
 
 export const NavigationRail = (props) => {
+  const [isCopied, copyToClipboard] = useCopyToClipboard();
   const pathname = usePathname();
   const userStore = useUserStore();
   const router = useRouter();
@@ -98,6 +100,14 @@ export const NavigationRail = (props) => {
       )}
 
       <span className="max"></span>
+
+      <button className="circle transparent" onClick={() => copyToClipboard()}>
+        <i>{isCopied ? "done" : "content_copy"}</i>
+        <div class="tooltip right">
+          {isCopied ? "Ссылка скопирована" : "Скопировать ссылку"}
+        </div>
+      </button>
+
       <button
         className="circle transparent"
         onClick={() => props.setSettingsPopup(!props.settingsPopup)}
