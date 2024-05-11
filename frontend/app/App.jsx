@@ -79,8 +79,20 @@ export const App = (props) => {
             />
           )}
         </div>
-        <main className="responsive padding" style={{ overflow: "hidden" }}>
-          {props.children}
+        <main
+          className="max padding"
+          style={{
+            height: "calc(100vh - 2rem)",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            className="border round padding"
+            style={{ height: "calc(100vh - 2rem)", "overflow-y": "scroll" }}
+          >
+            {props.children}
+          </div>
         </main>
       </div>
     </body>

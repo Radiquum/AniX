@@ -5,7 +5,7 @@ export const ReleaseCard = (props) => {
   return (
     <Link
       href={`/release/${props.id}`}
-      className={props.className ? props.className : "s3"}
+      className={props.className ? props.className : "s2"}
     >
       <article
         className="no-padding round fill"
