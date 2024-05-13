@@ -1,3 +1,9 @@
+## 0.10.0 (2024-05-13)
+
+### Feat
+
+- **deploy**: allow deploying on deta.space
+
 ## 0.9.0 (2024-05-11)
 
 ### Feat
