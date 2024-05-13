@@ -36,26 +36,28 @@ TAGS = [
     },
 ]
 
+PREFIX = "/v1"
+
 app = FastAPI(
     openapi_tags=TAGS,
     title="AniX API",
     description="unofficial API proxy for Anixart android application.",
-    openapi_url="/api/openapi.json",
-    docs_url="/api/docs",
+    openapi_url=f"{PREFIX}/openapi.json",
+    docs_url=f"{PREFIX}/docs",
     redoc_url=None,
 )
 
-app.include_router(profile.router, prefix="/api/profile", tags=["Profile"])
-app.include_router(auth.router, prefix="/api/auth", tags=["Profile"])
+app.include_router(profile.router, prefix=f"{PREFIX}/profile", tags=["Profile"])
+app.include_router(auth.router, prefix=f"{PREFIX}/auth", tags=["Profile"])
 
-app.include_router(release.router, prefix="/api/release", tags=["Releases"])
+app.include_router(release.router, prefix=f"{PREFIX}/release", tags=["Releases"])
 
-app.include_router(index.router, prefix="/api/index", tags=["Index"])
-app.include_router(bookmarks.router, prefix="/api/bookmarks", tags=["Bookmarks"])
-app.include_router(favorites.router, prefix="/api/favorites", tags=["Favorites"])
-app.include_router(search.router, prefix="/api/search", tags=["Search"])
+app.include_router(index.router, prefix=f"{PREFIX}/index", tags=["Index"])
+app.include_router(bookmarks.router, prefix=f"{PREFIX}/bookmarks", tags=["Bookmarks"])
+app.include_router(favorites.router, prefix=f"{PREFIX}/favorites", tags=["Favorites"])
+app.include_router(search.router, prefix=f"{PREFIX}/search", tags=["Search"])
 
-app.include_router(proxy.router, prefix="/api/proxy")
+app.include_router(proxy.router, prefix=f"{PREFIX}/proxy")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000)

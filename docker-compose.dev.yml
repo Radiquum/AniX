@@ -27,7 +27,9 @@ services:
       dockerfile: ../docker/backend.dev.Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.anix-backend.rule=Host(`127.0.0.1`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.anix-backend.rule=Host(`127.0.0.1`) && PathPrefix(`/api/`)"
+      - traefik.http.middlewares.anix-backend_stripprefix.stripprefix.prefixes=/api
+      - "traefik.http.routers.anix-backend.middlewares=anix-backend_stripprefix@docker"
       - "traefik.http.routers.anix-backend.entrypoints=web"
     expose:
       - 8000
@@ -43,12 +45,13 @@ services:
     container_name: "AniX-traefik"
     command:
       #- "--log.level=DEBUG"
-      - "--api.dashboard=false"
-      - "--api.insecure=false"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.web.address=:80"
     ports:
       - "80:80"
+      - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"

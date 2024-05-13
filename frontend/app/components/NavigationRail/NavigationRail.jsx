@@ -47,13 +47,13 @@ export const NavigationRail = (props) => {
     <nav
       className="left border round margin"
       style={{
-        "inline-size": "unset",
+        inlineSize: "unset",
         position: "sticky",
         top: "1rem",
         left: "0",
-        "min-height": "calc(100vh - (var(---margin) * 2))",
-        "background-color": "var(--surface)",
-        "padding-block": "1rem",
+        minHeight: "calc(100vh - (var(---margin) * 2))",
+        backgroundColor: "var(--surface)",
+        paddingBlock: "1rem",
       }}
     >
       {userStore.isAuth && userStore.user ? (

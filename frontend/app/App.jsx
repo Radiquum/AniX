@@ -56,8 +56,8 @@ export const App = (props) => {
 
   return (
     <body>
-      <div style={{ display: "flex", "flex-direction": "row" }}>
-        <div style={{ "padding-inline-start": "0" }}>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ paddingInlineStart: "0" }}>
           <NavigationRail
             colorPicker={colorPicker}
             settingsPopup={settingsPopup}
@@ -89,7 +89,7 @@ export const App = (props) => {
         >
           <div
             className="border round padding"
-            style={{ height: "calc(100vh - 2rem)", "overflow-y": "scroll" }}
+            style={{ height: "calc(100vh - 2rem)", overflowY: "scroll" }}
           >
             {props.children}
           </div>

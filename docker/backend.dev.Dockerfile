@@ -15,4 +15,4 @@ COPY . .
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
-CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--root-path", "/api"]

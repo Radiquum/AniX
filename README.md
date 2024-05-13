@@ -118,13 +118,13 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
 
 ## Deployment
 
-### Docker Deployment
+<!-- ### Docker Deployment
 
-To be added soon . . .
+To be added soon . . . -->
 
-### Deta Space
+<!-- ### Deta Space
 
-To be added soon . . .
+To be added soon . . . -->
 
 <!-- ### Standalone
 

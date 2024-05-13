@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] Add docker deployment
+
 ## Релизы
 
 - [ ] Авто-ген ссылка с именем

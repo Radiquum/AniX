@@ -1,0 +1,14 @@
+v: 0
+# icon: ./icon.png
+micros:
+  - name: anix-api
+    src: ./backend/
+    engine: python3.9
+    path: api
+    run: uvicorn main:app --root-path /api
+    dev: uvicorn main:app --reload
+
+  - name: anix-app
+    src: ./frontend/
+    engine: next
+    primary: true
