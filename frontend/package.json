@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "docker": "next build && mkdir -p .next/standalone/public/_next && cp -r .next/static .next/standalone/public/_next/ && mv .next/standalone ./build && rm -rf .next",
     "lint": "next lint"
   },
   "dependencies": {

@@ -1,0 +1,77 @@
+services:
+  frontend:
+    env_file: .env
+    container_name: "AniX-frontend"
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend.Dockerfile
+    labels:
+      # --- ${DOMAIN} will be replaced with DOMAIN from .env ---
+      - "traefik.enable=true"
+      - "traefik.http.routers.anix-frontend.rule=Host(`${DOMAIN}`)"
+
+      # --- !COMMENT THIS FOR HTTPS! ---
+      - "traefik.http.routers.anix-frontend.entrypoints=web"
+
+      # --- !UNCOMMENT THIS FOR HTTPS! ---
+      #- "traefik.http.routers.anix-frontend.entrypoints=websecure"
+      #- "traefik.http.routers.anix-frontend.tls=true"
+      #- "traefik.http.routers.user-api-backend.tls.certresolver=letsencrypt"
+    expose:
+      - 3000
+  backend:
+    env_file: .env
+    container_name: "AniX-backend"
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    labels:
+      # --- ${DOMAIN} will be replaced with DOMAIN from .env ---
+      - "traefik.enable=true"
+      - "traefik.http.routers.anix-backend.rule=Host(`${DOMAIN}`) && PathPrefix(`/api`)"
+      - traefik.http.middlewares.anix-backend_stripprefix.stripprefix.prefixes=/api
+      - "traefik.http.routers.anix-backend.middlewares=anix-backend_stripprefix@docker"
+
+      # --- !COMMENT THIS FOR HTTPS! ---
+      - "traefik.http.routers.anix-backend.entrypoints=web"
+
+      # --- !UNCOMMENT THIS FOR HTTPS! ---
+      #- "traefik.http.routers.anix-backend.tls=true"
+      #- "traefik.http.routers.anix-backend.entrypoints=websecure"
+      #- "traefik.http.routers.user-api-backend.tls.certresolver=letsencrypt"
+    expose:
+      - 8000
+  traefik:
+    env_file: .env
+    image: "traefik:v3.0"
+    container_name: "AniX-traefik"
+    command:
+      - "--api.dashboard=false"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+
+      # --- !COMMENT THIS FOR HTTPS! ---
+      - "--entryPoints.web.address=:${HTTP_PORT:-80}"
+
+      # --- !UNCOMMENT THIS FOR HTTPS! ---
+      #- "--entrypoints.websecure.address=:${HTTPS_PORT:-443}"
+      #- "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      #- "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      #- "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      #- "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
+      #- "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      # --- !COMMENT THIS FOR HTTPS! ---
+      - ${HTTP_PORT:-80}:${HTTP_PORT:-80}
+      # --- !UNCOMMENT THIS FOR HTTPS! ---
+      #- ${HTTPS_PORT:-443}:${HTTPS_PORT:-443}
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    depends_on:
+      - frontend
+      - backend
+
+      # --- !UNCOMMENT THIS FOR HTTPS! ---
+      # acme.json should be created on host instance!
+      #- "./acme.json:/letsencrypt/acme.json"

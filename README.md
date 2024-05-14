@@ -118,13 +118,69 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
 
 ## Deployment
 
-<!-- ### Docker Deployment
+1. clone this repository via `git clone https://github.com/Radiquum/AniX.git`
+2. cd into the repository folder.
+3. deploy app with below instructions.
 
-To be added soon . . . -->
+### Docker Deployment
 
-<!-- ### Deta Space
+#### Docker Prerequisites
 
-To be added soon . . . -->
+1. **Docker:** Make sure Docker is installed on your system. You can download it from [https://www.docker.com/](https://www.docker.com/).
+2. **Docker Compose:** Docker Compose should also be installed. It's usually included with Docker installations.
+3. **Domain Name:** (optional) You need a registered domain name (e.g., `example.com`) and have it pointing to your server's IP address.
+4. **SSL Certificate:** (optional) For HTTPS, you'll need an SSL certificate. Let's Encrypt is a free and popular option.
+
+#### Docker steps
+
+1. Edit the .env file
+2. Edit the docker-compose.yml file to match your needs.
+3. run `docker compose up -d` to build and run production images.
+4. your app will be available at `http(s)://{DOMAIN}`.
+5. run `docker compose down` to stop the containers.
+
+*notes*:
+
+- application is deployed as http by default, to enable https you need to edit docker compose and .env files.
+
+   if https is enabled, traefik will automatically issue HTTPS certificate from lets encrypt and redirect to HTTPS.
+
+- you can also run `docker compose up --build` to build and run images without re-deploying the containers.
+
+
+### Deta Space
+
+1. **Install the Space CLI:**
+
+   ```bash
+   curl -fsSL https://deta.space/assets/space-cli.sh | sh
+   ```
+
+2. **Login to Deta Space:**
+
+   ```bash
+   space login
+   ```
+
+   (You'll need to grab an access token from your Space dashboard)
+
+3. **Create a new Space Project:**
+
+   ```bash
+   space new
+   ```
+
+   (This will guide you through setting up your project)
+
+4. **Push your app to Deta Space:**
+
+   ```bash
+   space push
+   ```
+
+   (This will build and deploy your application)
+
+You can find more details in the Deta Space documentation: [Deta Space Docs](https://docs.deta.space/)
 
 <!-- ### Standalone
 
