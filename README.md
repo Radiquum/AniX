@@ -4,11 +4,43 @@ AniX is an unofficial web client for the Android application Anixart. It allows 
 
 ## Screenshots
 
-user profile page
-![user profile page image](./docs/profile.jpg)
+**User profile page**
 
-main page
-![main page image](./docs/index.jpg)
+<details>
+
+| Dark                                                          | Light                                                           |
+| ------------------------------------------------------------- | --------------------------------------------------------------- |
+| ![user profile page image dark mode](./docs/profile_dark.jpg) | ![user profile page image light mode](./docs/profile_light.jpg) |
+
+</details>
+
+**Pages with releases lists**
+
+<details>
+
+| Dark                                                                   | Light                                                                    |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| ![index page image dark mode cards view ](./docs/index_cards_dark.jpg) | ![index page image light mode cards view ](./docs/index_cards_light.jpg) |
+| ![index page image dark mode rows view ](./docs/index_rows_dark.jpg)   | ![index page image light mode rows view ](./docs/index_rows_light.jpg)   |
+
+</details>
+
+**Release page and Player**
+
+<details>
+
+| Dark                                                   | Light                                                    |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| ![player page image dark mode](./docs/player_dark.jpg) | ![player page image light mode](./docs/player_light.jpg) |
+
+</details>
+
+## Features
+
+1. Dynamic theming (light/dark mode, app colors)
+2. login/logout to AnixArt account
+3. sync watch history, bookmarks and favorites
+4. row or card layout for releases view
 
 ## Project Structure
 
@@ -21,82 +53,6 @@ This project consists of two main parts:
 
 Please note that AniX is an unofficial project and is not affiliated with the developers of Anixart. It is recommended to use the official Anixart app for the most up-to-date features and functionality.
 
-## Getting Started
-
-The is a two ways to run this project locally. directly and via docker compose.
-
-### Docker
-
-#### Docker Requirements
-
-- docker (>=26)
-- docker compose (>= 2.27)
-
-#### Running the project via Docker
-
-Execute `docker compose -f docker-compose.dev.yml up` command in the root of the folder.
-
-You can access the AniX web client in your browser at `http://127.0.0.1`. And API docs at `http://127.0.0.1/api/docs`
-
-### Directly
-
-#### Prerequisites
-
-- Python 3.6 or later ([https://www.python.org/downloads/](https://www.python.org/downloads/))
-- Node.js and npm ([https://nodejs.org/en](https://nodejs.org/en))
-
-#### Setting Up the Backend
-
-1. Clone this repository.
-2. Navigate to the project directory in your terminal.
-3. Create a virtual environment to isolate project dependencies:
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # For Linux/macOS
-   venv\Scripts\activate.bat  # For Windows
-   ```
-
-4. Install the required backend dependencies:
-
-   ```bash
-   pip install -r ./requirements.txt
-   ```
-
-#### Setting Up the Frontend
-
-1. Navigate to the `frontend` directory.
-2. Install the required frontend dependencies:
-
-   ```bash
-   npm install
-   ```
-
-#### Running the Project
-
-1. Start the backend server:
-
-   ```bash
-   cd ./backend
-   source ./venv/bin/activate
-   uvicorn main:app --reload
-   ```
-
-2. Start the frontend development server:
-
-   ```bash
-   cd ./frontend
-   npm run dev
-   ```
-
-3. Start local traefik reverse proxy
-
-   1. download a traefik binary from [github](https://github.com/traefik/traefik/releases/tag/v2.11.2)
-   2. place it in traefik directory and make it executable
-   3. run `sudo ./traefik --configFile ./traefik.yml`
-
-You can access the AniX web client in your browser at `http://127.0.0.1`. And API docs at `http://127.0.0.1/api/docs`
-
 ## Development
 
 To maintain code formatting it's recommended to use pre-commit hooks
@@ -108,11 +64,26 @@ To maintain readable git commit messages it's recommended to use [commitizen](ht
 
 Feel free to make changes and experiment with the project.
 
-### Docker development environment
+## Getting Started
 
-To run development environment via docker you can execute the docker watch command, it will watch and copy local changes in to the running container. you will need to use the dev compose file and docker files.
+### Docker
 
-Execute the `docker compose -f docker-compose.dev.yml watch` command to set up the docker development environment.
+#### Docker Requirements
+
+- docker (>=26)
+- docker compose (>= 2.27)
+
+#### Running development project via Docker
+
+Execute `docker compose -f docker-compose.dev.yml up` command in the root of the folder.
+
+You can access the AniX web client in your browser at `http://127.0.0.1`. And API docs at `http://127.0.0.1/api/v1/docs`
+
+#### Running development project via Docker with realtime changes
+
+To run development environment with realtime changes via docker you can execute the docker watch command, it will watch and copy local changes in to the running container. you will need to use the dev compose file and docker files.
+
+Execute the `docker compose -f docker-compose.dev.yml watch` command to set up the docker development environment with realtime changes.
 
 To access the docker logs you can use `docker compose -f docker-compose.dev.yml logs -f` command.
 
@@ -147,7 +118,6 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
 
 - you can also run `docker compose up --build` to build and run images without re-deploying the containers.
 
-
 ### Deta Space
 
 1. **Install the Space CLI:**
@@ -181,10 +151,6 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
    (This will build and deploy your application)
 
 You can find more details in the Deta Space documentation: [Deta Space Docs](https://docs.deta.space/)
-
-<!-- ### Standalone
-
-To be added soon . . . -->
 
 ## Contributing
 
