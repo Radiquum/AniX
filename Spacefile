@@ -3,7 +3,7 @@ v: 0
 micros:
   - name: anix-api
     src: ./backend/
-    engine: python3.9
+    engine: python3.11
     path: api
     run: uvicorn main:app --root-path /api
     dev: uvicorn main:app --reload

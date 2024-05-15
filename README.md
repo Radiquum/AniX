@@ -145,7 +145,7 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
 4. **Push your app to Deta Space:**
 
    ```bash
-   space push
+   space push --runner-version experimental
    ```
 
    (This will build and deploy your application)
