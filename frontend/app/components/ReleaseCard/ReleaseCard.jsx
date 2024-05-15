@@ -5,11 +5,18 @@ export const ReleaseCard = (props) => {
   return (
     <Link
       href={`/release/${props.id}`}
-      className={props.className ? props.className : "s2"}
+      className={""}
+      style={{
+        width: "300px",
+        height: "100%",
+      }}
     >
       <article
-        className="no-padding round fill"
-        style={{ width: 284, height: props.height ? props.height : 508 }}
+        className="small-padding round fill"
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <div style={{ aspectRatio: "1/1" }}>

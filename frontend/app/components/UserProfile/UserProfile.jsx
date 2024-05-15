@@ -216,7 +216,6 @@ export const UserProfile = (props) => {
             {lastWatched.map((item) => {
               return (
                 <ReleaseCard
-                  className={"s2"}
                   key={item.id}
                   id={item.id}
                   title={item.title_ru}
@@ -225,7 +224,6 @@ export const UserProfile = (props) => {
                     item.last_view_episode.name ||
                     `${item.last_view_episode.position + 1} серия`
                   }
-                  height={400}
                 />
               );
             })}

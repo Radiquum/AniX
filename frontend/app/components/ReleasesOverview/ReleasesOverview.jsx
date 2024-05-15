@@ -6,9 +6,18 @@ export default function ReleasesOverview(props) {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <nav
+        className="l"
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          maxWidth: "calc(100% - 12rem)",
+          margin: "auto",
+        }}
+      >
         {props.chips && (
-          <div>
+          <nav className="scroll">
             {props.chips.map((item) => {
               return (
                 <button
@@ -22,10 +31,10 @@ export default function ReleasesOverview(props) {
                 </button>
               );
             })}
-          </div>
+          </nav>
         )}
 
-        <div>
+        <div className="secondary-container round tiny-padding">
           <button
             className="circle transparent"
             onClick={() => {
@@ -43,11 +52,68 @@ export default function ReleasesOverview(props) {
             <i className={view == "grid" ? "fill" : ""}>cards</i>
           </button>
         </div>
-      </div>
+      </nav>
+
+      <nav
+        className="s m"
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          margin: "auto",
+          maxWidth: "100%",
+        }}
+      >
+        {props.chips && (
+          <nav className="scroll" style={{ maxWidth: "100%" }}>
+            {props.chips.map((item) => {
+              return (
+                <button
+                  key={item.list}
+                  className={`chip ${props.list == item.list ? "fill" : ""}`}
+                  onClick={() => {
+                    props.setList(item.list);
+                  }}
+                >
+                  <span>{item.title}</span>
+                </button>
+              );
+            })}
+          </nav>
+        )}
+
+        <div className="secondary-container round tiny-padding">
+          <button
+            className="circle transparent"
+            onClick={() => {
+              setView("list");
+            }}
+          >
+            <i className={view == "list" ? "fill" : ""}>view_agenda</i>
+          </button>
+          <button
+            className="circle transparent"
+            onClick={() => {
+              setView("grid");
+            }}
+          >
+            <i className={view == "grid" ? "fill" : ""}>cards</i>
+          </button>
+        </div>
+      </nav>
 
       {props.releases ? (
         <>
-          <div className="grid">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat( auto-fill, 300px )",
+              gap: "1rem",
+              justifyContent: "center",
+              justifyItems: "center",
+              paddingTop: "1rem",
+            }}
+          >
             <CardList data={props.releases} view={view} />
           </div>
 
