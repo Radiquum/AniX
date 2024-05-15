@@ -51,7 +51,11 @@ export default function History() {
     <>
       {!userStore.isAuth ? (
         <LogInNeeded />
-      ) : releases > 0 ? (
+      ) : !releases ? (
+        <div className="center-align">
+          <progress className="circle" />
+        </div>
+      ) : releases.length > 0 ? (
         <ReleasesOverview
           page={page}
           setPage={setPage}
