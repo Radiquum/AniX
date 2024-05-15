@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Styles from "./ColorPicker.module.css";
 import { useUserStore } from "@/app/store/user-store";
+import { API_URL } from "@/app/api/config";
 
 export const ColorPicker = (props) => {
   const userStore = useUserStore();
@@ -42,7 +43,7 @@ export const ColorPicker = (props) => {
             className={`circle border small s2`}
             onClick={() => {
               props.theme(
-                `/api/proxy/image?url=${userStore.user.profile.avatar}`,
+                `${API_URL}/proxy/image?url=${userStore.user.profile.avatar}`,
               );
             }}
           >

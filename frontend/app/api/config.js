@@ -1,4 +1,4 @@
-let API_URL = "/api/v1";
+export let API_URL = "/api/v1";
 
 if (process.env.API_URL) {
   API_URL = process.env.API_URL;
