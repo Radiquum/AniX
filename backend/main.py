@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
 from modules import proxy
@@ -37,6 +39,9 @@ TAGS = [
 ]
 
 PREFIX = "/v1"
+
+if os.getenv("API_PREFIX"):
+    PREFIX = os.getenv("API_PREFIX")
 
 app = FastAPI(
     openapi_tags=TAGS,
