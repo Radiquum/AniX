@@ -221,7 +221,10 @@ export const UserProfile = (props) => {
                   id={item.id}
                   title={item.title_ru}
                   poster={item.image}
-                  description={item.last_view_episode.name}
+                  description={
+                    item.last_view_episode.name ||
+                    `${item.last_view_episode.position + 1} серия`
+                  }
                   height={400}
                 />
               );
