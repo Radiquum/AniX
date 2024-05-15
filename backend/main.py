@@ -1,5 +1,8 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from modules import proxy
 from modules.pages import bookmarks
 from modules.pages import favorites
@@ -38,6 +41,9 @@ TAGS = [
 
 PREFIX = "/v1"
 
+if os.getenv("API_PREFIX"):
+    PREFIX = os.getenv("API_PREFIX")
+
 app = FastAPI(
     openapi_tags=TAGS,
     title="AniX API",
@@ -45,6 +51,14 @@ app = FastAPI(
     openapi_url=f"{PREFIX}/openapi.json",
     docs_url=f"{PREFIX}/docs",
     redoc_url=None,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
 )
 
 app.include_router(profile.router, prefix=f"{PREFIX}/profile", tags=["Profile"])

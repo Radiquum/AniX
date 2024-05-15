@@ -2,6 +2,10 @@
 
 AniX is an unofficial web client for the Android application Anixart. It allows you to access and manage your Anixart account from a web browser on your desktop or laptop computer.
 
+[Changelog](./CHANGELOG.md)
+
+[Backend Readme](./backend/README.md)
+
 ## Screenshots
 
 **User profile page**
@@ -89,6 +93,8 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
 
 ## Deployment
 
+### first steps
+
 1. clone this repository via `git clone https://github.com/Radiquum/AniX.git`
 2. cd into the repository folder.
 3. deploy app with below instructions.
@@ -151,6 +157,27 @@ To access the docker logs you can use `docker compose -f docker-compose.dev.yml 
    (This will build and deploy your application)
 
 You can find more details in the Deta Space documentation: [Deta Space Docs](https://docs.deta.space/)
+
+### Vercel
+
+*note* you don't need to complete the first steps for vercel deploy
+
+1. [Deploy the backend](./backend/README.md#vercel) and copy the production url, including the prefix
+2. create a new project on vercel and set the root directory to frontend
+3. set API_URL env variable to copied url
+4. click deploy
+
+#### Available environment variables
+
+- API_URL - sets the api url to use for frontend to connect to the backend
+
+#### One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Radiquum/AniX/tree/main/frontend)
+
+*note*: this will create a new repository.
+
+*note*: don't forget to set API_URL to backend url.
 
 ## Contributing
 

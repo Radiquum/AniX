@@ -1,3 +1,16 @@
+## 0.11.0 (2024-05-15)
+
+### Feat
+
+- **deployment**: allow deploy to vercel
+
+### Fix
+
+- **vercel/backend**: fix vercel backend deploy
+- **vercel/backend**: fix vercel.json headers schema
+- **vercel/backend**: fix missing CORS headers
+- **frontend**: fix API_URL environment variable being undefined
+
 ## 0.10.0 (2024-05-13)
 
 ### Feat
