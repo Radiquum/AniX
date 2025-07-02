@@ -9,7 +9,8 @@ export const resHeaders = {
   "Content-Type": "application/json",
 };
 
-export function asJSON(res, object: any, status: number) {
+import { Request, Response } from "express";
+export function asJSON(res: Response, object: any, status: number) {
   res.status(status);
   res.set(resHeaders);
   res.send(JSON.stringify(object));
@@ -18,7 +19,13 @@ export function asJSON(res, object: any, status: number) {
 export const ANIXART_UA =
   "AnixartApp/9.0 BETA 5-25062213 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";
 export const ANIXART_API = "https://api.anixart.app";
-export const ANIXART_HEADERS = {
+
+export type ANIXART_HEADERST = {
+  "User-Agent": string;
+  "Content-Type": string;
+  "Api-Version"?: string;
+};
+export const ANIXART_HEADERS: ANIXART_HEADERST = {
   "User-Agent": ANIXART_UA,
   "Content-Type": "application/json; charset=UTF-8",
 };
@@ -102,3 +109,18 @@ export class Log {
 }
 
 export const logger = new Log((process.env.LOG_LEVEL as LogLevel) || "info");
+
+export interface GetHook {
+  match: (path: string) => boolean;
+  get: (data: any, url: URL) => any;
+}
+
+export interface PostHook {
+  match: (path: string) => boolean;
+  post: (body: any, url: URL) => any;
+}
+
+export interface LoadedHook {
+  path: string;
+  mtime: string;
+}

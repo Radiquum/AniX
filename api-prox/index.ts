@@ -1,4 +1,12 @@
-import { ANIXART_API, ANIXART_HEADERS, asJSON, logger } from "./shared";
+import {
+  ANIXART_API,
+  ANIXART_HEADERS,
+  ANIXART_HEADERST,
+  asJSON,
+  GetHook,
+  LoadedHook,
+  logger,
+} from "./shared";
 import express from "express";
 import fs from "fs/promises";
 
@@ -9,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 const host = "0.0.0.0";
 const port = 7001;
 
-const loadedHooks = [];
+const loadedHooks: LoadedHook[] = [];
 
 app.get("/*path", async (req, res) => {
   if (req.path == "/favicon.ico") return asJSON(res, {}, 404);
@@ -25,7 +33,7 @@ app.get("/*path", async (req, res) => {
     req.headers["api-version"] == "v2"
   ) {
     // logger.debug(`  ↳ Force API V2`);
-    ANIXART_HEADERS["API-Version"] = "v2";
+    ANIXART_HEADERS["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
 
@@ -35,6 +43,7 @@ app.get("/*path", async (req, res) => {
   });
 
   if (
+    !apiResponse ||
     !apiResponse.ok ||
     apiResponse.headers.get("content-type") != "application/json"
   ) {
@@ -46,8 +55,9 @@ app.get("/*path", async (req, res) => {
       {
         code: 99,
         returned_value: {
-          request_status: apiResponse.status,
-          request_content_type: apiResponse.headers.get("content-type"),
+          request_status: apiResponse ? apiResponse.status : null,
+          request_content_type:
+            apiResponse ? apiResponse.headers.get("content-type") : null,
         },
         reason: "Path probably doesn't exist",
       },
@@ -57,7 +67,7 @@ app.get("/*path", async (req, res) => {
   }
 
   let data = await apiResponse.json();
-  let hooks = [];
+  let hooks: string[] = [];
 
   try {
     hooks = await fs.readdir("./hooks");
@@ -81,7 +91,7 @@ app.get("/*path", async (req, res) => {
       isHookLoaded.mtime = stat.mtime.toISOString();
     }
 
-    const hook = require(`./hooks/${name}`);
+    const hook: GetHook = require(`./hooks/${name}`);
     if (!isHookLoaded) {
       logger.infoHook(`Loaded "./hooks/${name}"`);
       loadedHooks.push({
@@ -108,9 +118,9 @@ app.post("/*path", async (req, res) => {
   // logger.debug(`  ↳ [QUERY] ${url.searchParams.toString()}`);
 
   let apiResponse: null | Response = null;
-  const apiHeaders = {
+  const apiHeaders: ANIXART_HEADERST = {
     "User-Agent": ANIXART_HEADERS["User-Agent"],
-    "Content-Type": req.headers["content-type"],
+    "Content-Type": req.headers["content-type"] || "application/json",
   };
 
   if (
@@ -118,7 +128,7 @@ app.post("/*path", async (req, res) => {
     req.headers["api-version"] == "v2"
   ) {
     // logger.debug(`  ↳ Force API V2`);
-    apiHeaders["API-Version"] = "v2";
+    apiHeaders["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
 
@@ -160,6 +170,7 @@ app.post("/*path", async (req, res) => {
   // logger.console("debug", "      ↳ [RES HEADERS]", apiResponse.headers);
 
   if (
+    !apiResponse ||
     !apiResponse.ok ||
     apiResponse.headers.get("content-type") != "application/json"
   ) {
@@ -171,8 +182,9 @@ app.post("/*path", async (req, res) => {
       {
         code: 99,
         returned_value: {
-          request_status: apiResponse.status,
-          request_content_type: apiResponse.headers.get("content-type"),
+          request_status: apiResponse ? apiResponse.status : null,
+          request_content_type:
+            apiResponse ? apiResponse.headers.get("content-type") : null,
         },
         reason: "Path probably doesn't exist",
       },
