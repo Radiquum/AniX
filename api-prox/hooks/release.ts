@@ -31,8 +31,8 @@ export async function get(data: any, url: URL) {
 
   // пушим строки в список, что-бы было легче их объединить
   const noteBuilder = [];
-  if (data["release"]["note"] != null) noteBuilder.push(`${data.note}<hr/>`); // если в поле note уже что-то есть, разделяем значение и рейтинг
-  noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${shikiAnimJson.score}★<br>`); // добавляем рейтинг от шикимори
+  if (data["release"]["note"] != null) noteBuilder.push(`${data.note}<br/>`); // если в поле note уже что-то есть, разделяем значение и рейтинг
+  noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${shikiAnimJson.score}★`); // добавляем рейтинг от шикимори
   data["release"]["note"] = noteBuilder.toString(); // заменяем оригинальное поле нашей строкой
   data["release"]["id_shikimori"] = shikiId; // добавляем айди шикимори в ответ, потому что почему нет
 
