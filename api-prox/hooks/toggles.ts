@@ -62,5 +62,12 @@ export async function get(data: Toggles, url: URL) {
 
   data.apiAltAvailable = false;
   data.apiAltUrl = "";
+
+  data.sponsorshipAvailable = false;
+  data.sponsorshipPromotion = false;
+  data.kodikIframeAd = false;
+  data.kodikAdIframeUrl = "";
+
+  // data.iframeEmbedUrl = "https://rani.loophole.site/iframe?url=" // необходимо менять на юрл сервиса (пока вручную) если используется хук с кастомными эпизодами (episode.ts)
   return data;
 }

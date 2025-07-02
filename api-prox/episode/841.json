@@ -1,0 +1,92 @@
+{
+    "comment": [
+        "пример для добавления и изменения озвучек, источников и эпизодов",
+        "для аниме Initial D - First Stage, ID: 841",
+        "кстати раздел 'comment' совсем не нужен, так что это буквально коммент"
+    ],
+    "types": [
+        {
+            "id": 1,
+            "name": "NyaniDUB",
+            "icon": "https://wsrv.nl/?url=https://s3.tebi.io/wahs.wah.su/red_panda/0782.%20gfCXa9ZzhvY.jpg",
+            "sources": [
+                {
+                    "id": 1,
+                    "name": "Sibnet",
+                    "episodes": [
+                        {
+                            "position": 1,
+                            "name": "первая серия",
+                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
+                            "iframe": false,
+                            "is_filler": false
+                        }
+                    ]
+                },
+                {
+                    "id": 998,
+                    "name": "Custom Source",
+                    "episodes": [
+                        {
+                            "position": 1,
+                            "name": "своя серия",
+                            "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            "iframe": true,
+                            "is_filler": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 999,
+            "name": "Custom Voiceover",
+            "icon": "https://s3.anixstatic.com/voiceovers/anidub.jpg",
+            "episodes_count": 2,
+            "sources": [
+                {
+                    "id": 998,
+                    "name": "Custom Source",
+                    "episodes_count": 2,
+                    "episodes": [
+                        {
+                            "position": 1,
+                            "name": "mewmewmew",
+                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
+                            "iframe": true,
+                            "is_filler": true
+                        },
+                        {
+                            "position": 2,
+                            "name": "своя серия",
+                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
+                            "iframe": true,
+                            "is_filler": true
+                        }
+                    ]
+                },
+                {
+                    "id": 997,
+                    "name": "Custom Source 2",
+                    "episodes_count": 2,
+                    "episodes": [
+                        {
+                            "position": 1,
+                            "name": "mewmewmew",
+                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
+                            "iframe": true,
+                            "is_filler": true
+                        },
+                        {
+                            "position": 2,
+                            "name": "своя серия",
+                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
+                            "iframe": true,
+                            "is_filler": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
