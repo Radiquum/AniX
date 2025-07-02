@@ -3,18 +3,28 @@ import express from "express";
 import fs from "fs/promises";
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const host = "0.0.0.0";
 const port = 7001;
 
 const loadedHooks = [];
 
 app.get("/*path", async (req, res) => {
-  const url = new URL(`${ANIXART_API}${req.url}`);
-  logger.debug(`Fetching ${url.protocol}//${url.hostname}${url.pathname}`);
+  if (req.path == "/favicon.ico") return asJSON(res, {}, 404);
 
-  const isApiV2 = url.searchParams.get("API-Version") == "v2" || false;
-  if (isApiV2) {
-    logger.debug(`  ↳ Force API V2`);
+  const url = new URL(`${ANIXART_API}${req.url}`);
+  logger.debug(
+    `[${req.method}] ${url.protocol}//${url.hostname}${url.pathname}`
+  );
+  // logger.debug(`  ↳ [QUERY] ${url.searchParams.toString()}`);
+
+  if (
+    url.searchParams.get("API-Version") == "v2" ||
+    req.headers["api-version"] == "v2"
+  ) {
+    // logger.debug(`  ↳ Force API V2`);
     ANIXART_HEADERS["API-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
@@ -28,7 +38,9 @@ app.get("/*path", async (req, res) => {
     !apiResponse.ok ||
     apiResponse.headers.get("content-type") != "application/json"
   ) {
-    logger.error(`Failed to fetch: ${url.protocol}//${url.hostname}${url.pathname}`)
+    logger.error(
+      `Failed to fetch: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
+    );
     asJSON(
       res,
       {
@@ -37,6 +49,7 @@ app.get("/*path", async (req, res) => {
           request_status: apiResponse.status,
           request_content_type: apiResponse.headers.get("content-type"),
         },
+        reason: "Path probably doesn't exist",
       },
       500
     );
@@ -82,6 +95,92 @@ app.get("/*path", async (req, res) => {
 
     data = await hook.get(data, url);
   }
+
+  asJSON(res, data, 200);
+  return;
+});
+
+app.post("/*path", async (req, res) => {
+  const url = new URL(`${ANIXART_API}${req.url}`);
+  logger.debug(
+    `[${req.method}] ${url.protocol}//${url.hostname}${url.pathname}`
+  );
+  // logger.debug(`  ↳ [QUERY] ${url.searchParams.toString()}`);
+
+  let apiResponse: null | Response = null;
+  const apiHeaders = {
+    "User-Agent": ANIXART_HEADERS["User-Agent"],
+    "Content-Type": req.headers["content-type"],
+  };
+
+  if (
+    url.searchParams.get("API-Version") == "v2" ||
+    req.headers["api-version"] == "v2"
+  ) {
+    // logger.debug(`  ↳ Force API V2`);
+    apiHeaders["API-Version"] = "v2";
+    url.searchParams.delete("API-Version");
+  }
+
+  const reqContentType =
+    req.headers["content-type"] ?
+      req.headers["content-type"].split(";")[0]
+    : "application/json";
+  switch (reqContentType) {
+    case "multipart/form-data":
+      const formData = new FormData();
+      for (const name in req.body) {
+        formData.append(name, req.body[name]);
+      }
+      apiResponse = await fetch(url.toString(), {
+        method: "POST",
+        headers: apiHeaders,
+        body: formData,
+      });
+      break;
+    case "application/x-www-form-urlencoded":
+      apiResponse = await fetch(url.toString(), {
+        method: "POST",
+        headers: apiHeaders,
+        body: new URLSearchParams(req.body),
+      });
+      break;
+    case "application/json":
+      apiResponse = await fetch(url.toString(), {
+        method: "POST",
+        headers: apiHeaders,
+        body: JSON.stringify(req.body),
+      });
+      break;
+  }
+
+  // logger.console("debug", `      ↳ [REQ BODY]`, req.body);
+  // logger.console("debug", `      ↳ [REQ HEADERS]`, req.headers);
+  // logger.console("debug", "      ↳ [RES TEXT]", await apiResponse.text());
+  // logger.console("debug", "      ↳ [RES HEADERS]", apiResponse.headers);
+
+  if (
+    !apiResponse.ok ||
+    apiResponse.headers.get("content-type") != "application/json"
+  ) {
+    logger.error(
+      `Failed to post: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
+    );
+    asJSON(
+      res,
+      {
+        code: 99,
+        returned_value: {
+          request_status: apiResponse.status,
+          request_content_type: apiResponse.headers.get("content-type"),
+        },
+        reason: "Path probably doesn't exist",
+      },
+      500
+    );
+    return;
+  }
+  let data = await apiResponse.json();
 
   asJSON(res, data, 200);
   return;
