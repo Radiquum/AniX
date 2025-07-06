@@ -6,6 +6,7 @@ import {
   GetHook,
   LoadedHook,
   logger,
+  PostHook,
 } from "./shared";
 import express from "express";
 import fs from "fs/promises";
@@ -222,6 +223,44 @@ app.post("/*path", async (req, res) => {
     return;
   }
   let data = await apiResponse.json();
+  let hooks: string[] = [];
+
+  try {
+    hooks = await fs.readdir("./hooks");
+  } catch (err) {
+    logger.error("'hooks' directory not found");
+  }
+
+  for (let i = 0; i < hooks.length; i++) {
+    const name = hooks[i];
+    if (!name.endsWith(".ts")) continue;
+    if (name.includes("example")) continue;
+
+    const isHookLoaded = loadedHooks.find(
+      (item) => item.path == `./hooks/${name}`
+    );
+    const stat = await fs.stat(`./hooks/${name}`);
+
+    if (isHookLoaded && isHookLoaded.mtime != stat.mtime.toISOString()) {
+      logger.infoHook(`Updated "./hooks/${name}"`);
+      delete require.cache[require.resolve(`./hooks/${name}`)];
+      isHookLoaded.mtime = stat.mtime.toISOString();
+    }
+
+    const hook: PostHook = require(`./hooks/${name}`);
+    if (!isHookLoaded) {
+      logger.infoHook(`Loaded "./hooks/${name}"`);
+      loadedHooks.push({
+        path: `./hooks/${name}`,
+        mtime: stat.mtime.toISOString(),
+      });
+    }
+
+    if (!hook.hasOwnProperty("match") || !hook.hasOwnProperty("post")) continue;
+    if (!hook.match(req.path)) continue;
+
+    data = await hook.post(data, url);
+  }
 
   asJSON(res, data, 200);
   return;
