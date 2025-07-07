@@ -26,11 +26,9 @@ Requirements:
 
     ![vercel import button](./docs/deploy/vercel_import.png)
 
-5. (optional) Add variables to use your own player:
+5. (optional) Add variable to use your own player:
 
-   - NEXT_PUBLIC_KODIK_PARSER_URL
-   - NEXT_PUBLIC_ANILIBRIA_PARSER_URL
-   - NEXT_PUBLIC_SIBNET_PARSER_URL
+   - NEXT_PUBLIC_PLAYER_PARSER_URL
 
     Use the ones you received if you deployed [anix-player-parsers](./player-parsers/README.md)
 
@@ -77,9 +75,7 @@ Requirements:
 
 7. (optional) Add variables to use your own player:
 
-   - NEXT_PUBLIC_KODIK_PARSER_URL
-   - NEXT_PUBLIC_ANILIBRIA_PARSER_URL
-   - NEXT_PUBLIC_SIBNET_PARSER_URL
+   - NEXT_PUBLIC_PLAYER_PARSER_URL
 
     Use the ones you received if you deployed [anix-player-parsers](./player-parsers/README.md)
 
@@ -124,7 +120,7 @@ Additional Requirements:
 - -p - container port to be exposed externally. PORT:3000
 
 > [!NOTE]
-> For variables you received if you deployed [anix-player-parsers](./player-parsers/README.md), you need to use `-e VARIABLE=VALUE` before the word anix
+> For variables you received if you deployed [anix-player-parsers](./player-parsers/README.md), you need to use `-e VARIABLE=VALUE` before the last word anix
 
 [docker run command](https://docs.docker.com/reference/cli/docker/container/run/)
 
