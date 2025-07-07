@@ -62,148 +62,35 @@ export async function _fetchPlayer(
   return data;
 }
 
-function decryptKodikLink(enc: string) {
-  const decryptedBase64 = enc.replace(/[a-zA-Z]/g, (e: any) => {
-    return String.fromCharCode(
-      (e <= "Z" ? 90 : 122) >= (e = e.charCodeAt(0) + 18) ? e : e - 26
-    );
-  });
-  return atob(decryptedBase64);
-}
 
 export const _fetchKodikManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  // Fetch episode links via edge function
-  const NEXT_PUBLIC_KODIK_PARSER_URL = env("NEXT_PUBLIC_KODIK_PARSER_URL")
-  if (!NEXT_PUBLIC_KODIK_PARSER_URL) {
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
+  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
     setPlayerError({
-      message: "Источник не настроен",
-      detail: "переменная 'NEXT_PUBLIC_KODIK_PARSER_URL' не обнаружена",
+      message: "Плеер не настроен",
+      detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
     });
     return { manifest: null, poster: null };
   }
 
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_KODIK_PARSER_URL}/?url=${url}&player=kodik`,
+    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${url}&player=kodik`,
     setPlayerError
   );
+
   if (data) {
-    let lowQualityLink = data.links["360"][0].src; // we assume that 360p is always present
-
-    if (!lowQualityLink.includes("//")) {
-      // check if link is encrypted, else do nothing
-      lowQualityLink = decryptKodikLink(lowQualityLink);
+      let manifest: string = data.manifest
+      if (!manifest.startsWith("http")) {
+        let file = new File([manifest], "manifest.m3u8", {
+          type: "application/x-mpegURL",
+        });
+        manifest = URL.createObjectURL(file);
+      }
+      return { manifest, poster: data.poster };
     }
-
-    if (lowQualityLink.includes("https://")) {
-      // strip the https prefix, since we add it manually
-      lowQualityLink = lowQualityLink.replace("https://", "//");
-    }
-
-    let manifest = `https:${lowQualityLink.replace("360.mp4:hls:", "")}`;
-    let poster = `https:${lowQualityLink.replace("360.mp4:hls:manifest.m3u8", "thumb001.jpg")}`;
-
-    if (
-      lowQualityLink.includes("animetvseries") ||
-      lowQualityLink.includes("tvseries")
-    ) {
-      // if link includes "animetvseries" or "tvseries" we need to construct manifest ourselves
-      let blobTxt = "#EXTM3U\n";
-
-      if (data.links.hasOwnProperty("240")) {
-        blobTxt += "#EXT-X-STREAM-INF:RESOLUTION=427x240,BANDWIDTH=200000\n";
-        let link = data.links["240"][0].src;
-        let dec = null;
-        link.includes("//") ?
-          link.startsWith("https:") ?
-            (blobTxt += `${link}\n`)
-          : (blobTxt += `https:${link}\n`)
-        : (dec = decryptKodikLink(link));
-
-        dec ?
-          dec.startsWith("https:") ?
-            (blobTxt += `${dec}\n`)
-          : (blobTxt += `https:${dec}\n`)
-        : null;
-      }
-
-      if (data.links.hasOwnProperty("360")) {
-        blobTxt += "#EXT-X-STREAM-INF:RESOLUTION=578x360,BANDWIDTH=400000\n";
-        let link = data.links["360"][0].src;
-        let dec = null;
-        link.includes("//") ?
-          link.startsWith("https:") ?
-            (blobTxt += `${link}\n`)
-          : (blobTxt += `https:${link}\n`)
-        : (dec = decryptKodikLink(link));
-
-        dec ?
-          dec.startsWith("https:") ?
-            (blobTxt += `${dec}\n`)
-          : (blobTxt += `https:${dec}\n`)
-        : null;
-      }
-
-      if (data.links.hasOwnProperty("480")) {
-        blobTxt += "#EXT-X-STREAM-INF:RESOLUTION=854x480,BANDWIDTH=596000\n";
-        let link = data.links["480"][0].src;
-        let dec = null;
-        link.includes("//") ?
-          link.startsWith("https:") ?
-            (blobTxt += `${link}\n`)
-          : (blobTxt += `https:${link}\n`)
-        : (dec = decryptKodikLink(link));
-
-        dec ?
-          dec.startsWith("https:") ?
-            (blobTxt += `${dec}\n`)
-          : (blobTxt += `https:${dec}\n`)
-        : null;
-      }
-
-      if (data.links.hasOwnProperty("720")) {
-        blobTxt += "#EXT-X-STREAM-INF:RESOLUTION=1280x720,BANDWIDTH=1280000\n";
-        let link = data.links["720"][0].src;
-        let dec = null;
-        link.includes("//") ?
-          link.startsWith("https:") ?
-            (blobTxt += `${link}\n`)
-          : (blobTxt += `https:${link}\n`)
-        : (dec = decryptKodikLink(link));
-
-        dec ?
-          dec.startsWith("https:") ?
-            (blobTxt += `${dec}\n`)
-          : (blobTxt += `https:${dec}\n`)
-        : null;
-      }
-
-      if (data.links.hasOwnProperty("1080")) {
-        blobTxt += "#EXT-X-STREAM-INF:RESOLUTION=1920x1080,BANDWIDTH=2560000\n";
-        let link = data.links["1080"][0].src;
-        let dec = null;
-        link.includes("//") ?
-          link.startsWith("https:") ?
-            (blobTxt += `${link}\n`)
-          : (blobTxt += `https:${link}\n`)
-        : (dec = decryptKodikLink(link));
-
-        dec ?
-          dec.startsWith("https:") ?
-            (blobTxt += `${dec}\n`)
-          : (blobTxt += `https:${dec}\n`)
-        : null;
-      }
-
-      let file = new File([blobTxt], "manifest.m3u8", {
-        type: "application/x-mpegURL",
-      });
-      manifest = URL.createObjectURL(file);
-    }
-    return { manifest, poster };
-  }
   return { manifest: null, poster: null };
 };
 
@@ -211,32 +98,26 @@ export const _fetchAnilibriaManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const id = url.split("?id=")[1].split("&ep=")[0];
-  const epid = url.split("?id=")[1].split("&ep=")[1];
-  const _url = `https://api.anilibria.tv/v3/title?id=${id}`;
-  let data = null;
-  const NEXT_PUBLIC_ANILIBRIA_PARSER_URL = env("NEXT_PUBLIC_ANILIBRIA_PARSER_URL")
-  if (NEXT_PUBLIC_ANILIBRIA_PARSER_URL) {
-    data = await _fetchPlayer(
-      `${NEXT_PUBLIC_ANILIBRIA_PARSER_URL}/?url=${_url}&player=libria`,
-      setPlayerError
-    );
-  } else {
-    data = await _fetchPlayer(_url, setPlayerError);
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
+  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
+    setPlayerError({
+      message: "Плеер не настроен",
+      detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
+    });
+    return { manifest: null, poster: null };
   }
 
-  if (data) {
-    const host = `https://${data.player.host}`;
-    const ep = data.player.list[epid];
+  const data = await _fetchPlayer(
+    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${encodeURIComponent(url)}&player=libria`,
+    setPlayerError
+  );
 
-    // we need to manually construct a manifest file for a hls player
-    const blobTxt = `#EXTM3U\n${ep.hls.sd && `#EXT-X-STREAM-INF:RESOLUTION=854x480,BANDWIDTH=596000\n${host}${ep.hls.sd}\n`}${ep.hls.hd && `#EXT-X-STREAM-INF:RESOLUTION=1280x720,BANDWIDTH=1280000\n${host}${ep.hls.hd}\n`}${ep.hls.fhd && `#EXT-X-STREAM-INF:RESOLUTION=1920x1080,BANDWIDTH=2560000\n${host}${ep.hls.fhd}\n`}`;
-    let file = new File([blobTxt], "manifest.m3u8", {
+  if (data) {
+    let file = new File([data.manifest], "manifest.m3u8", {
       type: "application/x-mpegURL",
     });
     let manifest = URL.createObjectURL(file);
-    let poster = `https://anixart.libria.fun${ep.preview}`;
-    return { manifest, poster };
+    return { manifest, poster: data.poster };
   }
   return { manifest: null, poster: null };
 };
@@ -245,23 +126,22 @@ export const _fetchSibnetManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  // Fetch data via cloud endpoint
-  const NEXT_PUBLIC_SIBNET_PARSER_URL = env("NEXT_PUBLIC_SIBNET_PARSER_URL")
-  if (!NEXT_PUBLIC_SIBNET_PARSER_URL) {
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
+  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
     setPlayerError({
-      message: "Источник не настроен",
-      detail: "переменная 'NEXT_PUBLIC_SIBNET_PARSER_URL' не обнаружена",
+      message: "Плеер не настроен",
+      detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
     });
     return { manifest: null, poster: null };
   }
+
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_SIBNET_PARSER_URL}/?url=${url}&player=sibnet`,
+    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${url}&player=sibnet`,
     setPlayerError
   );
+
   if (data) {
-    let manifest = data.video;
-    let poster = data.poster;
-    return { manifest, poster };
+    return { manifest: data.manifest, poster: data.poster };
   }
   return { manifest: null, poster: null };
 };

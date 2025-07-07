@@ -22,9 +22,6 @@ where:
 - VIDEO_URL - the link to the video from the source
 - PLAYER_SOURCE - the source, one of: kodik, sibnet, libria
 
-> [!NOTE]
-> When using libria source, url should be the url to the anilibria api, not player directly
-
 Response:
 
 - 500|400: an error occurred, see the `message` field in the response body for details

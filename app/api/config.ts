@@ -1,9 +1,9 @@
 export const CURRENT_APP_VERSION = "3.7.0";
 
-export const API_URL = "https://api.anixart.tv";
+export const API_URL = "https://api.anixart.app";
 export const API_PREFIX = "/api/proxy";
 export const USER_AGENT =
-  "AnixartApp/8.2.1-23121216 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";
+  "AnixartApp/9.0 BETA 5-25062213 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";
 
 export const ENDPOINTS = {
   release: {

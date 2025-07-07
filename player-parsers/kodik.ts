@@ -90,6 +90,88 @@ export async function getKodikURL(res, url: string) {
     return;
   }
 
-  asJSON(res, await linksRes.json(), 200);
+  let data = stripResponse(await linksRes.json());
+  if (isEncrypted(data)) {
+    for (const [key] of Object.entries(data.links)) {
+      data.links[key][0].src = decryptSrc(data.links[key][0].src);
+    }
+  }
+
+  if (!hasProto(data)) {
+    for (const [key] of Object.entries(data.links)) {
+      data.links[key][0].src = addProto(data.links[key][0].src);
+    }
+  }
+
+  if (!isAnimeTvSeries(data)) {
+    data["manifest"] = data.links[data.default][0].src.replace(
+      `${data.default}.mp4:hls:`,
+      ""
+    );
+  } else {
+    data["manifest"] = createManifest(data);
+  }
+
+  data["poster"] = data.links[data.default][0].src.replace(
+    `${data.default}.mp4:hls:manifest.m3u8`,
+    "thumb001.jpg"
+  );
+
+  asJSON(res, data, 200);
   return;
+}
+
+function stripResponse(data) {
+  return {
+    default: data.default,
+    links: data.links,
+  };
+}
+
+function isEncrypted(data) {
+  return !data.links[data.default][0].src.includes("//");
+}
+
+function decryptSrc(enc: string) {
+  const decryptedBase64 = enc.replace(/[a-zA-Z]/g, (e: any) => {
+    return String.fromCharCode(
+      (e <= "Z" ? 90 : 122) >= (e = e.charCodeAt(0) + 18) ? e : e - 26
+    );
+  });
+  return atob(decryptedBase64);
+}
+
+function hasProto(data) {
+  return data.links[data.default][0].src.startsWith("http");
+}
+
+function addProto(string) {
+  return `https:${string}`;
+}
+
+function isAnimeTvSeries(data) {
+  return (
+    data.links[data.default][0].src.includes("animetvseries") ||
+    data.links[data.default][0].src.includes("tvseries")
+  );
+}
+
+function createManifest(data) {
+  const resolutions = {
+    240: "427x240",
+    360: "578x360",
+    480: "854x480",
+    720: "1280x720",
+    1080: "1920x1080",
+  };
+
+  const stringBuilder: string[] = [];
+
+  stringBuilder.push("#EXTM3U");
+  for (const [key] of Object.entries(data.links)) {
+    stringBuilder.push(`#EXT-X-STREAM-INF:RESOLUTION=${resolutions[key]}`);
+    stringBuilder.push(data.links[key][0].src);
+  }
+
+  return stringBuilder.join("\n");
 }

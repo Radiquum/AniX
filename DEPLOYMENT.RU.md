@@ -26,11 +26,9 @@
 
     ![vercel import button](./docs/deploy/vercel_import.png)
 
-5. (опционально) добавьте переменные для использования своего плеера:
+5. (опционально) добавьте переменную для использования своего плеера:
 
-   - NEXT_PUBLIC_KODIK_PARSER_URL
-   - NEXT_PUBLIC_ANILIBRIA_PARSER_URL
-   - NEXT_PUBLIC_SIBNET_PARSER_URL
+   - NEXT_PUBLIC_PLAYER_PARSER_URL
 
     на те которые вы получили, если развёртывали [anix-player-parsers](./player-parsers/README.RU.md)
 
@@ -75,11 +73,9 @@
 
     ![netlify project name](./docs/deploy/netlify_project_name.png)
 
-7. (опционально) добавьте переменные для использования своего плеера:
+7. (опционально) добавьте переменную для использования своего плеера:
 
-   - NEXT_PUBLIC_KODIK_PARSER_URL
-   - NEXT_PUBLIC_ANILIBRIA_PARSER_URL
-   - NEXT_PUBLIC_SIBNET_PARSER_URL
+   - NEXT_PUBLIC_PLAYER_PARSER_URL
 
     на те которые вы получили, если развёртывали [anix-player-parsers](./player-parsers/README.RU.md)
 
@@ -124,7 +120,7 @@
 - -p - порт контейнера который будет доступен извне. ПОРТ:3000
 
 > [!NOTE]
-> для переменных которые вы получили, если развёртывали [anix-player-parsers](./player-parsers/README.RU.md), необходимо использовать `-e ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ` до слова anix
+> для переменных которые вы получили, если развёртывали [anix-player-parsers](./player-parsers/README.RU.md), необходимо использовать `-e ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ` до последнего слова anix
 
 [команда docker run](https://docs.docker.com/reference/cli/docker/container/run/)
 
