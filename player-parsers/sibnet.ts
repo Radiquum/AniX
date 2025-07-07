@@ -54,6 +54,6 @@ export async function getSibnetURL(res, url: string) {
         : null
         : null;
 
-    asJSON(res, { video, poster }, 200)
+    asJSON(res, { manifest: video, poster }, 200)
     return
 }
