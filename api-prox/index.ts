@@ -10,6 +10,8 @@ import {
 } from "./shared";
 import express from "express";
 import fs from "fs/promises";
+import { MediaChromeTheme } from "./media-chrome";
+import { Iframe } from "./iframe";
 
 const app = express();
 app.use(express.json());
@@ -20,8 +22,8 @@ const port = 7001;
 
 const loadedHooks: LoadedHook[] = [];
 
-app.get("/iframe", async (req, res) => {
-  const url = req.query.url || null;
+app.get("/player", async (req, res) => {
+  let url = req.query.url || null;
 
   res.status(200);
   res.set({
@@ -34,6 +36,68 @@ app.get("/iframe", async (req, res) => {
     res.send("<h1>No url query found!</h1>");
     return;
   }
+
+  let player = "";
+  let poster = "";
+
+  const CUSTOM_PLAYER_DOMAINS = [
+    "video.sibnet.ru",
+    "anixart.libria.fun",
+    "kodik.info",
+    "aniqit.com",
+    "kodik.cc",
+    "kodik.biz",
+  ];
+  const urlDomain = new URL(url.toString());
+  const PLAYER_PARSER_URL = process.env.PLAYER_PARSER_URL || null;
+
+  if (CUSTOM_PLAYER_DOMAINS.includes(urlDomain.hostname)) {
+    try {
+      if (!PLAYER_PARSER_URL) throw new Error();
+
+      if (
+        ["kodik.info", "aniqit.com", "kodik.cc", "kodik.biz"].includes(
+          urlDomain.hostname
+        )
+      ) {
+        player = "kodik";
+      }
+      if ("anixart.libria.fun" == urlDomain.hostname) {
+        player = "libria";
+      }
+      if ("video.sibnet.ru" == urlDomain.hostname) {
+        player = "sibnet";
+      }
+
+      const playerParserRes = await fetch(
+        `${PLAYER_PARSER_URL}?url=${encodeURIComponent(url.toString())}&player=${player}`
+      );
+
+      if (!playerParserRes.ok) throw new Error();
+
+      const playerParserData: { manifest: string; poster: string } =
+        await playerParserRes.json();
+
+      poster = playerParserData.poster;
+      if (playerParserData.manifest.startsWith("#EXTM3U")) {
+        const playerUrlArray = playerParserData.manifest.split("\n");
+        url = playerUrlArray.join("\\n");
+      } else {
+        url = playerParserData.manifest;
+      }
+    } catch {
+      res.send(Iframe(url.toString()));
+      return;
+    }
+  } else if (url.toString().endsWith("mp4")) {
+    player = "mp4";
+  } else if (url.toString().endsWith(".m3u8")) {
+    player = "hls";
+  } else {
+    res.send(Iframe(url.toString()));
+    return;
+  }
+
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -41,9 +105,38 @@ app.get("/iframe", async (req, res) => {
         <title>Веб-плеер</title>
         <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes' />
         <style>body, html {height: 100%; width: 100%; margin: 0px;padding: 0px;border: 0px;}</style>
+        ${["kodik", "libria", "hls"].includes(player) ? '<script type="module" src="https://cdn.jsdelivr.net/npm/hls-video-element@1.2/+esm"></script>' : ""}
+        <script>
+          window.onload = () => {
+            const url = "${url}";
+            const poster = "${poster}";
+            const element = document.querySelector("#video-element");
+
+            element.poster = poster;
+            if (url.startsWith("http")) {
+              element.src = url;
+            } else {
+              let file = new File([url], "manifest.m3u8", {
+                type: "application/x-mpegURL",
+              });
+              element.src = URL.createObjectURL(file);
+            };
+          };
+        </script>
       </head>
       <body>
-        <iframe src="${url}" width='100%' height='100%' frameborder='0' AllowFullScreen allow="autoplay"></iframe>
+
+      ${MediaChromeTheme()}
+
+      <media-theme
+        template="media-theme-sutro"
+        style="width:100%;height:100%;">
+          ${
+            ["kodik", "libria", "hls"].includes(player) ?
+              `<hls-video slot="media" playsinline id="video-element"></hls-video>`
+            : `<video slot="media" playsinline id="video-element"></video>`
+          }
+        </media-theme>
       </body>
     </html>
     `);
@@ -107,8 +200,12 @@ app.get("/*path", async (req, res) => {
 
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
-    if (!name.endsWith(".ts")) continue;
-    if (name.includes("example")) continue;
+    if (
+      !name.endsWith(".ts") ||
+      name.includes("example") ||
+      name.includes("disabled")
+    )
+      continue;
 
     const isHookLoaded = loadedHooks.find(
       (item) => item.path == `./hooks/${name}`
@@ -233,8 +330,12 @@ app.post("/*path", async (req, res) => {
 
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
-    if (!name.endsWith(".ts")) continue;
-    if (name.includes("example")) continue;
+    if (
+      !name.endsWith(".ts") ||
+      name.includes("example") ||
+      name.includes("disabled")
+    )
+      continue;
 
     const isHookLoaded = loadedHooks.find(
       (item) => item.path == `./hooks/${name}`

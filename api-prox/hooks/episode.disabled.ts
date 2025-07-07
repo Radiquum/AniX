@@ -7,9 +7,15 @@
 import { logger } from "../shared";
 import fs from "fs/promises";
 
-const HOSTNAME = "http://127.0.0.1:7001";
+let HOSTNAME: null | string = null;
+if (process.env.HOST_URL) {
+  HOSTNAME = process.env.HOST_URL;
+}
+
 
 export function match(path: string): boolean {
+  // если не установлен хост, не запускаем хук
+  if (!HOSTNAME) return false
   // используем только страницы с путём /episode/*
   const pathRe = /^\/episode\/\d+/;
   if (pathRe.test(path)) return true;

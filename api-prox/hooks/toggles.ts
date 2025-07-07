@@ -57,8 +57,8 @@ export async function get(data: Toggles, url: URL) {
   data.impMessageEnabled = true;
   data.impMessageText = "разработчик AniX / Api-Prox-Svc";
   data.impMessageLink = "https://bento.me/radiquum";
-  data.impMessageBackgroundColor = "ffb3d0"
-  data.impMessageTextColor = "ffffff"
+  data.impMessageBackgroundColor = "ffb3d0";
+  data.impMessageTextColor = "ffffff";
 
   data.apiAltAvailable = false;
   data.apiAltUrl = "";
@@ -68,6 +68,9 @@ export async function get(data: Toggles, url: URL) {
   data.kodikIframeAd = false;
   data.kodikAdIframeUrl = "";
 
-  // data.iframeEmbedUrl = "https://rani.loophole.site/iframe?url=" // необходимо менять на юрл сервиса (пока вручную) если используется хук с кастомными эпизодами (episode.ts)
+  if (process.env.HOST_URL) {
+    data.iframeEmbedUrl = `${process.env.HOST_URL}/player?url=`;
+  }
+
   return data;
 }
