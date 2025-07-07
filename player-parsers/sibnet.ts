@@ -46,7 +46,7 @@ export async function getSibnetURL(res, url: string) {
         return
     }
 
-    const video = actualVideoRes.headers.get("location");
+    const video = `https:${actualVideoRes.headers.get("location")}`;
     const poster =
         posterMatch ?
         posterMatch.length > 0 ?
