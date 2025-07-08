@@ -20,8 +20,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const host = "0.0.0.0";
-const port = 7001;
+const HOST = process.env.HOST || "0.0.0.0";
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 7001;
 
 let hooks: string[] = [];
 
@@ -356,7 +356,7 @@ app.post("/*path", async (req, res) => {
   return;
 });
 
-app.listen(port, host, function () {
+app.listen(PORT, HOST, function () {
   loadHooks();
-  logger.info(`Server listen: http://${host}:${port}`);
+  logger.info(`Server listen: http://${HOST}:${PORT}`);
 });

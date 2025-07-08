@@ -13,6 +13,5 @@ COPY tsconfig.json ./
 RUN mkdir -p /app/hooks
 
 EXPOSE 7001
-ENV PORT=7001
-ENV HOSTNAME="0.0.0.0"
+
 CMD ["npm", "run", "serve"]
