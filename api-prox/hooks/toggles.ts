@@ -56,7 +56,7 @@ export async function get(data: Toggles, url: URL) {
 
   data.impMessageEnabled = true;
   data.impMessageText = "разработчик AniX / Api-Prox-Svc";
-  data.impMessageLink = "https://bento.me/radiquum";
+  data.impMessageLink = "https://wah.su/radiquum";
   data.impMessageBackgroundColor = "ffb3d0";
   data.impMessageTextColor = "ffffff";
 

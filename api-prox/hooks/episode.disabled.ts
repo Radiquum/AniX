@@ -1,8 +1,10 @@
 // хук добавляет ссылки на кастомные источники
-// а так-же позволяет добавлять собственные озвучки через json (./episode/<id релиза>.json)
+// а так-же позволяет добавлять собственные озвучки
+// с помощью json (<api-prox>/episode/<id релиза>.json)
+// пример находится в файле 841.example.json в папке episode
 //
-// сами файлы эпизодов необходимо хостить отдельно (например с помощью nginx),
-// а так-же поменять iframe url в хуке toggles.ts на url сервиса
+// сами видео файлы эпизодов необходимо хостить отдельно (например с помощью nginx),
+// хуку требуется переменная среды HOST_URL, которая ведёт на сервис api-prox
 
 import { logger } from "../shared";
 import fs from "fs/promises";
@@ -58,7 +60,6 @@ export interface EpisodeInfo {
 export async function get(data: any, url: URL) {
   const base = "./episode";
 
-  // let isExists = false;
   let releaseId = null;
   let voiceOverId = null;
   let sourceId = null;
