@@ -276,7 +276,7 @@ export async function get(data: any, url: URL) {
             source: data.episodes.length > 0 ? 3 : source,
             name: episode.name || "Неизвестная Серия",
             url: episode.url || "",
-            iframe: episode.iframe || false,
+            iframe: episode.iframe || true,
             addedDate: 0,
             is_filler: episode.is_filler || false,
             is_watched: false,

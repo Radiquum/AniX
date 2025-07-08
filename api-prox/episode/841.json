@@ -1,4 +1,5 @@
 {
+    "$schema": "https://gist.githubusercontent.com/Radiquum/7f33c09be293233b831c841b69f24608/raw/anix-api-prox-custom-episode-schema.json",
     "comment": [
         "пример для добавления и изменения озвучек, источников и эпизодов",
         "для аниме Initial D - First Stage, ID: 841",
@@ -7,32 +8,15 @@
     "types": [
         {
             "id": 1,
-            "name": "NyaniDUB",
-            "icon": "https://wsrv.nl/?url=https://s3.tebi.io/wahs.wah.su/red_panda/0782.%20gfCXa9ZzhvY.jpg",
+            "name": "NyaniDUB (Заменено с AniDub)",
             "sources": [
                 {
                     "id": 1,
                     "name": "Sibnet",
                     "episodes": [
                         {
-                            "position": 1,
-                            "name": "первая серия",
-                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
-                            "iframe": false,
-                            "is_filler": false
-                        }
-                    ]
-                },
-                {
-                    "id": 998,
-                    "name": "Custom Source",
-                    "episodes": [
-                        {
-                            "position": 1,
-                            "name": "своя серия",
-                            "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                            "iframe": true,
-                            "is_filler": true
+                            "position": 0,
+                            "name": "Первая серия"
                         }
                     ]
                 }
@@ -40,48 +24,25 @@
         },
         {
             "id": 999,
-            "name": "Custom Voiceover",
-            "icon": "https://s3.anixstatic.com/voiceovers/anidub.jpg",
+            "name": "By Blender Foundation",
+            "icon": "https://download.blender.org/branding/community/blender_community_badge_white.png",
             "episodes_count": 2,
             "sources": [
                 {
                     "id": 998,
-                    "name": "Custom Source",
+                    "name": "Public Test Videos",
                     "episodes_count": 2,
                     "episodes": [
                         {
                             "position": 1,
-                            "name": "mewmewmew",
-                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
-                            "iframe": true,
+                            "name": "Big Buck Bunny",
+                            "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
                             "is_filler": true
                         },
                         {
                             "position": 2,
-                            "name": "своя серия",
-                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
-                            "iframe": true,
-                            "is_filler": true
-                        }
-                    ]
-                },
-                {
-                    "id": 997,
-                    "name": "Custom Source 2",
-                    "episodes_count": 2,
-                    "episodes": [
-                        {
-                            "position": 1,
-                            "name": "mewmewmew",
-                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
-                            "iframe": true,
-                            "is_filler": true
-                        },
-                        {
-                            "position": 2,
-                            "name": "своя серия",
-                            "url": "https://aniqit.com/seria/250857/96e2df7a21302ef9556c7cbb427e314d/720p",
-                            "iframe": true,
+                            "name": "Elephant Dream",
+                            "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
                             "is_filler": true
                         }
                     ]
