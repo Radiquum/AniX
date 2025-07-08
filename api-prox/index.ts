@@ -14,14 +14,54 @@ import { MediaChromeTheme } from "./media-chrome";
 import { Iframe } from "./iframe";
 
 const app = express();
-app.use(express.raw({ inflate: true, limit: "50mb", type: "multipart/form-data" }));
+app.use(
+  express.raw({ inflate: true, limit: "50mb", type: "multipart/form-data" })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const host = "0.0.0.0";
 const port = 7001;
 
-const loadedHooks: LoadedHook[] = [];
+let hooks: string[] = [];
+
+async function loadHooks() {
+  let hooksDir: string[] = [];
+  try {
+    hooksDir = await fs.readdir("./hooks");
+  } catch (err) {
+    logger.error("'hooks' directory not found");
+  }
+
+  for (let i = 0; i < hooksDir.length; i++) {
+    const name = hooksDir[i];
+    if (
+      !name.endsWith(".ts") ||
+      name.includes("example") ||
+      name.includes("disabled")
+    )
+      continue;
+
+    require(`./hooks/${name}`);
+    logger.infoHook(`Loaded "./hooks/${name}"`);
+    hooks.push(name);
+
+    (async () => {
+      try {
+        const watcher = fs.watch(`./hooks/${name}`);
+        for await (const event of watcher) {
+          if (event.eventType === "change") {
+            logger.infoHook(`Updated "./hooks/${event.filename}"`);
+            delete require.cache[require.resolve(`./hooks/${event.filename}`)];
+            require(`./hooks/${event.filename}`);
+          }
+        }
+      } catch (err) {
+        throw err;
+      }
+    })();
+  }
+}
 
 app.get("/player", async (req, res) => {
   let url = req.query.url || null;
@@ -90,9 +130,9 @@ app.get("/player", async (req, res) => {
       res.send(Iframe(url.toString()));
       return;
     }
-  } else if (url.toString().endsWith("mp4")) {
+  } else if (url.toString().toLowerCase().endsWith("mp4")) {
     player = "mp4";
-  } else if (url.toString().endsWith(".m3u8")) {
+  } else if (url.toString().toLowerCase().endsWith(".m3u8")) {
     player = "hls";
   } else {
     res.send(Iframe(url.toString()));
@@ -191,46 +231,12 @@ app.get("/*path", async (req, res) => {
   }
 
   let data = await apiResponse.json();
-  let hooks: string[] = [];
-
-  try {
-    hooks = await fs.readdir("./hooks");
-  } catch (err) {
-    logger.error("'hooks' directory not found");
-  }
 
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
-    if (
-      !name.endsWith(".ts") ||
-      name.includes("example") ||
-      name.includes("disabled")
-    )
-      continue;
-
-    const isHookLoaded = loadedHooks.find(
-      (item) => item.path == `./hooks/${name}`
-    );
-    const stat = await fs.stat(`./hooks/${name}`);
-
-    if (isHookLoaded && isHookLoaded.mtime != stat.mtime.toISOString()) {
-      logger.infoHook(`Updated "./hooks/${name}"`);
-      delete require.cache[require.resolve(`./hooks/${name}`)];
-      isHookLoaded.mtime = stat.mtime.toISOString();
-    }
-
     const hook: GetHook = require(`./hooks/${name}`);
-    if (!isHookLoaded) {
-      logger.infoHook(`Loaded "./hooks/${name}"`);
-      loadedHooks.push({
-        path: `./hooks/${name}`,
-        mtime: stat.mtime.toISOString(),
-      });
-    }
-
     if (!hook.hasOwnProperty("match") || !hook.hasOwnProperty("get")) continue;
     if (!hook.match(req.path)) continue;
-
     data = await hook.get(data, url);
   }
 
@@ -264,12 +270,30 @@ app.post("/*path", async (req, res) => {
     req.headers["content-type"] ?
       req.headers["content-type"].split(";")[0]
     : "application/json";
+
+  const supportedContentTypes = [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data",
+  ];
+  const isSupported = supportedContentTypes.some((type) =>
+    reqContentType.toLowerCase().startsWith(type)
+  );
+  if (!isSupported) {
+    res.status(500).json({
+      code: 99,
+      error: "Unsupported Media Type",
+      reason: `Content-Type '${reqContentType}' is not supported.`,
+    });
+    return;
+  }
+
   switch (reqContentType) {
     case "multipart/form-data":
       apiResponse = await fetch(url.toString(), {
         method: "POST",
         headers: apiHeaders,
-        body: req.body
+        body: req.body,
       });
       break;
     case "application/x-www-form-urlencoded":
@@ -287,11 +311,6 @@ app.post("/*path", async (req, res) => {
       });
       break;
   }
-
-  // logger.console("debug", `      ↳ [REQ BODY]`, req.body);
-  // logger.console("debug", `      ↳ [REQ HEADERS]`, req.headers);
-  // logger.console("debug", "      ↳ [RES TEXT]", await apiResponse.text());
-  // logger.console("debug", "      ↳ [RES HEADERS]", apiResponse.headers);
 
   if (
     !apiResponse ||
@@ -327,36 +346,9 @@ app.post("/*path", async (req, res) => {
 
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
-    if (
-      !name.endsWith(".ts") ||
-      name.includes("example") ||
-      name.includes("disabled")
-    )
-      continue;
-
-    const isHookLoaded = loadedHooks.find(
-      (item) => item.path == `./hooks/${name}`
-    );
-    const stat = await fs.stat(`./hooks/${name}`);
-
-    if (isHookLoaded && isHookLoaded.mtime != stat.mtime.toISOString()) {
-      logger.infoHook(`Updated "./hooks/${name}"`);
-      delete require.cache[require.resolve(`./hooks/${name}`)];
-      isHookLoaded.mtime = stat.mtime.toISOString();
-    }
-
     const hook: PostHook = require(`./hooks/${name}`);
-    if (!isHookLoaded) {
-      logger.infoHook(`Loaded "./hooks/${name}"`);
-      loadedHooks.push({
-        path: `./hooks/${name}`,
-        mtime: stat.mtime.toISOString(),
-      });
-    }
-
     if (!hook.hasOwnProperty("match") || !hook.hasOwnProperty("post")) continue;
     if (!hook.match(req.path)) continue;
-
     data = await hook.post(data, url);
   }
 
@@ -365,5 +357,6 @@ app.post("/*path", async (req, res) => {
 });
 
 app.listen(port, host, function () {
+  loadHooks();
   logger.info(`Server listen: http://${host}:${port}`);
 });

@@ -55,7 +55,7 @@ export async function get(data: Toggles, url: URL) {
   data.lastVersionCode = 25062200;
 
   data.impMessageEnabled = true;
-  data.impMessageText = "разработчик AniX / Api-Prox-Svc";
+  data.impMessageText = "разработчик AniX / Api-Prox-Service";
   data.impMessageLink = "https://wah.su/radiquum";
   data.impMessageBackgroundColor = "ffb3d0";
   data.impMessageTextColor = "ffffff";
