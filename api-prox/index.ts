@@ -4,7 +4,6 @@ import {
   ANIXART_HEADERST,
   asJSON,
   GetHook,
-  LoadedHook,
   logger,
   PostHook,
 } from "./shared";
@@ -14,6 +13,15 @@ import { MediaChromeTheme } from "./media-chrome";
 import { Iframe } from "./iframe";
 
 const app = express();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Sign"
+  );
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,POST,OPTIONS");
+  next();
+});
 app.use(
   express.raw({ inflate: true, limit: "50mb", type: "multipart/form-data" })
 );
@@ -68,7 +76,7 @@ app.get("/player", async (req, res) => {
 
   res.status(200);
   res.set({
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": req.headers.origin || "*",
     "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
     "Cache-Control": "no-cache",
     "Content-Type": "text/html; charset=utf-8",
@@ -184,7 +192,7 @@ app.get("/player", async (req, res) => {
 });
 
 app.get("/*path", async (req, res) => {
-  if (req.path == "/favicon.ico") return asJSON(res, {}, 404);
+  if (req.path == "/favicon.ico") return asJSON(req, res, {}, 404);
 
   const url = new URL(`${ANIXART_API}${req.url}`);
   logger.debug(
@@ -215,6 +223,7 @@ app.get("/*path", async (req, res) => {
       `Failed to fetch: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
     );
     asJSON(
+      req,
       res,
       {
         code: 99,
@@ -231,7 +240,6 @@ app.get("/*path", async (req, res) => {
   }
 
   let data = await apiResponse.json();
-
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
     const hook: GetHook = require(`./hooks/${name}`);
@@ -240,7 +248,7 @@ app.get("/*path", async (req, res) => {
     data = await hook.get(data, url);
   }
 
-  asJSON(res, data, 200);
+  asJSON(req, res, data, 200);
   return;
 });
 
@@ -251,10 +259,34 @@ app.post("/*path", async (req, res) => {
   );
   // logger.debug(`  ↳ [QUERY] ${url.searchParams.toString()}`);
 
+  let reqContentType =
+    req.headers["content-type"] ?
+      req.headers["content-type"].split(";")[0]
+    : "x-unknown/unknown";
+
+  const supportedContentTypes = [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data",
+  ];
+
+  const isSupported = supportedContentTypes.includes(
+    reqContentType.toLowerCase()
+  );
+
+  if (!isSupported) {
+    res.status(500).json({
+      code: 99,
+      error: "Unsupported Media Type",
+      reason: `Content-Type '${reqContentType}' is not supported.`,
+    });
+    return;
+  }
+
   let apiResponse: null | Response = null;
   const apiHeaders: ANIXART_HEADERST = {
     "User-Agent": ANIXART_HEADERS["User-Agent"],
-    "Content-Type": req.headers["content-type"] || "application/json",
+    "Content-Type": req.headers["content-type"] || "application/json"
   };
 
   if (
@@ -264,28 +296,6 @@ app.post("/*path", async (req, res) => {
     // logger.debug(`  ↳ Force API V2`);
     apiHeaders["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
-  }
-
-  const reqContentType =
-    req.headers["content-type"] ?
-      req.headers["content-type"].split(";")[0]
-    : "application/json";
-
-  const supportedContentTypes = [
-    "application/json",
-    "application/x-www-form-urlencoded",
-    "multipart/form-data",
-  ];
-  const isSupported = supportedContentTypes.some((type) =>
-    reqContentType.toLowerCase().startsWith(type)
-  );
-  if (!isSupported) {
-    res.status(500).json({
-      code: 99,
-      error: "Unsupported Media Type",
-      reason: `Content-Type '${reqContentType}' is not supported.`,
-    });
-    return;
   }
 
   switch (reqContentType) {
@@ -321,6 +331,7 @@ app.post("/*path", async (req, res) => {
       `Failed to post: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
     );
     asJSON(
+      req,
       res,
       {
         code: 99,
@@ -335,15 +346,8 @@ app.post("/*path", async (req, res) => {
     );
     return;
   }
+
   let data = await apiResponse.json();
-  let hooks: string[] = [];
-
-  try {
-    hooks = await fs.readdir("./hooks");
-  } catch (err) {
-    logger.error("'hooks' directory not found");
-  }
-
   for (let i = 0; i < hooks.length; i++) {
     const name = hooks[i];
     const hook: PostHook = require(`./hooks/${name}`);
@@ -352,7 +356,7 @@ app.post("/*path", async (req, res) => {
     data = await hook.post(data, url);
   }
 
-  asJSON(res, data, 200);
+  asJSON(req, res, data, 200);
   return;
 });
 

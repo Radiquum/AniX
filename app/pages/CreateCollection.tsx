@@ -188,6 +188,7 @@ export const CreateCollectionPage = () => {
       const { data, error } = await tryCatchAPI(
         fetch(url, {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...collectionInfo,
             is_private: isPrivate,

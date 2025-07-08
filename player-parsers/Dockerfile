@@ -10,6 +10,5 @@ RUN npm ci
 COPY *.ts ./
 
 EXPOSE 7000
-ENV PORT=7000
-ENV HOSTNAME="0.0.0.0"
+
 CMD ["npm", "run", "serve"]

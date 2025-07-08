@@ -1,9 +1,9 @@
 import { asJSON, randomUA } from "./shared";
 
-export async function getSibnetURL(res, url: string) {
+export async function getSibnetURL(req, res, url: string) {
 
     if (!url.includes("sibnet")) {
-        asJSON(res, { message: "Wrong url provided for player sibnet" }, 400);
+        asJSON(req, res, { message: "Wrong url provided for player sibnet" }, 400);
         return
     }
 
@@ -15,7 +15,7 @@ export async function getSibnetURL(res, url: string) {
         },
     });
     if (!pageRes.ok) {
-        asJSON(res, { message: `SIBNET:${pageRes.status}: failed to load page` }, 500)
+        asJSON(req, res, { message: `SIBNET:${pageRes.status}: failed to load page` }, 500)
         return
     }
     const pageData = await pageRes.text();
@@ -23,7 +23,7 @@ export async function getSibnetURL(res, url: string) {
     const videoMatch = videoRe.exec(pageData);
 
     if (!videoMatch || videoMatch.length == 0) {
-        asJSON(res, { message: `SIBNET: failed to find data to parse` }, 500)
+        asJSON(req, res, { message: `SIBNET: failed to find data to parse` }, 500)
         return
     }
 
@@ -42,7 +42,7 @@ export async function getSibnetURL(res, url: string) {
     );
 
     if (!actualVideoRes.headers.get("location")) {
-        asJSON(res, { message: `SIBNET: failed to get video link` }, 500)
+        asJSON(req, res, { message: `SIBNET: failed to get video link` }, 500)
         return
     }
 
@@ -54,6 +54,6 @@ export async function getSibnetURL(res, url: string) {
         : null
         : null;
 
-    asJSON(res, { manifest: video, poster }, 200)
+    asJSON(req, res, { manifest: video, poster }, 200)
     return
 }

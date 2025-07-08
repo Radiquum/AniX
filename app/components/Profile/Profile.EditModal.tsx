@@ -1,6 +1,13 @@
 "use client";
 
-import { FileInput, Label, Modal, ModalBody, ModalHeader, useThemeMode } from "flowbite-react";
+import {
+  FileInput,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  useThemeMode,
+} from "flowbite-react";
 import { Spinner } from "../Spinner/Spinner";
 import useSWR from "swr";
 import { ENDPOINTS } from "#/api/config";
@@ -143,6 +150,7 @@ export const ProfileEditModal = (props: {
       const { data, error } = await tryCatchAPI(
         fetch(`${ENDPOINTS.user.settings.avatar}?token=${props.token}`, {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: formData,
         })
       );
@@ -188,7 +196,7 @@ export const ProfileEditModal = (props: {
     if (avatarModalProps.croppedImage) {
       _uploadAvatar();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatarModalProps.croppedImage]);
 
   if (!prefData || !loginData || prefError || loginError) {

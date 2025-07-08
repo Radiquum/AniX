@@ -1,9 +1,9 @@
 import { asJSON } from "./shared";
 const API_URL = "https://api.anilibria.tv/v3/title"
 
-export async function getAnilibriaURL(res, url: string) {
+export async function getAnilibriaURL(req, res, url: string) {
   if (!url.includes("libria")) {
-    asJSON(res, { message: "Wrong url provided for player libria" }, 400);
+    asJSON(req, res, { message: "Wrong url provided for player libria" }, 400);
     return
   }
 
@@ -14,7 +14,7 @@ export async function getAnilibriaURL(res, url: string) {
 
   let apiRes = await fetch(`${API_URL}?id=${releaseId}`);
   if (!apiRes.ok) {
-    asJSON(res, { message: "LIBRIA: failed to get api response" }, 500);
+    asJSON(req, res, { message: "LIBRIA: failed to get api response" }, 500);
     return
   }
 
@@ -26,7 +26,7 @@ export async function getAnilibriaURL(res, url: string) {
   }
 
 
-  asJSON(res, data, 200);
+  asJSON(req, res, data, 200);
   return
 }
 

@@ -1,18 +1,16 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Sign",
   "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
   "Cache-Control": "no-cache",
 };
 
-export const resHeaders = {
-  ...corsHeaders,
-  "Content-Type": "application/json",
-};
-
 import { Request, Response } from "express";
-export function asJSON(res: Response, object: any, status: number) {
-  res.status(status);
-  res.set(resHeaders);
+export function asJSON(req: Request,res: Response, object: any, status: number) {
+  corsHeaders["Access-Control-Allow-Origin"] = req.headers.origin || "*";
+
+  res.status(status).type("application/json");
+  res.set(corsHeaders);
   res.send(JSON.stringify(object));
 }
 

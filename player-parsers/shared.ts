@@ -1,12 +1,8 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
   "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
   "Cache-Control": "no-cache",
-};
-
-export const resHeaders = {
-  ...corsHeaders,
-  "Content-Type": "application/json",
 };
 
 export const USERAGENTS = [
@@ -37,7 +33,9 @@ export const USERAGENTS = [
   "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:128.0) Gecko/128.0 Firefox/128.0",
 ];
 
-export function asJSON(res, object: any, status: number) {
+export function asJSON(req, res, object: any, status: number) {
+  corsHeaders["Access-Control-Allow-Origin"] = req.headers.origin || "*";
+
   res.status(status).type("application/json");
   res.set(corsHeaders);
   res.send(JSON.stringify(object));

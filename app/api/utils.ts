@@ -323,6 +323,7 @@ export async function _FetchHomePageReleases(
 
   const data: Object = fetch(url, {
     method: "POST",
+    headers: HEADERS,
     body: JSON.stringify(body),
   })
     .then((response) => {

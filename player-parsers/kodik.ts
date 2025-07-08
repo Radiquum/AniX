@@ -1,12 +1,12 @@
 import { asJSON, randomUA } from "./shared";
 const altDomains = ["kodik.info", "aniqit.com", "kodik.cc", "kodik.biz"];
 
-export async function getKodikURL(res, url: string) {
+export async function getKodikURL(req, res, url: string) {
   const origDomain = url.replace("https://", "").split("/")[0];
   let domain = url.replace("https://", "").split("/")[0];
 
   if (!altDomains.includes(domain)) {
-    asJSON(res, { message: "Wrong url provided for player kodik" }, 400);
+    asJSON(req, res, { message: "Wrong url provided for player kodik" }, 400);
     return;
   }
 
@@ -45,7 +45,7 @@ export async function getKodikURL(res, url: string) {
   }
 
   if (!pageRes.ok) {
-    asJSON(res, { message: "KODIK: failed to load page" }, 500);
+    asJSON(req, res, { message: "KODIK: failed to load page" }, 500);
     return;
   }
 
@@ -54,7 +54,7 @@ export async function getKodikURL(res, url: string) {
   const urlParamsMatch = urlParamsRe.exec(pageData);
 
   if (!urlParamsMatch || urlParamsMatch.length == 0) {
-    asJSON(res, { message: `KODIK: failed to find data to parse` }, 500);
+    asJSON(req, res, { message: `KODIK: failed to find data to parse` }, 500);
     return;
   }
 
@@ -86,7 +86,7 @@ export async function getKodikURL(res, url: string) {
   });
 
   if (!linksRes.ok) {
-    asJSON(res, { message: `KODIK: failed to get links` }, 500);
+    asJSON(req, res, { message: `KODIK: failed to get links` }, 500);
     return;
   }
 
@@ -117,7 +117,7 @@ export async function getKodikURL(res, url: string) {
     "thumb001.jpg"
   );
 
-  asJSON(res, data, 200);
+  asJSON(req, res, data, 200);
   return;
 }
 
