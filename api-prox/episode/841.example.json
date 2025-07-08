@@ -1,0 +1,53 @@
+{
+    "$schema": "https://gist.githubusercontent.com/Radiquum/7f33c09be293233b831c841b69f24608/raw/anix-api-prox-custom-episode-schema.json",
+    "comment": [
+        "пример для добавления и изменения озвучек, источников и эпизодов",
+        "для аниме Initial D - First Stage, ID: 841",
+        "кстати раздел 'comment' совсем не нужен, так что это буквально коммент"
+    ],
+    "types": [
+        {
+            "id": 1,
+            "name": "NyaniDUB (Заменено с AniDub)",
+            "sources": [
+                {
+                    "id": 1,
+                    "name": "Sibnet",
+                    "episodes": [
+                        {
+                            "position": 0,
+                            "name": "Первая серия"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 999,
+            "name": "By Blender Foundation",
+            "icon": "https://download.blender.org/branding/community/blender_community_badge_white.png",
+            "episodes_count": 2,
+            "sources": [
+                {
+                    "id": 998,
+                    "name": "Public Test Videos",
+                    "episodes_count": 2,
+                    "episodes": [
+                        {
+                            "position": 1,
+                            "name": "Big Buck Bunny",
+                            "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            "is_filler": true
+                        },
+                        {
+                            "position": 2,
+                            "name": "Elephant Dream",
+                            "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                            "is_filler": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
