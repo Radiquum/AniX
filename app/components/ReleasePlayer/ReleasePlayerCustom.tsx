@@ -125,6 +125,22 @@ export const ReleasePlayerCustom = (props: {
         }
         return;
       }
+      if (episode.selected.url.toLowerCase().endsWith(".mp4")) {
+        SetPlayerProps({
+          src: episode.selected.url,
+          poster: null,
+          type: "mp4",
+        });
+        return;
+      }
+      if (episode.selected.url.toLowerCase().endsWith(".m3u8")) {
+        SetPlayerProps({
+          src: episode.selected.url,
+          poster: null,
+          type: "hls",
+        });
+        return;
+      }
       setPlayerError({
         message: `Источник "${source.selected.name}" не поддерживается`,
         detail: null,
