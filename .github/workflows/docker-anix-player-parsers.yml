@@ -1,0 +1,35 @@
+name: Build and Publish 'anix-player-parsers' to Docker Hub
+
+on:
+  push:
+    branches:
+      - V3
+    paths:
+      - 'player-parsers/*.ts'
+      - 'player-parsers/Dockerfile'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Build Image
+        run: |
+          cd ./player-parsers
+          docker build . -t radiquum/anix-player-parser:dev
+      - name: Publish Image
+        run: |
+          docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push radiquum/anix-player-parser:dev
+      - name: push README to Dockerhub
+        uses: christian-korneck/update-container-description-action@v1
+        env:
+          DOCKER_USER: radiquum
+          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          destination_container_repo: radiquum/anix-player-parser
+          provider: dockerhub
+          short_description: 'Get direct video and poster url from Sibnet, Kodik and Libria sources'
+          readme_file: 'README.md'
