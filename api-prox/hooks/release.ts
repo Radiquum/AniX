@@ -2,9 +2,52 @@
 
 export function match(path: string): boolean {
   // используем только страницы с путём /release/<id>
-  const pathRe = /\/release\/\d+/
+  const pathRe = /\/release\/\d+/;
   if (pathRe.test(path)) return true;
   return false;
+}
+
+async function fetchShikiRating(title: string) {
+  try {
+    // ищём аниме на шикимори по названию, т.к. ид аниме аниксарт и шикимори разные и нет никакого референса друг на друга
+    const shikiIdRes = await fetch(
+      `https://shikimori.one/api/animes?search=${title}`
+    );
+    if (!shikiIdRes.ok) throw new Error(); // если при поиске произошла ошибка, то возвращаем null
+
+    const shikiIdJson = await shikiIdRes.json();
+    if (shikiIdJson.length == 0) throw new Error(); // если нет результатов, то возвращаем null
+
+    // берём ид от первого результата
+    const shikiId = shikiIdJson[0]["id"];
+
+    // повторяем процесс, уже с ид от шикимори
+    const shikiAnimRes = await fetch(
+      `https://shikimori.one/api/animes/${shikiId}`
+    );
+    if (!shikiAnimRes.ok) throw new Error(); // если при произошла ошибка, то возвращаем null
+    const shikiAnimJson = await shikiAnimRes.json();
+
+    // возвращаем рейтинг
+    return Number(shikiAnimJson.score);
+  } catch {
+    return null;
+  }
+}
+
+async function fetchMALRating(title: string) {
+  try {
+    // ищём аниме на MAL по названию, через API Jikan, т.к. ид аниме аниксарт и шикимори разные и нет никакого референса друг на друга
+    const malRes = await fetch(`https://api.jikan.moe/v4/anime?q=${title}`);
+    if (!malRes.ok) throw new Error(); // если при поиске произошла ошибка, то возвращаем null
+
+    const malJson = await malRes.json();
+    if (malJson.data.length == 0) throw new Error(); // если нет результатов, то возвращаем null
+    // возвращаем рейтинг от первого результата
+    return Number(malJson.data[0].score);
+  } catch {
+    return null;
+  }
 }
 
 export async function get(data: any, url: URL) {
@@ -12,29 +55,19 @@ export async function get(data: any, url: URL) {
   // иначе возвращаем оригинальные данные
   if (!data.hasOwnProperty("release")) return data;
 
-  // ищём аниме на шикимори по названию, т.к. ид аниме аниксарт и шикимори разные и нет никакого референса друг на друга
-  const shikiIdRes = await fetch(
-    `https://shikimori.one/api/animes?search=${data["release"]["title_original"]}`
+  const shikimoriRating = await fetchShikiRating(
+    data["release"]["title_original"]
   );
-  if (!shikiIdRes.ok) return data; // если при поиске произошла ошибка, то возвращаем оригинальные данные
-  const shikiIdJson = await shikiIdRes.json();
-  if (shikiIdJson.length == 0) return data; // если нет результатов, то возвращаем оригинальные данные
-
-  const shikiId = shikiIdJson[0]["id"]; // берём ид от первого результата
-
-  // повторяем процесс, уже с ид от шикимори
-  const shikiAnimRes = await fetch(
-    `https://shikimori.one/api/animes/${shikiId}`
-  );
-  if (!shikiAnimRes.ok) return data;
-  const shikiAnimJson = await shikiAnimRes.json();
+  const malRating = await fetchMALRating(data["release"]["title_original"]);
 
   // пушим строки в список, что-бы было легче их объединить
   const noteBuilder = [];
-  if (data["release"]["note"] != null) noteBuilder.push(`${data.release.note}<br/>---<br/>`); // если в поле note уже что-то есть, разделяем значение и рейтинг
-  noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${Number(shikiAnimJson.score)}★`); // добавляем рейтинг от шикимори
-  data["release"]["note"] = noteBuilder.toString(); // заменяем оригинальное поле нашей строкой
-  data["release"]["id_shikimori"] = shikiId; // добавляем айди шикимори в ответ, потому что почему нет
+  if (data["release"]["note"]) noteBuilder.push(`${data.release.note}`); // первым добавляем оригинальное значение примечания, если оно есть
+  data["release"]["note"] && (shikimoriRating || malRating) && noteBuilder.push("------"); // добавляем разделитель, если есть рейтинг и оригинальное примечание
+  shikimoriRating &&
+    noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${shikimoriRating}★`); // добавляем рейтинг от шикимори
+  malRating && noteBuilder.push(`<b>Рейтинг My Anime List:</b> ${malRating}★`); // добавляем рейтинг от MAL
+  data["release"]["note"] = noteBuilder.join("<br/>"); // заменяем оригинальное поле нашей строкой
 
   // возвращаем изменённые данные
   return data;
