@@ -23,13 +23,3 @@ jobs:
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push radiquum/anix:dev
-      - name: push README to Dockerhub
-        uses: christian-korneck/update-container-description-action@v1
-        env:
-          DOCKER_USER: radiquum
-          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
-        with:
-          destination_container_repo: radiquum/anix
-          provider: dockerhub
-          short_description: 'AniX is an unofficial web client for the Android application Anixart'
-          readme_file: 'README.md'
