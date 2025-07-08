@@ -7,11 +7,14 @@ export function match(path: string): boolean {
   return false;
 }
 
+const timeout = 5000; // таймаут запроса к внешнему апи на 5 секунд
+
 async function fetchShikiRating(title: string) {
   try {
     // ищём аниме на шикимори по названию, т.к. ид аниме аниксарт и шикимори разные и нет никакого референса друг на друга
     const shikiIdRes = await fetch(
-      `https://shikimori.one/api/animes?search=${title}`
+      `https://shikimori.one/api/animes?search=${title}`,
+      { signal: AbortSignal.timeout(timeout) }
     );
     if (!shikiIdRes.ok) throw new Error(); // если при поиске произошла ошибка, то возвращаем null
 
@@ -23,7 +26,8 @@ async function fetchShikiRating(title: string) {
 
     // повторяем процесс, уже с ид от шикимори
     const shikiAnimRes = await fetch(
-      `https://shikimori.one/api/animes/${shikiId}`
+      `https://shikimori.one/api/animes/${shikiId}`,
+      { signal: AbortSignal.timeout(timeout) }
     );
     if (!shikiAnimRes.ok) throw new Error(); // если при произошла ошибка, то возвращаем null
     const shikiAnimJson = await shikiAnimRes.json();
@@ -38,7 +42,9 @@ async function fetchShikiRating(title: string) {
 async function fetchMALRating(title: string) {
   try {
     // ищём аниме на MAL по названию, через API Jikan, т.к. ид аниме аниксарт и шикимори разные и нет никакого референса друг на друга
-    const malRes = await fetch(`https://api.jikan.moe/v4/anime?q=${title}`);
+    const malRes = await fetch(`https://api.jikan.moe/v4/anime?q=${title}`, {
+      signal: AbortSignal.timeout(timeout),
+    });
     if (!malRes.ok) throw new Error(); // если при поиске произошла ошибка, то возвращаем null
 
     const malJson = await malRes.json();
@@ -63,7 +69,9 @@ export async function get(data: any, url: URL) {
   // пушим строки в список, что-бы было легче их объединить
   const noteBuilder = [];
   if (data["release"]["note"]) noteBuilder.push(`${data.release.note}`); // первым добавляем оригинальное значение примечания, если оно есть
-  data["release"]["note"] && (shikimoriRating || malRating) && noteBuilder.push("------"); // добавляем разделитель, если есть рейтинг и оригинальное примечание
+  data["release"]["note"] &&
+    (shikimoriRating || malRating) &&
+    noteBuilder.push("------"); // добавляем разделитель, если есть рейтинг и оригинальное примечание
   shikimoriRating &&
     noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${shikimoriRating}★`); // добавляем рейтинг от шикимори
   malRating && noteBuilder.push(`<b>Рейтинг My Anime List:</b> ${malRating}★`); // добавляем рейтинг от MAL
