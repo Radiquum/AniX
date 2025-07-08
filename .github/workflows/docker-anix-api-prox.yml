@@ -18,7 +18,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Build Image
-        run: docker build . -t radiquum/anix-api-prox:dev
+        run: |
+          cd ./api-prox
+          docker build . -t radiquum/anix-api-prox:dev
       - name: Publish Image
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
