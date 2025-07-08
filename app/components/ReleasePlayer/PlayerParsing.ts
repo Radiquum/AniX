@@ -1,5 +1,5 @@
 import { tryCatchPlayer, tryCatchAPI } from "#/api/utils";
-import { env } from 'next-runtime-env';
+import { env } from "next-runtime-env";
 
 export async function _fetchAPI(
   url: string,
@@ -62,12 +62,11 @@ export async function _fetchPlayer(
   return data;
 }
 
-
 export const _fetchKodikManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL");
   if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
@@ -82,15 +81,15 @@ export const _fetchKodikManifest = async (
   );
 
   if (data) {
-      let manifest: string = data.manifest
-      if (!manifest.startsWith("http")) {
-        let file = new File([manifest], "manifest.m3u8", {
-          type: "application/x-mpegURL",
-        });
-        manifest = URL.createObjectURL(file);
-      }
-      return { manifest, poster: data.poster };
+    let manifest: string = data.manifest;
+    if (!manifest.startsWith("http")) {
+      let file = new File([manifest], "manifest.m3u8", {
+        type: "application/x-mpegURL",
+      });
+      manifest = URL.createObjectURL(file);
     }
+    return { manifest, poster: data.poster };
+  }
   return { manifest: null, poster: null };
 };
 
@@ -98,8 +97,9 @@ export const _fetchAnilibriaManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
-  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
+  const NEXT_PUBLIC_LIBRIA_PARSER_URL = env("NEXT_PUBLIC_LIBRIA_PARSER_URL") || null;
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL") || null;
+  if (!NEXT_PUBLIC_LIBRIA_PARSER_URL && !NEXT_PUBLIC_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
       detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
@@ -108,7 +108,7 @@ export const _fetchAnilibriaManifest = async (
   }
 
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${encodeURIComponent(url)}&player=libria`,
+    `${NEXT_PUBLIC_LIBRIA_PARSER_URL || NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${encodeURIComponent(url)}&player=libria`,
     setPlayerError
   );
 
@@ -126,7 +126,7 @@ export const _fetchSibnetManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL")
+  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL");
   if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
