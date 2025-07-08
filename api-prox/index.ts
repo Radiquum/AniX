@@ -14,6 +14,7 @@ import { MediaChromeTheme } from "./media-chrome";
 import { Iframe } from "./iframe";
 
 const app = express();
+app.use(express.raw({ inflate: true, limit: "50mb", type: "multipart/form-data" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -265,14 +266,10 @@ app.post("/*path", async (req, res) => {
     : "application/json";
   switch (reqContentType) {
     case "multipart/form-data":
-      const formData = new FormData();
-      for (const name in req.body) {
-        formData.append(name, req.body[name]);
-      }
       apiResponse = await fetch(url.toString(), {
         method: "POST",
         headers: apiHeaders,
-        body: formData,
+        body: req.body
       });
       break;
     case "application/x-www-form-urlencoded":

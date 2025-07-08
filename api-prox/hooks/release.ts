@@ -24,7 +24,7 @@ export async function get(data: any, url: URL) {
 
   // повторяем процесс, уже с ид от шикимори
   const shikiAnimRes = await fetch(
-    `https://shikimori.one/api/animes/${shikiId}}`
+    `https://shikimori.one/api/animes/${shikiId}`
   );
   if (!shikiAnimRes.ok) return data;
   const shikiAnimJson = await shikiAnimRes.json();
@@ -32,7 +32,7 @@ export async function get(data: any, url: URL) {
   // пушим строки в список, что-бы было легче их объединить
   const noteBuilder = [];
   if (data["release"]["note"] != null) noteBuilder.push(`${data.release.note}<br/>---<br/>`); // если в поле note уже что-то есть, разделяем значение и рейтинг
-  noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${shikiAnimJson.score}★`); // добавляем рейтинг от шикимори
+  noteBuilder.push(`<b>Рейтинг Shikimori:</b> ${Number(shikiAnimJson.score)}★`); // добавляем рейтинг от шикимори
   data["release"]["note"] = noteBuilder.toString(); // заменяем оригинальное поле нашей строкой
   data["release"]["id_shikimori"] = shikiId; // добавляем айди шикимори в ответ, потому что почему нет
 

@@ -14,10 +14,9 @@ if (process.env.HOST_URL) {
   HOSTNAME = process.env.HOST_URL;
 }
 
-
 export function match(path: string): boolean {
   // если не установлен хост, не запускаем хук
-  if (!HOSTNAME) return false
+  if (!HOSTNAME) return false;
   // используем только страницы с путём /episode/*
   const pathRe = /^\/episode\/\d+/;
   if (pathRe.test(path)) return true;
@@ -226,9 +225,9 @@ export async function get(data: any, url: URL) {
       data.episodes[0].release = release.release;
       data.episodes[0].source = source;
       data.episodes[0].source.episodes_count = 0;
-      !data.episodes[0].source.type.workers ?
-        (data.episodes[0].source.type.workers = "")
-      : null;
+      data.episodes[0].source.type.workers ?
+        null
+      : (data.episodes[0].source.type.workers = "");
     }
 
     const ctypes = info.types;
@@ -244,11 +243,16 @@ export async function get(data: any, url: URL) {
     const episodes = csource.episodes;
     if (!episodes || episodes.length == 0) return data;
 
-    if (data.episodes && data.episodes.length > 0 && data.episodes[0].source.name == "Sibnet") {
+    if (
+      data.episodes &&
+      data.episodes.length > 0 &&
+      data.episodes[0].source &&
+      data.episodes[0].source.name == "Sibnet"
+    ) {
       data.episodes.forEach((item: EpisodeInfo, index: number) => {
-        !item.name ?
+        item.name ? null : (
           (data.episodes[index].name = `${item.position + 1} серия`)
-        : null;
+        );
       });
     }
 
@@ -262,8 +266,10 @@ export async function get(data: any, url: URL) {
         episode.position ? (existingEpisode.position = episode.position) : null;
         episode.name ? (existingEpisode.name = episode.name) : null;
         episode.url ? (existingEpisode.url = episode.url) : null;
-        episode.iframe ? (existingEpisode.iframe = episode.iframe) : null;
-        episode.is_filler ?
+        episode.iframe !== undefined ?
+          (existingEpisode.iframe = episode.iframe)
+        : null;
+        episode.is_filler !== undefined ?
           (existingEpisode.is_filler = episode.is_filler)
         : null;
       } else {
@@ -271,15 +277,15 @@ export async function get(data: any, url: URL) {
           ...data.episodes,
           {
             "@id": data.episodes.length == 0 ? 1 : 4 + data.episodes.length,
-            position:
-              episode.position ? episode.position : data.episodes.length,
+            position: episode.position || data.episodes.length,
             release: data.episodes.length > 0 ? 2 : release.release,
             source: data.episodes.length > 0 ? 3 : source,
             name: episode.name || "Неизвестная Серия",
             url: episode.url || "",
-            iframe: episode.iframe || true,
+            iframe: episode.iframe !== undefined ? episode.iframe : true,
             addedDate: 0,
-            is_filler: episode.is_filler || false,
+            is_filler:
+              episode.is_filler !== undefined ? episode.is_filler : false,
             is_watched: false,
           },
         ];
