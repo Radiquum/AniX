@@ -16,7 +16,7 @@ app.use(function (req, res, next) {
 });
 
 const HOST = process.env.HOST || "0.0.0.0";
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 7001;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 7000;
 const allowedPlayers = ["kodik", "libria", "sibnet"];
 
 app.get("/", (req, res) => {
