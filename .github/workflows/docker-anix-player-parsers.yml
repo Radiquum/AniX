@@ -5,8 +5,8 @@ on:
     branches:
       - V3
     paths:
-      - "player-parsers/*.ts"
-      - "player-parsers/Dockerfile"
+      - "player-parser/*.ts"
+      - "player-parser/Dockerfile"
   workflow_dispatch:
 
 jobs:
@@ -15,11 +15,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Dynamically set 'tag' environment variable
+        run: echo "tag=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
       - name: Build Image
         run: |
-          cd ./player-parsers
-          docker build . -t radiquum/anix-player-parser:dev
+          cd ./player-parser
+          docker build . -t radiquum/anix-player-parser:latest
+          docker tag radiquum/anix-player-parser:latest radiquum/anix-player-parser:${{ env.tag }}
       - name: Publish Image
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push radiquum/anix-player-parser:dev
+          docker push radiquum/anix-player-parser:latest
+          docker push radiquum/anix-player-parser:${{ env.tag }}

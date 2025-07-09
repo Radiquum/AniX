@@ -17,11 +17,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Dynamically set 'tag' environment variable
+        run: echo "tag=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
       - name: Build Image
         run: |
           cd ./api-prox
-          docker build . -t radiquum/anix-api-prox:dev
+          docker build . -t radiquum/anix-api-prox:latest
+          docker tag radiquum/anix-api-prox:latest radiquum/anix-api-prox:${{ env.tag }}
       - name: Publish Image
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push radiquum/anix-api-prox:dev
+          docker push radiquum/anix-api-prox:latest
+          docker push radiquum/anix-api-prox:${{ env.tag }}
