@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const HOST = process.env.HOST || "0.0.0.0";
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 7001;
+const PORT = 7001;
 
 let hooks: string[] = [];
 

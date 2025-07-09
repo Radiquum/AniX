@@ -31,7 +31,7 @@ Requirements:
    - NEXT_PUBLIC_PLAYER_PARSER_URL
    - NEXT_PUBLIC_API_URL
 
-    Use the ones you received if you deployed [anix-player-parsers](./player-parsers/README.md) and/or [anix-api-prox](./api-prox/README.md)
+    Use the ones you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md)
 
     ![vercel project settings](./docs/deploy/vercel_project.png)
 
@@ -79,7 +79,7 @@ Requirements:
    - NEXT_PUBLIC_PLAYER_PARSER_URL
    - NEXT_PUBLIC_API_URL
 
-    Use the ones you received if you deployed [anix-player-parsers](./player-parsers/README.md) and/or [anix-api-prox](./api-prox/README.md)
+    Use the ones you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md)
 
     1. ![alt text](./docs/deploy/netlify_env_1.png)
 
@@ -122,7 +122,7 @@ Additional Requirements:
 - -p - container port to be exposed externally. PORT:3000
 
 > [!NOTE]
-> For variables you received if you deployed [anix-player-parsers](./player-parsers/README.md) and/or [anix-api-prox](./api-prox/README.md), you need to use `-e VARIABLE=VALUE` before the last word anix
+> For variables you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md), you need to use `-e VARIABLE=VALUE` before the last word anix
 
 [docker run command](https://docs.docker.com/reference/cli/docker/container/run/)
 
@@ -152,7 +152,7 @@ Instructions:
 1. Clone the repository `git clone https://github.com/Radiquum/AniX`
 2. Navigate to the repository directory `cd AniX`
 3. Run the command `npm install`
-4. (optional) copy `.env.sample` as `.env` and fill it with variables you received if you deployed [anix-player-parsers](./player-parsers/README.md) and/or [anix-api-prox](./api-prox/README.md)
+4. (optional) copy `.env.sample` as `.env` and fill it with variables you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md)
 5. Run the command `npm run build`
 6. Create a new directory (next we will be refer to its name as `<new_dir>`)
 7. Move the following files into the new directory (`<new_dir>`):

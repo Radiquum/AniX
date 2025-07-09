@@ -33,5 +33,5 @@
     "**/*.tsx",
     "next.config.js"
   ],
-  "exclude": ["node_modules", "player-parsers", "api-prox"]
+  "exclude": ["node_modules", "player-parser", "api-prox"]
 }
