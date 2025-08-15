@@ -3,6 +3,7 @@ import {
   ANIXART_HEADERS,
   ANIXART_HEADERST,
   asJSON,
+  getAnixartApiBaseUrl,
   GetHook,
   logger,
   PostHook,
@@ -360,7 +361,8 @@ app.post("/*path", async (req, res) => {
   return;
 });
 
-app.listen(PORT, HOST, function () {
+app.listen(PORT, HOST, async function () {
   loadHooks();
+  await getAnixartApiBaseUrl();
   logger.info(`Server listen: http://${HOST}:${PORT}`);
 });

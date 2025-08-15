@@ -2,7 +2,7 @@ export const CURRENT_APP_VERSION = "3.7.0";
 import { env } from "next-runtime-env";
 
 const NEXT_PUBLIC_API_URL = env("NEXT_PUBLIC_API_URL") || null;
-export const API_URL = NEXT_PUBLIC_API_URL ||"https://api.anixart.app";
+export const API_URL = NEXT_PUBLIC_API_URL ||"https://api-s.anixsekai.com";
 export const API_PREFIX = NEXT_PUBLIC_API_URL || "/api/proxy";
 export const USER_AGENT =
   "AnixartApp/9.0 BETA 5-25062213 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";

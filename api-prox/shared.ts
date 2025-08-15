@@ -1,32 +1,24 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Sign",
+  "Access-Control-Allow-Headers":
+    "Origin, X-Requested-With, Content-Type, Accept, Sign",
   "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
   "Cache-Control": "no-cache",
 };
 
 import { Request, Response } from "express";
-export function asJSON(req: Request,res: Response, object: any, status: number) {
+export function asJSON(
+  req: Request,
+  res: Response,
+  object: any,
+  status: number
+) {
   corsHeaders["Access-Control-Allow-Origin"] = req.headers.origin || "*";
 
   res.status(status).type("application/json");
   res.set(corsHeaders);
   res.send(JSON.stringify(object));
 }
-
-export const ANIXART_UA =
-  "AnixartApp/9.0 BETA 5-25062213 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";
-export const ANIXART_API = "https://api.anixart.app";
-
-export type ANIXART_HEADERST = {
-  "User-Agent": string;
-  "Content-Type": string;
-  "Api-Version"?: string;
-};
-export const ANIXART_HEADERS: ANIXART_HEADERST = {
-  "User-Agent": ANIXART_UA,
-  "Content-Type": "application/json; charset=UTF-8",
-};
 
 type LogLevel = "debug" | "info" | "warn" | "error" | "disable";
 export class Log {
@@ -107,6 +99,49 @@ export class Log {
 }
 
 export const logger = new Log((process.env.LOG_LEVEL as LogLevel) || "info");
+
+export const ANIXART_UA =
+  "AnixartApp/9.0 BETA 5-25062213 (Android 9; SDK 28; arm64-v8a; samsung SM-G975N; en)";
+export let ANIXART_API: string | null = null; // "https://api.anixart-app.com";
+
+const _anixart_baseUrlList = [
+  "https://api.anixart-app.com",
+  "https://api-s.anixsekai.com",
+  "https://api.anixart.tv",
+  "https://api-s2.anixart.tv",
+];
+
+export async function getAnixartApiBaseUrl() {
+  if (process.env.ANIXART_BASE_URL) return process.env.ANIXART_BASE_URL;
+  logger.info("FINDING WORKING ANIXART API BASE URL...");
+
+  for (const url of _anixart_baseUrlList) {
+    try {
+      const res = await fetch(`${url}/config/toggles?version_code=25062213&is_beta=true&is_api_alt=false&token=`, { method: "GET" });
+      await res.json();
+      ANIXART_API = url;
+      logger.info(`FOUND WORKING ANIXART API BASE URL: ${url}`);
+      break;
+    } catch {
+      continue;
+    }
+  }
+
+  if (!ANIXART_API) {
+    logger.error("FAILED TO FIND WORKING ANIXART API BASE URL!");
+    process.exit(1);
+  }
+}
+
+export type ANIXART_HEADERST = {
+  "User-Agent": string;
+  "Content-Type": string;
+  "Api-Version"?: string;
+};
+export const ANIXART_HEADERS: ANIXART_HEADERST = {
+  "User-Agent": ANIXART_UA,
+  "Content-Type": "application/json; charset=UTF-8",
+};
 
 export interface GetHook {
   match: (path: string) => boolean;
