@@ -97,7 +97,7 @@ export const ReleasePlayerCustom = (props: {
         }
         return;
       }
-      if (source.selected.name == "Libria") {
+      if (["Libria", "Liberty"].includes(source.selected.name)) {
         const { manifest, poster } = await _fetchAnilibriaManifest(
           episode.selected.url,
           setPlayerError
