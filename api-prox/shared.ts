@@ -112,15 +112,20 @@ const _anixart_baseUrlList = [
 ];
 
 export async function getAnixartApiBaseUrl() {
-  if (process.env.ANIXART_BASE_URL) return process.env.ANIXART_BASE_URL;
-  logger.info("FINDING WORKING ANIXART API BASE URL...");
+  if (process.env.ANIXART_BASE_URL) {
+    ANIXART_API = process.env.ANIXART_BASE_URL
+    logger.info(`Using predefined anixart base url: ${process.env.ANIXART_BASE_URL}`);
+    return;
+  };
+
+  logger.info("Finding working anixart base url...");
 
   for (const url of _anixart_baseUrlList) {
     try {
       const res = await fetch(`${url}/config/toggles?version_code=25062213&is_beta=true&is_api_alt=false&token=`, { method: "GET" });
       await res.json();
       ANIXART_API = url;
-      logger.info(`FOUND WORKING ANIXART API BASE URL: ${url}`);
+      logger.info(`Found anixart base url: ${url}`);
       break;
     } catch {
       continue;
@@ -128,7 +133,7 @@ export async function getAnixartApiBaseUrl() {
   }
 
   if (!ANIXART_API) {
-    logger.error("FAILED TO FIND WORKING ANIXART API BASE URL!");
+    logger.error("FATAL: Failed to find working anixart base url!");
     process.exit(1);
   }
 }
