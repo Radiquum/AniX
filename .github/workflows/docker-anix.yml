@@ -11,6 +11,7 @@ on:
       - 'next.config.js'
   workflow_dispatch:
 
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -18,13 +19,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Dynamically set 'tag' environment variable
-        run: echo "tag=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
+        # 1. parse config.ts and extract app version
+        # 2. set time based tag
+        run: |
+            echo "APP_VERSION=$(head -n 1 ./app/api/config.ts | tr -d "\";= " | sed "s/exportconstCURRENT_APP_VERSION//g")" >> $GITHUB_ENV
+            echo "IMAGE_DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
       - name: Build Image
         run: |
           docker build . -t radiquum/anix:latest
-          docker tag radiquum/anix:latest radiquum/anix:${{ env.tag }}
+          docker tag radiquum/anix:latest radiquum/anix:${{ env.APP_VERSION }}-${{ env.IMAGE_DATE }}
       - name: Publish Image
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push radiquum/anix:latest
-          docker push radiquum/anix:${{ env.tag }}
+          docker push radiquum/anix:${{ env.APP_VERSION }}-${{ env.IMAGE_DATE }}
