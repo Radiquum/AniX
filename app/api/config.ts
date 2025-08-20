@@ -51,7 +51,13 @@ export const ENDPOINTS = {
     }
   },
   filter: `${API_PREFIX}/filter`,
-  search: `${API_URL}/search`,
+  search: {
+    profileList: `${API_PREFIX}/search/profile/list/`,
+    profileHistory: `${API_PREFIX}/search/history/`,
+    profileFavoriteCollection: `${API_PREFIX}/search/favoriteCollections/`,
+    profiles: `${API_PREFIX}/search/profiles/`,
+    releases: `${API_PREFIX}/search/releases/`,
+  },
   statistic: {
     addHistory: `${API_PREFIX}/history/add`,
     markWatched: `${API_PREFIX}/episode/watch`,
