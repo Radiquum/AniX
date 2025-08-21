@@ -190,111 +190,72 @@ export function SearchPage() {
               Поиск
             </button>
           </div>
+          <div className="flex gap-2 ml-2">
+            <div className="flex justify-between gap-4">
+              <Dropdown
+                size="xl"
+                label={`Искать в: ${whereMapping.find((item) => item.id == params.where).label}`}
+                color="light"
+              >
+                {whereMapping.map((item) => {
+                  return item.auth && !userStore.isAuth ?
+                      <></>
+                    : <DropdownItem
+                        onClick={() =>
+                          searchByMapping[item.id] ?
+                            setParams({
+                              where: item.id,
+                              searchBy: searchByMapping[item.id][0].id,
+                            })
+                          : setParams({ where: item.id, searchBy: "none" })
+                        }
+                        key={`filter--where--${item.id}`}
+                      >
+                        {item.label}
+                      </DropdownItem>;
+                })}
+              </Dropdown>
+            </div>
+            {searchByMapping[params.where] ?
+              <div className="flex justify-between gap-4">
+                <Dropdown
+                  size="xl"
+                  label={
+                    `Искать по: ${params.searchBy == "none" ?
+                      searchByMapping.none[0].label
+                    : searchByMapping[params.where].find(
+                        (item) => item.id == params.searchBy
+                      ).label}`
+                  }
+                  color="light"
+                >
+                  {searchByMapping[params.where].map((item) => {
+                    return (
+                      <DropdownItem
+                        onClick={() =>
+                          setParams({
+                            where: params.where,
+                            searchBy: item.id,
+                          })
+                        }
+                        key={`filter--where--${params.where}--searchBy--${item.id}`}
+                      >
+                        {item.label}
+                      </DropdownItem>
+                    );
+                  })}
+                </Dropdown>
+              </div>
+            : <></>}
+          </div>
         </div>
-        <Button
-          color="light"
-          size="xl"
-          className="flex items-center gap-1"
-          onClick={() => setFiltersModalOpen(true)}
-        >
-          <span className="w-6 h-6 iconify material-symbols--filter-list"></span>
-          Фильтры
-        </Button>
       </div>
 
       <p>query: {query}</p>
       <p>params: {JSON.stringify(params)}</p>
-      <FiltersModal
-        isOpen={filtersModalOpen}
-        setIsOpen={setFiltersModalOpen}
-        isAuth={userStore.isAuth}
-        setContent={() => {}}
-        params={params}
-        setParams={setParams}
-      />
     </div>
   );
 }
-
-const FiltersModal = (props: {
-  isOpen: boolean;
-  setIsOpen: any;
-  isAuth: boolean;
-  setContent: any;
-  params: any;
-  setParams: any;
-}) => {
-  if (!props.params) return <></>;
-
-  return (
-    <Modal show={props.isOpen} onClose={() => props.setIsOpen(false)}>
-      <ModalHeader>Фильтры</ModalHeader>
-      <ModalBody>
-        <div className="space-y-4">
-          <div className="flex justify-between gap-4">
-            <p>Искать в</p>
-            <Dropdown
-              label={
-                whereMapping.find((item) => item.id == props.params.where).label
-              }
-              color="blue"
-            >
-              {whereMapping.map((item) => {
-                return item.auth && !props.isAuth ?
-                    <></>
-                  : <DropdownItem
-                      onClick={() =>
-                        searchByMapping[item.id] ?
-                          props.setParams({
-                            where: item.id,
-                            searchBy: searchByMapping[item.id][0].id,
-                          })
-                        : props.setParams({ where: item.id, searchBy: "none" })
-                      }
-                      key={`filter--where--${item.id}`}
-                    >
-                      {item.label}
-                    </DropdownItem>;
-              })}
-            </Dropdown>
-          </div>
-          {searchByMapping[props.params.where] ?
-            <div className="flex justify-between gap-4">
-              <p>Искать по</p>
-              <Dropdown
-                label={
-                  props.params.searchBy == "none" ?
-                    searchByMapping.none[0].label
-                  : searchByMapping[props.params.where].find(
-                      (item) => item.id == props.params.searchBy
-                    ).label
-                }
-                color="blue"
-              >
-                {searchByMapping[props.params.where].map((item) => {
-                  return (
-                    <DropdownItem
-                      onClick={() =>
-                        props.setParams({
-                          where: props.params.where,
-                          searchBy: item.id,
-                        })
-                      }
-                      key={`filter--where--${props.params.where}--searchBy--${item.id}`}
-                    >
-                      {item.label}
-                    </DropdownItem>
-                  );
-                })}
-              </Dropdown>
-            </div>
-          : <></>}
-        </div>
-      </ModalBody>
-      <ModalFooter></ModalFooter>
-    </Modal>
-  );
-};
 
 // import useSWRInfinite from "swr/infinite";
 // import { ReleaseSection } from "#/components/ReleaseSection/ReleaseSection";
