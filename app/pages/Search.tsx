@@ -115,16 +115,23 @@ export function SearchPage() {
   const [filtersModalOpen, setFiltersModalOpen] = useState(false);
 
   useEffect(() => {
-    let _parsed = null;
-    try {
-      _parsed = JSON.parse(searchParams.get("params"));
-    } catch {
-      _parsed = {
+    const queryParams = searchParams.get("params");
+
+    if (queryParams) {
+      try {
+        setParams(JSON.parse(queryParams));
+      } catch (e) {
+        setParams({
+          where: "releases",
+          searchBy: "name",
+        });
+      }
+    } else {
+      setParams({
         where: "releases",
         searchBy: "name",
-      };
+      });
     }
-    setParams(_parsed);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -244,7 +251,7 @@ const FiltersModal = (props: {
                           })
                         : props.setParams({ where: item.id, searchBy: "none" })
                       }
-                      key={`where--${item.id}`}
+                      key={`filter--where--${item.id}`}
                     >
                       {item.label}
                     </DropdownItem>;
@@ -273,7 +280,7 @@ const FiltersModal = (props: {
                           searchBy: item.id,
                         })
                       }
-                      key={`searchBy--${item.id}`}
+                      key={`filter--where--${props.params.where}--searchBy--${item.id}`}
                     >
                       {item.label}
                     </DropdownItem>
