@@ -4,6 +4,8 @@ export const metadata = {
 
 import { MenuPage } from "#/pages/MobileMenuPage";
 
+export const dynamic = "force-static";
+
 export default function Index() {
   return <MenuPage />;
 }
