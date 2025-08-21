@@ -1,7 +1,7 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "Origin, X-Requested-With, Content-Type, Accept, Sign",
+    "Origin, X-Requested-With, Content-Type, Accept, Sign, Allow, User-Agent",
   "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
   "Cache-Control": "no-cache",
 };
