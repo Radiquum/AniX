@@ -4,16 +4,35 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "flowbite-react";
+import { Dropdown, DropdownItem } from "flowbite-react";
 import { useUserStore } from "#/store/auth";
+import { ENDPOINTS } from "#/api/config";
+import { tryCatchAPI } from "#/api/utils";
+import useSWRInfinite from "swr/infinite";
+import { Spinner } from "#/components/Spinner/Spinner";
+import { ReleaseSection } from "#/components/ReleaseSection/ReleaseSection";
+import { UserSection } from "#/components/UserSection/UserSection";
+import { CollectionsSection } from "#/components/CollectionsSection/CollectionsSection";
+import { useScrollPosition } from "#/hooks/useScrollPosition";
+import { RelatedSection } from "#/components/RelatedSection/RelatedSection";
+
+const postFetcher = async (url: string, payload: string) => {
+  const { data, error } = await tryCatchAPI(
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Api-Version": "v2",
+        "Content-Type": "application/json",
+      },
+      body: payload,
+    })
+  );
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};
 
 const whereMapping = [
   {
@@ -112,7 +131,9 @@ export function SearchPage() {
   const userStore = useUserStore();
   const [query, setQuery] = useState(searchParams.get("query") || "");
   const [params, setParams] = useState(null);
-  const [filtersModalOpen, setFiltersModalOpen] = useState(false);
+  const [content, setContent] = useState(null);
+
+  const [HeaderH, setHeaderH] = useState(null);
 
   useEffect(() => {
     const queryParams = searchParams.get("params");
@@ -132,6 +153,11 @@ export function SearchPage() {
         searchBy: "name",
       });
     }
+
+    if (window) {
+      setHeaderH(document.querySelector("header").clientHeight);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -139,17 +165,115 @@ export function SearchPage() {
     if (!params) return;
 
     const url = new URL(`/search`, window.location.origin);
+    url.searchParams.set("query", query);
     url.searchParams.set("params", JSON.stringify(params));
     router.replace(url.toString());
+    setContent(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
+
+  useEffect(() => {
+    setContent(null);
+
+    const url = new URL(`/search`, window.location.origin);
+    url.searchParams.set("query", query);
+    url.searchParams.set("params", JSON.stringify(params));
+    router.replace(url.toString());
+  }, [query]);
+
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (!params) return null;
+    if (!query) return null;
+
+    if (previousPageData) {
+      if (params.where == "releases") {
+        if (!previousPageData.releases.length) return null;
+      } else {
+        if (!previousPageData.content.length) return null;
+      }
+    }
+
+    let url = null;
+    switch (params.where) {
+      case "releases":
+        url = `${ENDPOINTS.search.releases}/${pageIndex}`;
+        break;
+      case "profiles":
+        url = `${ENDPOINTS.search.profiles}/${pageIndex}`;
+        break;
+      case "list":
+        const list = searchByMapping[params.where].find(
+          (item) => item.id == params.searchBy
+        );
+        if (!list) break;
+        url = `${ENDPOINTS.search.profileList}/${list.value}/${pageIndex}`;
+        break;
+      case "history":
+        url = `${ENDPOINTS.search.profileHistory}/${pageIndex}`;
+        break;
+      case "favorites":
+        url = `${ENDPOINTS.search.profileFavorites}/${pageIndex}`;
+        break;
+      case "collections":
+        url = `${ENDPOINTS.search.profileFavoriteCollection}/${pageIndex}`;
+        break;
+    }
+
+    if (userStore.token) {
+      url += `?token=${userStore.token}`;
+    }
+
+    let searchBy = null;
+    const _sbym = searchByMapping[params.where];
+    if (_sbym) {
+      searchBy = _sbym.find((item) => item.id == params.searchBy).value;
+    } else {
+      searchBy = searchByMapping["none"][0].value;
+    }
+
+    return [url, JSON.stringify({ query, searchBy })];
+  };
+
+  const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite(
+    getKey,
+    ([url, payload]) => postFetcher(url, payload),
+    { initialSize: 2 }
+  );
+
+  useEffect(() => {
+    if (data) {
+      let _content = [];
+      if (params.where == "releases") {
+        for (let i = 0; i < data.length; i++) {
+          _content.push(...data[i].releases);
+        }
+      } else {
+        for (let i = 0; i < data.length; i++) {
+          _content.push(...data[i].content);
+        }
+      }
+      setContent(_content);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const scrollPosition = useScrollPosition();
+  useEffect(() => {
+    if (scrollPosition >= 98 && scrollPosition <= 99) {
+      setSize(size + 1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scrollPosition]);
 
   if (!params) return <></>;
 
   return (
     <div>
-      <div className="flex flex-wrap w-full gap-2">
-        <div className="flex flex-1 w-full">
+      <div
+        className="sticky top-0 sm:top-[var(--header-height)] z-50 flex flex-wrap w-full gap-2 bg-black bg-opacity-25 py-2 px-2 rounded-lg backdrop-blur-sm"
+        style={{ "--header-height": `${HeaderH}px` } as React.CSSProperties}
+      >
+        <div className="flex flex-col flex-1 w-full lg:flex-row">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -180,22 +304,17 @@ export function SearchPage() {
               className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg ps-10 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Поиск аниме..."
               required
-              // value={searchVal}
-              // onChange={(e) => setSearchVal(e.target.value)}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
-            <button
-              type="submit"
-              className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Поиск
-            </button>
           </div>
-          <div className="flex gap-2 ml-2">
-            <div className="flex justify-between gap-4">
+          <div className="flex gap-2 mt-2 lg:ml-2 lg:mt-0">
+            <div className="flex justify-between flex-1 gap-4">
               <Dropdown
                 size="xl"
                 label={`Искать в: ${whereMapping.find((item) => item.id == params.where).label}`}
                 color="light"
+                className="w-full"
               >
                 {whereMapping.map((item) => {
                   return item.auth && !userStore.isAuth ?
@@ -217,17 +336,18 @@ export function SearchPage() {
               </Dropdown>
             </div>
             {searchByMapping[params.where] ?
-              <div className="flex justify-between gap-4">
+              <div className="flex justify-between flex-1 gap-4">
                 <Dropdown
                   size="xl"
-                  label={
-                    `Искать по: ${params.searchBy == "none" ?
+                  label={`Искать по: ${
+                    params.searchBy == "none" ?
                       searchByMapping.none[0].label
                     : searchByMapping[params.where].find(
                         (item) => item.id == params.searchBy
-                      ).label}`
-                  }
+                      ).label
+                  }`}
                   color="light"
+                  className="w-full"
                 >
                   {searchByMapping[params.where].map((item) => {
                     return (
@@ -251,350 +371,43 @@ export function SearchPage() {
         </div>
       </div>
 
-      <p>query: {query}</p>
-      <p>params: {JSON.stringify(params)}</p>
+      <div>
+        {error ?
+          <div className="flex flex-col justify-between w-full p-4 border border-red-200 rounded-md md:flex-row bg-red-50 dark:bg-red-700 dark:border-red-600">
+            <div className="mb-4 md:mb-0 md:me-4">
+              <p>Произошла ошибка поиска</p>
+            </div>
+          </div>
+        : <></>}
+
+        {data && data[0].related && <RelatedSection {...data[0].related} />}
+        {content ?
+          content.length > 0 ?
+            params.where == "profiles" ?
+              <UserSection content={content} />
+            : params.where == "collections" ?
+              <CollectionsSection content={content} />
+            : <ReleaseSection content={content} />
+          : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
+              <span className="w-24 h-24 iconify-color twemoji--crying-cat"></span>
+              <p>Странно, аниме не найдено, попробуйте другой запрос...</p>
+            </div>
+
+        : <></>}
+
+        {!content && !isLoading && !query && (
+          <div className="flex flex-col items-center justify-center min-w-full gap-2 mt-12 text-xl">
+            <span className="w-16 h-16 iconify mdi--arrow-up animate-bounce"></span>
+            <p>Введите ваш запрос что-бы найти любимый тайтл</p>
+          </div>
+        )}
+
+        {isLoading ?
+          <div className="flex items-center justify-center w-full h-16">
+            <Spinner />
+          </div>
+        : ""}
+      </div>
     </div>
   );
 }
-
-// import useSWRInfinite from "swr/infinite";
-// import { ReleaseSection } from "#/components/ReleaseSection/ReleaseSection";
-// import { RelatedSection } from "#/components/RelatedSection/RelatedSection";
-// import { Spinner } from "#/components/Spinner/Spinner";
-// import { useScrollPosition } from "#/hooks/useScrollPosition";
-// import { useUserStore } from "../store/auth";
-// import { Button, Dropdown, DropdownItem, Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
-// import { CollectionsSection } from "#/components/CollectionsSection/CollectionsSection";
-// import { UserSection } from "#/components/UserSection/UserSection";
-// import { useSWRfetcher } from "#/api/utils";
-
-// export function SearchPage() {
-//   const router = useRouter();
-
-//   const [searchVal, setSearchVal] = useState(searchParams.get("q") || "");
-//   const [where, setWhere] = useState(searchParams.get("where") || "releases");
-
-//   const [list, setList] = useState(searchParams.get("list") || "watching");
-//   const [filtersModalOpen, setFiltersModalOpen] = useState(false);
-
-//
-
-//   const getKey = (pageIndex: number, previousPageData: any) => {
-//     if (where == "releases") {
-//       if (previousPageData && !previousPageData.releases.length) return null;
-//     } else {
-//       if (previousPageData && !previousPageData.content.length) return null;
-//     }
-
-//     const url = new URL("/api/search", window.location.origin);
-//     url.searchParams.set("page", pageIndex.toString());
-
-//     if (userStore.token) {
-//       url.searchParams.set("token", userStore.token);
-//     }
-
-//     if (where) {
-//       url.searchParams.set("where", where);
-//     }
-
-//     if (where == "list" && list && ListsMapping.hasOwnProperty(list)) {
-//       url.searchParams.set("list", ListsMapping[list].id);
-//     }
-
-//     url.searchParams.set("searchBy", TagMapping[searchBy].id);
-
-//     if (query) {
-//       url.searchParams.set("q", query);
-//       return url.toString();
-//     }
-//     return;
-//   };
-
-//   const { data, error, isLoading, size, setSize } = useSWRInfinite(
-//     getKey,
-//     useSWRfetcher,
-//     { initialSize: 2, revalidateFirstPage: false }
-//   );
-
-//   const [content, setContent] = useState(null);
-//   useEffect(() => {
-//     if (data) {
-//       let allReleases = [];
-//       if (where == "releases") {
-//         for (let i = 0; i < data.length; i++) {
-//           allReleases.push(...data[i].releases);
-//         }
-//       } else {
-//         for (let i = 0; i < data.length; i++) {
-//           allReleases.push(...data[i].content);
-//         }
-//       }
-//       setContent(allReleases);
-//     }
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [data]);
-
-//   const scrollPosition = useScrollPosition();
-//   useEffect(() => {
-//     if (scrollPosition >= 98 && scrollPosition <= 99) {
-//       setSize(size + 1);
-//     }
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [scrollPosition]);
-
-//   function _executeSearch(value: string) {
-//     const Params = new URLSearchParams(window.location.search);
-//     Params.set("q", value);
-//     const url = new URL(`/search?${Params.toString()}`, window.location.origin);
-//     setContent(null);
-//     setQuery(value);
-//     router.push(url.toString());
-//   }
-
-//   useEffect(() => {
-//     if (searchVal && searchVal.length % 4 == 1) {
-//       _executeSearch(searchVal.trim());
-//     }
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [searchVal]);
-
-//   if (error)
-//     return (
-//       <main className="flex items-center justify-center min-h-screen">
-//         <div className="flex flex-col gap-2">
-//           <h1 className="text-2xl font-bold">Ошибка</h1>
-//           <p className="text-lg">
-//             Произошла ошибка поиска. Попробуйте обновить страницу или зайдите
-//             позже.
-//           </p>
-//         </div>
-//       </main>
-//     );
-
-//   return (
-//     <>
-//       <div className="flex flex-wrap items-center gap-2">
-//         <form
-//           className="flex-1 max-w-full mx-auto"
-//           onSubmit={(e) => {
-//             e.preventDefault();
-//             _executeSearch(searchVal.trim());
-//           }}
-//         >
-
-//         </form>
-//         <Button
-//           color="light"
-//           size="xl"
-//           onClick={() => setFiltersModalOpen(true)}
-//         >
-//           Фильтры
-//         </Button>
-//       </div>
-//       <div className="mt-2">
-//         {data && data[0].related && <RelatedSection {...data[0].related} />}
-//         {content ?
-//           content.length > 0 ?
-//             <>
-//               {where == "collections" ?
-//                 <CollectionsSection
-//                   sectionTitle="Найденные Коллекции"
-//                   content={content}
-//                 />
-//               : where == "profiles" ?
-//                 <UserSection
-//                   sectionTitle="Найденные Пользователи"
-//                   content={content}
-//                 />
-//               : <ReleaseSection
-//                   sectionTitle="Найденные релизы"
-//                   content={content}
-//                 />
-//               }
-//             </>
-//           : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
-//               <span className="w-24 h-24 iconify-color twemoji--crying-cat"></span>
-//               <p>Странно, аниме не найдено, попробуйте другой запрос...</p>
-//             </div>
-//         : isLoading && (
-//             <div className="flex items-center justify-center min-w-full min-h-screen">
-//               <Spinner />
-//             </div>
-//           )
-//         }
-//         {!content && !isLoading && !query && (
-//           <div className="flex flex-col items-center justify-center min-w-full gap-2 mt-12 text-xl">
-//             <span className="w-16 h-16 iconify mdi--arrow-up animate-bounce"></span>
-//             <p>Введите ваш запрос что-бы найти любимый тайтл</p>
-//           </div>
-//         )}
-//       </div>
-//       {(
-//         data &&
-//         data.length > 1 &&
-//         (where == "releases" ?
-//           data[data.length - 1].releases.length == 25
-//         : data[data.length - 1].content.length == 25)
-//       ) ?
-//         <Button
-//           className="w-full"
-//           color={"light"}
-//           onClick={() => setSize(size + 1)}
-//         >
-//           <div className="flex items-center gap-2">
-//             <span className="w-6 h-6 iconify mdi--plus-circle "></span>
-//             <span className="text-lg">Загрузить ещё</span>
-//           </div>
-//         </Button>
-//       : ""}
-//       <FiltersModal
-//         isOpen={filtersModalOpen}
-//         setIsOpen={setFiltersModalOpen}
-//         where={where}
-//         setWhere={setWhere}
-//         list={list}
-//         setList={setList}
-//         isAuth={userStore.isAuth}
-//         searchBy={searchBy}
-//         setSearchBy={setSearchBy}
-//         setContent={setContent}
-//       />
-//     </>
-//   );
-// }
-
-// const FiltersModal = (props: {
-//   isOpen: boolean;
-//   setIsOpen: any;
-//   where: string;
-//   setWhere: any;
-//   list: string;
-//   setList: any;
-//   isAuth: boolean;
-//   searchBy: string;
-//   setSearchBy: any;
-//   setContent: any;
-// }) => {
-//   const router = useRouter();
-//   const [where, setWhere] = useState(props.where);
-//   const [list, setList] = useState(props.list);
-//   const [searchBy, setSearchBy] = useState(props.searchBy);
-
-//   function _cancel() {
-//     setWhere(props.where);
-//     setList(props.list);
-//     setSearchBy(props.searchBy);
-//     props.setIsOpen(false);
-//   }
-
-//   function _accept() {
-//     const Params = new URLSearchParams(window.location.search);
-
-//     if (props.where != where) {
-//       Params.set("where", where);
-//       props.setWhere(where);
-//     }
-
-//     if (where == "list") {
-//       Params.set("list", list);
-//       props.setList(list);
-//     } else {
-//       Params.delete("list");
-//     }
-
-//     if (!["profiles", "collections"].includes(where)) {
-//       Params.set("searchBy", searchBy);
-//       props.setSearchBy(searchBy);
-//     } else {
-//       Params.delete("searchBy");
-//       props.setSearchBy("name");
-//     }
-
-//     props.setContent(null);
-
-//     const url = new URL(`/search?${Params.toString()}`, window.location.origin);
-//     router.push(url.toString());
-//   }
-
-//   return (
-//     <Modal show={props.isOpen} onClose={() => _cancel()}>
-//       <ModalHeader>Фильтры</ModalHeader>
-//       <ModalBody>
-//         <div className="my-4">
-//           <div className="flex items-center justify-between">
-//             <p className="font-bold dark:text-white">Искать в</p>
-//             <Dropdown label={WhereMapping[where]} color="blue">
-//               {Object.keys(WhereMapping).map((item) => {
-//                 if (
-//                   ["list", "history", "collections", "favorites"].includes(
-//                     item
-//                   ) &&
-//                   !props.isAuth
-//                 ) {
-//                   return <></>;
-//                 } else {
-//                   return (
-//                     <DropdownItem
-//                       onClick={() => setWhere(item)}
-//                       key={`where--${item}`}
-//                     >
-//                       {WhereMapping[item]}
-//                     </DropdownItem>
-//                   );
-//                 }
-//               })}
-//             </Dropdown>
-//           </div>
-//         </div>
-//         {props.isAuth && where == "list" && ListsMapping.hasOwnProperty(list) ?
-//           <div className="my-4">
-//             <div className="flex items-center justify-between">
-//               <p className="font-bold dark:text-white">Список</p>
-//               <Dropdown label={ListsMapping[list].name} color="blue">
-//                 {Object.keys(ListsMapping).map((item) => {
-//                   return (
-//                     <DropdownItem
-//                       onClick={() => setList(item)}
-//                       key={`list--${item}`}
-//                     >
-//                       {ListsMapping[item].name}
-//                     </DropdownItem>
-//                   );
-//                 })}
-//               </Dropdown>
-//             </div>
-//           </div>
-//         : ""}
-//         {!["profiles", "collections"].includes(where) ?
-//           <div className="my-4">
-//             <div className="flex items-center justify-between">
-//               <p className="font-bold dark:text-white">Искать по</p>
-//               <Dropdown label={TagMapping[searchBy].name} color="blue">
-//                 {Object.keys(TagMapping).map((item) => {
-//                   return (
-//                     <DropdownItem
-//                       onClick={() => setSearchBy(item)}
-//                       key={`tag--${item}`}
-//                     >
-//                       {TagMapping[item].name}
-//                     </DropdownItem>
-//                   );
-//                 })}
-//               </Dropdown>
-//             </div>
-//           </div>
-//         : ""}
-//       </ModalBody>
-//       <ModalFooter>
-//         <div className="flex justify-end w-full gap-2">
-//           <Button color="red" onClick={() => _cancel()}>
-//             Отменить
-//           </Button>
-//           <Button color="blue" onClick={() => _accept()}>
-//             Применить
-//           </Button>
-//         </div>
-//       </ModalFooter>
-//     </Modal>
-//   );
-// };
