@@ -1,7 +1,7 @@
 import { CollectionsFullPage } from "#/pages/CollectionsFull";
 import { fetchDataViaGet } from "#/api/utils";
 import type { Metadata, ResolvingMetadata } from "next";
-export const dynamic = "force-static";
+import { API_URL } from "#/api/config";
 
 export async function generateMetadata(
   { params },
@@ -9,7 +9,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id: string = params.id;
   const { data, error } = await fetchDataViaGet(
-    `https://api.anixart.tv/profile/${id}`
+    `${API_URL}/profile/${id}`
   );
   const previousOG = (await parent).openGraph;
 
@@ -38,7 +38,7 @@ export async function generateMetadata(
 
 export default async function Collections({ params }) {
   const { data, error } = await fetchDataViaGet(
-    `https://api.anixart.tv/profile/${params.id}`
+    `${API_URL}/profile/${params.id}`
   );
 
   if (error) {

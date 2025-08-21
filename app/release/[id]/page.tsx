@@ -1,7 +1,7 @@
 import { ReleasePage } from "#/pages/Release";
 import { fetchDataViaGet } from "#/api/utils";
 import type { Metadata, ResolvingMetadata } from "next";
-export const dynamic = "force-static";
+import { API_URL } from "#/api/config";
 
 export async function generateMetadata(
   { params },
@@ -9,7 +9,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id = params.id;
   const { data, error } = await fetchDataViaGet(
-    `https://api.anixart.tv/release/${id}`
+    `${API_URL}/release/${id}`
   );
   const previousOG = (await parent).openGraph;
 

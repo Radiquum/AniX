@@ -1,7 +1,7 @@
 import { RelatedPage } from "#/pages/Related";
 import { fetchDataViaGet } from "#/api/utils";
 import type { Metadata, ResolvingMetadata } from "next";
-export const dynamic = 'force-static';
+import { API_URL } from "#/api/config";
 
 const _getData = async (url: string) => {
   const { data, error } = await fetchDataViaGet(url);
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
   const id:string = params.id;
   const previousOG = (await parent).openGraph;
 
-  const [ related, relatedError ] = await _getData(`https://api.anixart.tv/related/${id}/0`);
+  const [ related, relatedError ] = await _getData(`${API_URL}/related/${id}/0`);
   if (relatedError || related.content.length == 0) {
     return {
       title: "Ошибка",
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
     };
   };
 
-  const [ firstRelease, firstReleaseError ] = await _getData(`https://api.anixart.tv/release/${related.content[0].id}`);
+  const [ firstRelease, firstReleaseError ] = await _getData(`${API_URL}/release/${related.content[0].id}`);
   if (firstReleaseError) {
     return {
       title: "Ошибка",
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
 
 export default async function Related({ params }) {
   const id: string = params.id;
-  const [ related, relatedError ] = await _getData(`https://api.anixart.tv/related/${id}/0`);
+  const [ related, relatedError ] = await _getData(`${API_URL}/related/${id}/0`);
   if (relatedError || related.content.length == 0) {
     return <main className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col gap-2">
@@ -56,7 +56,7 @@ export default async function Related({ params }) {
     </main>
   };
 
-  const [ firstRelease, firstReleaseError ] = await _getData(`https://api.anixart.tv/release/${related.content[0].id}`);
+  const [ firstRelease, firstReleaseError ] = await _getData(`${API_URL}/release/${related.content[0].id}`);
   if (firstReleaseError) {
     return <main className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col gap-2">

@@ -314,7 +314,7 @@ export function SearchPage() {
                 size="xl"
                 label={`Искать в: ${whereMapping.find((item) => item.id == params.where).label}`}
                 color="light"
-                className="w-full"
+                className="w-full lg:w-fit"
               >
                 {whereMapping.map((item) => {
                   return item.auth && !userStore.isAuth ?
@@ -347,7 +347,7 @@ export function SearchPage() {
                       ).label
                   }`}
                   color="light"
-                  className="w-full"
+                  className="w-full lg:w-fit"
                 >
                   {searchByMapping[params.where].map((item) => {
                     return (

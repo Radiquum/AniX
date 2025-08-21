@@ -1,7 +1,7 @@
 import { BookmarksCategoryPage } from "#/pages/BookmarksCategory";
 import { fetchDataViaGet } from "#/api/utils";
 import type { Metadata, ResolvingMetadata } from "next";
-export const dynamic = 'force-static';
+import { API_URL } from "#/api/config";
 
 const SectionTitleMapping = {
   watching: "Смотрю",
@@ -17,7 +17,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id: string = params.id;
   const { data, error } = await fetchDataViaGet(
-    `https://api.anixart.tv/profile/${id}`
+    `${API_URL}/profile/${id}`
   );
   const previousOG = (await parent).openGraph;
 
