@@ -1,7 +1,7 @@
 import { ViewCollectionPage } from "#/pages/ViewCollection";
 import { fetchDataViaGet } from "#/api/utils";
 import type { Metadata, ResolvingMetadata } from "next";
-export const dynamic = "force-static";
+import { API_URL } from "#/api/config";
 
 export async function generateMetadata(
   { params },
@@ -9,7 +9,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id = params.id;
   const { data, error } = await fetchDataViaGet(
-    `https://api.anixart.tv/collection/${id}`
+    `${API_URL}/collection/${id}`
   );
   const previousOG = (await parent).openGraph;
 

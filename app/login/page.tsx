@@ -5,6 +5,8 @@ export const metadata = {
   description: "Вход в аккаунт anixart",
 }
 
+export const dynamic = "force-static";
+
 export default function Login() {
   return <LoginPage />;
 }

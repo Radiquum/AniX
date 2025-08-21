@@ -4,6 +4,8 @@ export const metadata = {
 
 import { FavoritesPage } from "#/pages/Favorites";
 
+export const dynamic = "force-static";
+
 export default function Index() {
   return <FavoritesPage />;
 }
