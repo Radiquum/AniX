@@ -72,6 +72,14 @@ async function loadHooks() {
   }
 }
 
+app.get("/", async (req, res) => {
+  res.status(200);
+  res.set({
+    "Content-Type": "text/html; charset=utf-8",
+  });
+  res.send("");
+});
+
 app.get("/player", async (req, res) => {
   let url = req.query.url || null;
 
@@ -287,7 +295,7 @@ app.post("/*path", async (req, res) => {
   let apiResponse: null | Response = null;
   const apiHeaders: ANIXART_HEADERST = {
     "User-Agent": ANIXART_HEADERS["User-Agent"],
-    "Content-Type": req.headers["content-type"] || "application/json"
+    "Content-Type": req.headers["content-type"] || "application/json",
   };
 
   if (
