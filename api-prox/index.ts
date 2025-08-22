@@ -323,7 +323,7 @@ app.post("/*path", async (req, res) => {
         body: new URLSearchParams(req.body),
       });
       break;
-    case "application/json":
+    default:
       apiResponse = await fetch(url.toString(), {
         method: "POST",
         headers: apiHeaders,
