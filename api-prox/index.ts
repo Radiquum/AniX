@@ -277,6 +277,7 @@ app.post("/*path", async (req, res) => {
     "application/json",
     "application/x-www-form-urlencoded",
     "multipart/form-data",
+    "x-unknown/unknown"
   ];
 
   const isSupported = supportedContentTypes.includes(
