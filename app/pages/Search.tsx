@@ -61,8 +61,13 @@ const whereMapping = [
     auth: true,
   },
   {
-    id: "collections",
-    label: "Коллекциях",
+    id: "collections_all",
+    label: "Всех Коллекциях",
+    auth: false,
+  },
+  {
+    id: "collections_fav",
+    label: "Своих Коллекциях",
     auth: true,
   },
 ];
@@ -179,6 +184,7 @@ export function SearchPage() {
     url.searchParams.set("query", query);
     url.searchParams.set("params", JSON.stringify(params));
     router.replace(url.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   const getKey = (pageIndex: number, previousPageData: any) => {
@@ -214,7 +220,10 @@ export function SearchPage() {
       case "favorites":
         url = `${ENDPOINTS.search.profileFavorites}/${pageIndex}`;
         break;
-      case "collections":
+      case "collections_all":
+        url = `${ENDPOINTS.search.collections}/${pageIndex}`;
+        break;
+      case "collections_fav":
         url = `${ENDPOINTS.search.profileFavoriteCollection}/${pageIndex}`;
         break;
     }
@@ -385,7 +394,7 @@ export function SearchPage() {
           content.length > 0 ?
             params.where == "profiles" ?
               <UserSection content={content} />
-            : params.where == "collections" ?
+            : ["collections_all", "collections_fav"].includes(params.where) ?
               <CollectionsSection content={content} />
             : <ReleaseSection content={content} />
           : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">

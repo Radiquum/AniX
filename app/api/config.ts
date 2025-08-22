@@ -58,6 +58,7 @@ export const ENDPOINTS = {
     profileFavorites: `${API_PREFIX}/search/favorites`,
     profiles: `${API_PREFIX}/search/profiles`,
     releases: `${API_PREFIX}/search/releases`,
+    collections: `${API_PREFIX}/search/collections`,
   },
   statistic: {
     addHistory: `${API_PREFIX}/history/add`,

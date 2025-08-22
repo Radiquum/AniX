@@ -28,10 +28,12 @@ export const CollectionLink = (props: any) => {
               icon_name="material-symbols--favorite"
               name_2={props.favorites_count}
             />
-            <Chip
-              icon_name="material-symbols--comment"
-              name_2={props.comment_count}
-            />
+            {props.comment_count && (
+              <Chip
+                icon_name="material-symbols--comment"
+                name_2={props.comment_count}
+              />
+            )}
             {props.is_private && (
               <div className="flex items-center justify-center bg-yellow-400 rounded-sm">
                 <span className="w-3 px-4 py-2.5 text-white sm:px-4 sm:py-3 xl:px-6 xl:py-4 iconify mdi--lock"></span>
