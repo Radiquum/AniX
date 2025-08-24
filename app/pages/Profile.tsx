@@ -164,6 +164,9 @@ export const ProfilePage = (props: any) => {
                 watched_count={user.watched_episode_count}
                 watched_time={user.watched_time}
                 profile_id={user.id}
+                preferred_genres={user.preferred_genres || []}
+                preferred_audiences={user.preferred_audiences || []}
+                preferred_themes={user.preferred_themes || []}
               />
               <ProfileWatchDynamic watchDynamic={user.watch_dynamics || []} />
               <div className="flex flex-col gap-2 lg:hidden">
