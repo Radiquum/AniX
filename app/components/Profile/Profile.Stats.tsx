@@ -90,7 +90,7 @@ export const ProfileStats = (props: {
       </div>
       <div className="flex items-center">
         <div>
-          <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-2 gap-x-4">
             <p className="align-center whitespace-nowrap">
               <span className="inline-block rounded w-4 h-4 bg-[#66bb6c]"></span>{" "}
               Смотрю <span className="font-bold">{props.lists[0]}</span>
