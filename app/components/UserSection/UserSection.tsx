@@ -12,20 +12,19 @@ export const UserSection = (props: { sectionTitle?: string; content: any }) => {
         </div>
       )}
       <div className="m-4">
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {props.content.map((user) => {
             return (
-              <Link href={`/profile/${user.id}`} key={user.id} className="w-full max-w-[234px] h-full max-h-[234px] aspect-square flex-shrink-0">
-                <Card className="items-center justify-center w-full h-full">
-                  <Avatar img={user.avatar} alt={user.login || ""} size="lg" rounded={true} />
-                  <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                    {user.login}
-                  </h5>
+              <Link href={`/profile/${user.id}`} key={user.id}>
+                <Card>
+                  <div className="flex items-center gap-4">
+                    <Avatar img={user.avatar} alt="" size="lg" rounded={true} />
+                    <p className="text-xl font-medium text-gray-900 dark:text-white">{user.login}</p>
+                  </div>
                 </Card>
               </Link>
             );
           })}
-          {props.content.length == 1 && <div></div>}
         </div>
       </div>
     </section>
