@@ -112,7 +112,7 @@ export const ProfileStats = (props: {
         <p>
           Время просмотра:{" "}
           <span className="font-bold">
-            ~{minutesToTime(props.watched_time, "daysHours")}
+            ~{minutesToTime(props.watched_time)}
           </span>
         </p>
       </div>
