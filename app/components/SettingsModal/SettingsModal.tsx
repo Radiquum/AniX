@@ -43,9 +43,10 @@ const NavbarTitles = {
 };
 
 const FifthButton = {
-  3: "Избранное",
-  4: "Коллекции",
-  5: "История",
+  favorites: "Избранное",
+  collections: "Коллекции",
+  history: "История",
+  discovery: "Обзор",
 };
 
 export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
@@ -56,7 +57,8 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
   const [isPlayerConfigured, setIsPlayerConfigured] = useState(false);
 
   useEffect(() => {
-    const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL") || null;
+    const NEXT_PUBLIC_PLAYER_PARSER_URL =
+      env("NEXT_PUBLIC_PLAYER_PARSER_URL") || null;
     if (NEXT_PUBLIC_PLAYER_PARSER_URL) {
       setIsPlayerConfigured(true);
     }
@@ -204,7 +206,7 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
             </Dropdown>
           </div>
           {userStore.isAuth ?
-            <div className="flex items-center justify-between sm:hidden">
+            <div className="flex items-center justify-between lg:hidden">
               <p className=" dark:text-white max-w-96">
                 Пятый пункт в навигации
               </p>
@@ -229,11 +231,7 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
                   return (
                     <DropdownItem
                       key={`navbar-fifthbutton-${key}`}
-                      onClick={() =>
-                        preferenceStore.setFlags({
-                          showFifthButton: Number(key) as 3 | 4 | 5,
-                        })
-                      }
+                      onClick={() => preferenceStore.setFlags({showFifthButton: key})}
                     >
                       {FifthButton[key]}
                     </DropdownItem>

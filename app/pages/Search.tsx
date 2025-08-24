@@ -279,7 +279,7 @@ export function SearchPage() {
   return (
     <div>
       <div
-        className="sticky top-0 sm:top-[var(--header-height)] z-50 flex flex-wrap w-full gap-2 bg-black bg-opacity-25 py-2 px-2 rounded-lg backdrop-blur-sm"
+        className="sticky top-0 sm:top-[var(--header-height)] z-30 flex flex-wrap w-full gap-2 bg-black bg-opacity-25 py-2 px-2 rounded-lg backdrop-blur-sm"
         style={{ "--header-height": `${HeaderH}px` } as React.CSSProperties}
       >
         <div className="flex flex-col flex-1 w-full lg:flex-row">

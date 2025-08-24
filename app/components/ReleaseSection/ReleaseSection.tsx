@@ -23,8 +23,8 @@ export const ReleaseSection = (props: {
                   chipsSettings={{
                     enabled: true,
                     lastWatchedHidden:
-                      (props.sectionTitle &&
-                        props.sectionTitle.toLowerCase() != "история")
+                      props.sectionTitle &&
+                      props.sectionTitle.toLowerCase() != "история",
                   }}
                 />
               </div>

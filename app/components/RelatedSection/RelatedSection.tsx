@@ -15,7 +15,7 @@ export const RelatedSection = (props: any) => {
         <div className="flex items-center justify-center p-4">
           {props.images.map((item, index) => {
             return (
-              <div key={`related-img-${index}`} className="w-[100px] lg:w-[300px] aspect-[9/12] even:scale-110 shadow-md even:[box-shadow:_0px_0px_16px_black;] even:z-30 origin-center first:[transform:translateX(25%)] last:[transform:translateX(-25%)] rounded-lg overflow-hidden">
+              <div key={`related-img-${index}`} className="w-[100px] lg:w-[300px] aspect-[9/12] even:scale-110 shadow-md even:[box-shadow:_0px_0px_16px_black;] even:z-20 origin-center first:[transform:translateX(25%)] last:[transform:translateX(-25%)] rounded-lg overflow-hidden">
                 <Image
                   fill={true}
                   src={item}

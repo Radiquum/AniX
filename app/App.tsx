@@ -1,7 +1,6 @@
 "use client";
 import { useUserStore } from "./store/auth";
 import { usePreferencesStore } from "./store/preferences";
-import { Navbar } from "./components/Navbar/NavbarUpdate";
 import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 import {
@@ -14,6 +13,9 @@ import {
 import { Spinner } from "./components/Spinner/Spinner";
 import { ChangelogModal } from "#/components/ChangelogModal/ChangelogModal";
 import { Bounce, ToastContainer } from "react-toastify";
+import { NavBarPc } from "./components/Navbar/NavBarPc";
+import { NavBarMobile } from "./components/Navbar/NavBarMobile";
+import { SettingsModal } from "./components/SettingsModal/SettingsModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +25,7 @@ export const App = (props) => {
   const [showChangelog, setShowChangelog] = useState(false);
   const [currentVersion, setCurrentVersion] = useState("");
   const [previousVersions, setPreviousVersions] = useState([]);
+  const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
 
   useEffect(() => {
     async function _checkVersion() {
@@ -68,7 +71,7 @@ export const App = (props) => {
     <body
       className={`${inter.className} overflow-x-hidden dark:bg-[#0d1117] dark:text-white`}
     >
-      <Navbar />
+      <NavBarPc setIsSettingModalOpen={setIsSettingModalOpen} />
       <main className="container px-2 pt-4 pb-24 mx-auto sm:pb-0">
         {props.children}
       </main>
@@ -122,6 +125,11 @@ export const App = (props) => {
         pauseOnHover={true}
         theme="colored"
         transition={Bounce}
+      />
+      <NavBarMobile setIsSettingModalOpen={setIsSettingModalOpen} />
+      <SettingsModal
+        isOpen={isSettingModalOpen}
+        setIsOpen={setIsSettingModalOpen}
       />
     </body>
   );

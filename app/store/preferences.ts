@@ -10,7 +10,7 @@ interface preferencesState {
     saveWatchHistory?: boolean;
     showChangelog?: boolean;
     showNavbarTitles?: "always" | "links" | "selected" | "never";
-    showFifthButton?: null | 3 | 4 | 5;
+    showFifthButton?: null | string;
   };
   params: {
     isFirstLaunch?: boolean;
@@ -80,6 +80,7 @@ export const usePreferencesStore = create<preferencesState>()(
           persistedState as preferencesState
         );
       },
-    }
+      version: 2,
+    },
   )
 );
