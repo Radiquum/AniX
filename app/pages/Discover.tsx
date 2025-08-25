@@ -1,10 +1,25 @@
 "use client";
 import { InterestingCarousel } from "#/components/Discovery/InterestingCarousel";
+import { Button } from "flowbite-react";
 
 export const DiscoverPage = () => {
   return (
     <>
       <InterestingCarousel />
+      <div className="grid grid-cols-2 gap-4 my-4 lg:grid-cols-4">
+        <Button size="xl" color="yellow">
+          <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--fire"></span><span>Популярное</span>
+        </Button>
+        <Button size="xl" color="blue">
+          <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--calendar-month"></span><span>Расписание</span>
+        </Button>
+        <Button size="xl" color="purple">
+          <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--collections-bookmark"></span><span>Коллекции</span>
+        </Button>
+        <Button size="xl" color="green">
+          <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--mixer-settings"></span><span>Фильтр</span>
+        </Button>
+      </div>
     </>
   );
 };

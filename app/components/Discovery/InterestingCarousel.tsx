@@ -37,7 +37,7 @@ export const InterestingCarousel = () => {
       <Swiper
         modules={[Navigation]}
         spaceBetween={8}
-        slidesPerView={3}
+        slidesPerView={"auto"}
         direction={"horizontal"}
         rewind={true}
         navigation={{
@@ -60,7 +60,7 @@ export const InterestingCarousel = () => {
               style={{ maxWidth: "fit-content" }}
             >
               <Link href={`/release/${item.action}`}>
-                <div className="relative w-[480px] h-[270px] rounded-lg overflow-hidden">
+                <div className="relative w-[300px] md:w-[480px] aspect-video rounded-lg overflow-hidden">
                   <Image
                     src={item.image}
                     alt=""
