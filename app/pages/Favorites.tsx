@@ -69,7 +69,9 @@ export function FavoritesPage() {
         className="flex-1 max-w-full mx-4 mb-4"
         onSubmit={(e) => {
           e.preventDefault();
-          router.push(`/search?q=${searchVal}&where=favorites`);
+          router.push(
+            `/search?query=${searchVal}&params={"where"%3A"favorites"%2C"searchBy"%3A"none"}`
+          );
         }}
       >
         <label
@@ -129,9 +131,9 @@ export function FavoritesPage() {
             <DropdownItem key={index} onClick={() => setSelectedSort(index)}>
               <span
                 className={`w-6 h-6 iconify ${
-                  sort.values[index].value.split("_")[1] == "descending"
-                    ? sort.descendingIcon
-                    : sort.ascendingIcon
+                  sort.values[index].value.split("_")[1] == "descending" ?
+                    sort.descendingIcon
+                  : sort.ascendingIcon
                 }`}
               ></span>
               {item.name}
@@ -139,18 +141,17 @@ export function FavoritesPage() {
           ))}
         </Dropdown>
       </div>
-      {content && content.length > 0 ? (
+      {content && content.length > 0 ?
         <ReleaseSection content={content} />
-      ) : isLoading ? (
+      : isLoading ?
         <div className="flex flex-col items-center justify-center min-w-full min-h-screen">
           <Spinner />
         </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
+      : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
           <span className="w-24 h-24 iconify-color twemoji--broken-heart"></span>
           <p>В избранном пока ничего нет...</p>
         </div>
-      )}
+      }
       {data &&
         data[data.length - 1].current_page <
           data[data.length - 1].total_page_count && (

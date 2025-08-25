@@ -10,7 +10,6 @@ import { Button } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useSWRfetcher } from "#/api/utils";
 
-
 export function HistoryPage() {
   const token = useUserStore((state) => state.token);
   const authState = useUserStore((state) => state.state);
@@ -62,7 +61,9 @@ export function HistoryPage() {
         className="flex-1 max-w-full mx-4 mb-4"
         onSubmit={(e) => {
           e.preventDefault();
-          router.push(`/search?q=${searchVal}&where=history`);
+          router.push(
+            `/search?query=${searchVal}&params={"where"%3A"history"%2C"searchBy"%3A"none"}`
+          );
         }}
       >
         <label
@@ -106,7 +107,7 @@ export function HistoryPage() {
           </button>
         </div>
       </form>
-      {content && content.length > 0 ? (
+      {content && content.length > 0 ?
         <>
           <ReleaseSection sectionTitle="История" content={content} />
           {data && data[0].total_count != content.length && (
@@ -122,16 +123,15 @@ export function HistoryPage() {
             </Button>
           )}
         </>
-      ) : isLoading ? (
+      : isLoading ?
         <div className="flex flex-col items-center justify-center min-w-full min-h-[100dvh]">
           <Spinner />
         </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
+      : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
           <span className="w-24 h-24 iconify-color twemoji--broken-heart"></span>
           <p>В истории пока ничего нет...</p>
         </div>
-      )}
+      }
     </>
   );
 }

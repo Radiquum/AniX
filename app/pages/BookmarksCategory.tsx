@@ -82,7 +82,7 @@ export function BookmarksCategoryPage(props: any) {
         <Spinner />
       </div>
     );
-  };
+  }
 
   if (error) {
     return (
@@ -105,7 +105,9 @@ export function BookmarksCategoryPage(props: any) {
           className="flex-1 max-w-full mx-4"
           onSubmit={(e) => {
             e.preventDefault();
-            router.push(`/search?q=${searchVal}&where=list&list=${props.slug}`);
+            router.push(
+              `/search?query=${searchVal}&params={"where"%3A"list"%2C"searchBy"%3A"${props.slug}"}`
+            );
           }}
         >
           <label
