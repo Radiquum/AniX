@@ -61,7 +61,7 @@ export const NavBarPc = (props: { setIsSettingModalOpen: any }) => {
 
   return (
     <>
-      <header className="sticky top-0 left-0 right-0 z-50 hidden w-full h-16 font-medium bg-black rounded-b-lg lg:block">
+      <header className="sticky top-0 left-0 right-0 z-50 hidden w-full h-16 font-medium text-white bg-black rounded-b-lg lg:block">
         <div className="container flex items-center justify-between h-full px-2 mx-auto">
           <div className="flex items-center h-full gap-3">
             {NavbarItems.map((item) => {

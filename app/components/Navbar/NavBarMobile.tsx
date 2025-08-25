@@ -66,7 +66,7 @@ export const NavBarMobile = (props: { setIsSettingModalOpen: any }) => {
 
   return (
     <>
-      <footer className="fixed bottom-0 left-0 right-0 z-50 block w-full h-[70px] font-medium bg-black rounded-t-lg lg:hidden">
+      <footer className="fixed bottom-0 left-0 right-0 z-50 block w-full h-[70px] font-medium text-white bg-black rounded-t-lg lg:hidden">
         <div className="flex items-center justify-center h-full gap-4">
           {NavbarItems.map((item) => {
             if (item.auth && !userStore.isAuth) return <></>;
