@@ -1,4 +1,4 @@
-import { Filter, FilterDefault } from "#/api/utils";
+import { FilterDefault } from "#/api/utils";
 
 export const ListLast = {
   name: "Последнее",
@@ -24,3 +24,11 @@ export const ListFilms = {
   name: "Фильмы",
   filter: { ...FilterDefault, category_id: 2, status_id: null },
 };
+
+export const slugToFilter = {
+  last: ListLast,
+  ongoing: ListOngoing,
+  announce: ListAnnounce,
+  finished: ListFinished,
+  films: ListFilms,
+}

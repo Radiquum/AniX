@@ -4,9 +4,10 @@ import { Spinner } from "#/components/Spinner/Spinner";
 import { useState, useEffect } from "react";
 import { useScrollPosition } from "#/hooks/useScrollPosition";
 import { useUserStore } from "../store/auth";
-import { _FetchHomePageReleases } from "#/api/utils";
+import { FetchFilter } from "#/api/utils";
 import { Button, ButtonGroup } from "flowbite-react";
 import { useRouter } from "next/navigation";
+import { slugToFilter } from "./IndexFilters";
 
 export function IndexCategoryPage(props) {
   const token = useUserStore((state) => state.token);
@@ -20,7 +21,7 @@ export function IndexCategoryPage(props) {
       setIsLoading(true);
       setContent(null);
 
-      const data: any = await _FetchHomePageReleases(props.slug, token, page);
+      const [ data ] = await FetchFilter(slugToFilter[props.slug].filter, page, token);
 
       setContent(data.content);
       setIsLoading(false);
@@ -32,7 +33,7 @@ export function IndexCategoryPage(props) {
 
   useEffect(() => {
     async function _loadNextReleasesPage() {
-      const data: any = await _FetchHomePageReleases(props.slug, token, page);
+      const [ data ] = await FetchFilter(slugToFilter[props.slug].filter, page, token);
       const newContent = [...content, ...data.content];
       setContent(newContent);
     }
