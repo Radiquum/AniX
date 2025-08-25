@@ -72,7 +72,7 @@ export const App = (props) => {
       className={`${inter.className} overflow-x-hidden dark:bg-[#0d1117] dark:text-white`}
     >
       <NavBarPc setIsSettingModalOpen={setIsSettingModalOpen} />
-      <main className="container px-2 pt-4 pb-24 mx-auto sm:pb-0">
+      <main className="container px-2 pt-4 pb-24 mx-auto lg:pb-0">
         {props.children}
       </main>
       <ChangelogModal
