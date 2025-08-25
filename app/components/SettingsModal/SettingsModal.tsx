@@ -35,13 +35,6 @@ const BookmarksCategory = {
   abandoned: "Заброшено",
 };
 
-const NavbarTitles = {
-  always: "Всегда",
-  links: "Только ссылки",
-  selected: "Только выбранные",
-  never: "Никогда",
-};
-
 const FifthButton = {
   favorites: "Избранное",
   collections: "Коллекции",
@@ -178,33 +171,6 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
               </div>
             </>
           : ""}
-          <div className="flex items-center justify-between">
-            <p className=" dark:text-white max-w-96">
-              Показывать название пункта в навигации
-            </p>
-            <Dropdown
-              color="blue"
-              label={NavbarTitles[preferenceStore.flags.showNavbarTitles]}
-            >
-              {Object.keys(NavbarTitles).map(
-                (key: "always" | "links" | "selected" | "never") => {
-                  return (
-                    <DropdownItem
-                      className={`${key == "links" ? "hidden lg:flex" : ""}`}
-                      key={`navbar-titles-${key}`}
-                      onClick={() =>
-                        preferenceStore.setFlags({
-                          showNavbarTitles: key,
-                        })
-                      }
-                    >
-                      {NavbarTitles[key]}
-                    </DropdownItem>
-                  );
-                }
-              )}
-            </Dropdown>
-          </div>
           {userStore.isAuth ?
             <div className="flex items-center justify-between lg:hidden">
               <p className=" dark:text-white max-w-96">
@@ -231,7 +197,9 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
                   return (
                     <DropdownItem
                       key={`navbar-fifthbutton-${key}`}
-                      onClick={() => preferenceStore.setFlags({showFifthButton: key})}
+                      onClick={() =>
+                        preferenceStore.setFlags({ showFifthButton: key })
+                      }
                     >
                       {FifthButton[key]}
                     </DropdownItem>
@@ -260,7 +228,7 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className=" dark:text-white">Сохранять историю просмотра</p>
-              <p className="max-w-sm text-gray-500 dark:text-gray-300">
+              <p className="max-w-sm text-sm text-gray-500 dark:text-gray-300">
                 При отключении, история не будет сохранятся как локально, так и
                 на аккаунте
               </p>
@@ -283,7 +251,7 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className=" dark:text-white">Новый плеер</p>
-              <p className="text-gray-500 dark:text-gray-300">
+              <p className="text-sm text-gray-500 dark:text-gray-300">
                 Поддерживаемые источники: Kodik, Sibnet, Libria
               </p>
             </div>

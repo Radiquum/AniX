@@ -9,7 +9,6 @@ interface preferencesState {
     // saveSearchHistory: boolean;
     saveWatchHistory?: boolean;
     showChangelog?: boolean;
-    showNavbarTitles?: "always" | "links" | "selected" | "never";
     showFifthButton?: null | string;
   };
   params: {
@@ -39,10 +38,8 @@ export const usePreferencesStore = create<preferencesState>()(
     (set, get) => ({
       _hasHydrated: false,
       flags: {
-        // saveSearchHistory: true,
         saveWatchHistory: true,
         showChangelog: true,
-        showNavbarTitles: "always",
         showFifthButton: null,
       },
       params: {
