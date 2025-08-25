@@ -74,5 +74,8 @@ export const ENDPOINTS = {
     releaseInCollections: `${API_PREFIX}/collection/all/release`,
     userCollections: `${API_PREFIX}/collection/all/profile`,
     favoriteCollections: `${API_PREFIX}/collectionFavorite`,
+  },
+  discover: {
+    interesting: `${API_PREFIX}/discover/interesting`,
   }
 };
