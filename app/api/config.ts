@@ -79,6 +79,7 @@ export const ENDPOINTS = {
     interesting: `${API_PREFIX}/discover/interesting`,
     discussing: `${API_PREFIX}/discover/discussing`,
     watching: `${API_PREFIX}/discover/watching`,
-    collections: `${API_PREFIX}/collection/all`
+    recommendations: `${API_PREFIX}/discover/recommendations`,
+    collections: `${API_PREFIX}/collection/all`,
   }
 };
