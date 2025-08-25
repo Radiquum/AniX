@@ -40,12 +40,6 @@ export const ReleaseCourusel = (props: {
             prevEl: ".swiper-button-prev"
           }}
           allowTouchMove={true}
-          breakpoints={{
-            1800: {
-              initialSlide: 2,
-              centeredSlides: true
-            }
-          }}
           className={Styles.swiper}
         >
             {props.content.map((release) => {

@@ -55,7 +55,7 @@ export const CollectionCourusel = (props: {
         )}
       </div>
       <div className="m-4">
-        <div className="swiper">
+        <div className={`swiper ${Styles.swiper}`}>
           <div className="swiper-wrapper">
             {props.isMyCollections && (
               <div className="swiper-slide" style={{ width: "fit-content" }}>

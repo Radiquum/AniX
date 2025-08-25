@@ -22,14 +22,7 @@ export const InterestingCarousel = () => {
     }
   );
 
-  if (error)
-    return (
-      <div className="flex flex-col justify-between w-full p-4 border border-red-200 rounded-md md:flex-row bg-red-50 dark:bg-red-700 dark:border-red-600">
-        <div className="mb-4 md:mb-0 md:me-4">
-          <p>Произошла ошибка загрузки интересных релизов</p>
-        </div>
-      </div>
-    );
+  if (error) return <></>;
   if (isLoading) return <></>;
 
   return (
@@ -45,12 +38,6 @@ export const InterestingCarousel = () => {
           prevEl: ".swiper-button-prev",
         }}
         allowTouchMove={true}
-        breakpoints={{
-          1800: {
-            initialSlide: 1,
-            centeredSlides: true,
-          },
-        }}
         className={Styles.swiper}
       >
         {data.content.map((item) => {

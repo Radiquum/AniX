@@ -7,7 +7,7 @@ import Link from "next/link";
 import { PosterWithStuff } from "../ReleasePoster/PosterWithStuff";
 import useSWR from "swr";
 
-export const DiscussingTodayCarousel = () => {
+export const DiscussingToday = () => {
   const token = useUserStore((state) => state.token);
   const { data, isLoading, error } = useSWR(
     `${ENDPOINTS.discover.discussing}${token ? `?token=${token}` : ""}`,
@@ -19,14 +19,7 @@ export const DiscussingTodayCarousel = () => {
     }
   );
 
-  if (error)
-    return (
-      <div className="flex flex-col justify-between w-full p-4 border border-red-200 rounded-md md:flex-row bg-red-50 dark:bg-red-700 dark:border-red-600">
-        <div className="mb-4 md:mb-0 md:me-4">
-          <p>Произошла ошибка загрузки обсуждаемых релизов</p>
-        </div>
-      </div>
-    );
+  if (error) return <></>;
   if (isLoading) return <></>;
 
   return (

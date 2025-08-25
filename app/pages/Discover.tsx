@@ -1,6 +1,8 @@
 "use client";
-import { DiscussingTodayCarousel } from "#/components/Discovery/DiscussingTodayCarousel";
+import { CollectionsOfTheWeek } from "#/components/Discovery/CollectionsOfTheWeek";
+import { DiscussingToday } from "#/components/Discovery/DiscussingToday";
 import { InterestingCarousel } from "#/components/Discovery/InterestingCarousel";
+import { WatchingNowCarousel } from "#/components/Discovery/WatchingNowCarousel";
 import { Button } from "flowbite-react";
 
 export const DiscoverPage = () => {
@@ -25,7 +27,9 @@ export const DiscoverPage = () => {
           <span>Фильтр</span>
         </Button>
       </div>
-      <DiscussingTodayCarousel />
+      <DiscussingToday />
+      <WatchingNowCarousel />
+      <CollectionsOfTheWeek />
     </>
   );
 };
