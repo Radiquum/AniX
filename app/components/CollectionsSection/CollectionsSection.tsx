@@ -16,7 +16,7 @@ export const CollectionsSection = (props: {
         </div>
       )}
       <div className="m-4">
-        <div className="grid justify-center sm:grid-cols-[repeat(auto-fit,minmax(400px,1fr))] grid-cols-[100%] gap-2">
+        <div className="grid justify-center grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4">
           {props.isMyCollections && <AddCollectionLink />}
           {props.content.map((collection) => {
             return (
@@ -25,7 +25,6 @@ export const CollectionsSection = (props: {
               </div>
             );
           })}
-          {props.content.length == 1 && !props.isMyCollections && <div></div>}
         </div>
       </div>
     </section>

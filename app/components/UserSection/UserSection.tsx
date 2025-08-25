@@ -18,8 +18,8 @@ export const UserSection = (props: { sectionTitle?: string; content: any }) => {
               <Link href={`/profile/${user.id}`} key={user.id}>
                 <Card>
                   <div className="flex items-center gap-4">
-                    <Avatar img={user.avatar} alt="" size="lg" rounded={true} />
-                    <p className="text-xl font-medium text-gray-900 dark:text-white">{user.login}</p>
+                    <Avatar img={user.avatar} alt="" size="lg" rounded={true} className="flex-shrink-0"/>
+                    <p className="text-xl font-medium text-gray-900 dark:text-white line-clamp-1">{user.login}</p>
                   </div>
                 </Card>
               </Link>
