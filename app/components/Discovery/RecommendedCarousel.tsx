@@ -9,7 +9,7 @@ import useSWR from "swr";
 export const RecommendedCarousel = () => {
   const token = useUserStore((state) => state.token);
   const { data, isLoading, error } = useSWR(
-    `${ENDPOINTS.discover.recommendations}/-1?previous_page=-1${token ? `&token=${token}` : ""}`,
+    token ? `${ENDPOINTS.discover.recommendations}/-1?previous_page=-1&token=${token}` : null,
     useSWRfetcher,
     {
       revalidateOnFocus: false,
