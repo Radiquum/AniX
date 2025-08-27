@@ -69,7 +69,7 @@ export const NavBarMobile = (props: { setIsSettingModalOpen: any }) => {
       <footer className="fixed bottom-0 left-0 right-0 z-50 block w-full h-[70px] font-medium text-white bg-black rounded-t-lg lg:hidden">
         <div className="flex items-center justify-center h-full gap-4">
           {NavbarItems.map((item) => {
-            if (item.auth && !userStore.isAuth) return <></>;
+            if (item.auth && !userStore.isAuth) return;
             return (
               <Link
                 href={item.href}
@@ -90,7 +90,7 @@ export const NavBarMobile = (props: { setIsSettingModalOpen: any }) => {
                 <></>
               : <Link
                   href={FifthButton[preferenceStore.flags.showFifthButton].href}
-                  key={`navbar-mobile-${FifthButton[preferenceStore.flags.showFifthButton].title}`}
+                  key={`navbar-mobile-fifthbutton-${FifthButton[preferenceStore.flags.showFifthButton].title}`}
                   className="flex flex-col items-center justify-center gap-1"
                 >
                   <span
@@ -133,9 +133,8 @@ export const NavBarMobile = (props: { setIsSettingModalOpen: any }) => {
                   <span className="ml-2">Профиль</span>
                 </DropdownItem>
                 {Object.entries(FifthButton).map(([key, item]) => {
-                  if (item.auth && !userStore.isAuth) return <></>;
-                  if (preferenceStore.flags.showFifthButton === key)
-                    return <></>;
+                  if (item.auth && !userStore.isAuth) return;
+                  if (preferenceStore.flags.showFifthButton === key) return;
                   return (
                     <DropdownItem
                       key={`navbar-mobile-${item.title}`}

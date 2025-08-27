@@ -65,7 +65,7 @@ export const NavBarPc = (props: { setIsSettingModalOpen: any }) => {
         <div className="container flex items-center justify-between h-full px-2 mx-auto">
           <div className="flex items-center h-full gap-3">
             {NavbarItems.map((item) => {
-              if (item.auth && !userStore.isAuth) return <></>;
+              if (item.auth && !userStore.isAuth) return;
               return (
                 <Link
                   href={item.href}

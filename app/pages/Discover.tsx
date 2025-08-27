@@ -2,6 +2,7 @@
 import { CollectionsOfTheWeek } from "#/components/Discovery/CollectionsOfTheWeek";
 import { DiscussingToday } from "#/components/Discovery/DiscussingToday";
 import { InterestingCarousel } from "#/components/Discovery/InterestingCarousel";
+import { FiltersModal } from "#/components/Discovery/Modal/FiltersModal";
 import { PopularModal } from "#/components/Discovery/Modal/PopularModal";
 import { ScheduleModal } from "#/components/Discovery/Modal/ScheduleModal";
 import { RecommendedCarousel } from "#/components/Discovery/RecommendedCarousel";
@@ -14,6 +15,7 @@ export const DiscoverPage = () => {
   const router = useRouter();
   const [PopularModalOpen, setPopularModalOpen] = useState(false);
   const [ScheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [FiltersModalOpen, setFiltersModalOpen] = useState(false);
 
   return (
     <>
@@ -58,6 +60,7 @@ export const DiscoverPage = () => {
         isOpen={ScheduleModalOpen}
         setIsOpen={setScheduleModalOpen}
       />
+      <FiltersModal isOpen={FiltersModalOpen} setIsOpen={setFiltersModalOpen} />
     </>
   );
 };

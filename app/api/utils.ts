@@ -288,13 +288,6 @@ export function minutesToTime(min: number) {
   if (minutes > 0) return minuteDisplay;
 }
 
-const StatusList: Record<string, null | number> = {
-  last: null,
-  finished: 1,
-  ongoing: 2,
-  announce: 3,
-};
-
 export const FilterCountry = ["Япония", "Китай", "Южная Корея"];
 export const FilterCategoryIdToString: Record<number, string> = {
   1: "Сериал",
