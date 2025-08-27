@@ -24,7 +24,7 @@ export const CollectionsOfTheWeek = () => {
   return (
     <CollectionCourusel
       sectionTitle="Коллекции недели"
-      showAllLink={`/discovery/collections`}
+      showAllLink={`/discovery/collections?sort=week_popular`}
       content={data.content}
     />
   );

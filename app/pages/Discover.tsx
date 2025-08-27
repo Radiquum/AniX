@@ -6,9 +6,11 @@ import { PopularModal } from "#/components/Discovery/Modal/PopularModal";
 import { RecommendedCarousel } from "#/components/Discovery/RecommendedCarousel";
 import { WatchingNowCarousel } from "#/components/Discovery/WatchingNowCarousel";
 import { Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export const DiscoverPage = () => {
+  const router = useRouter();
   const [PopularModalOpen, setPopularModalOpen] = useState(false);
 
   return (
@@ -27,7 +29,11 @@ export const DiscoverPage = () => {
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--calendar-month"></span>
           <span>Расписание</span>
         </Button>
-        <Button size="xl" color="purple">
+        <Button
+          size="xl"
+          color="purple"
+          onClick={() => router.push("/discovery/collections?sort=recent")}
+        >
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--collections-bookmark"></span>
           <span>Коллекции</span>
         </Button>
