@@ -22,7 +22,7 @@ export const ListFinished = {
 
 export const ListFilms = {
   name: "Фильмы",
-  filter: { ...FilterDefault, category_id: 2, status_id: null },
+  filter: { ...FilterDefault, category_id: 2 },
 };
 
 export const slugToFilter = {
