@@ -398,7 +398,6 @@ export const FilterProfileListIdToString: Record<number, string> = {
   5: "Брошено",
 };
 export const FilterStudio = [
-  "Неважно",
   "A-1 Pictures",
   "A.C.G.T",
   "ACTAS, Inc",
@@ -672,7 +671,7 @@ export type Filter = {
   is_genres_exclude_mode_enabled: boolean;
   profile_list_exclusions: number[];
   types: number[]; // fetched from /type/all
-  studio: string[];
+  studio: null | string;
   source: null | string;
   start_year: null | number;
   end_year: null | number;

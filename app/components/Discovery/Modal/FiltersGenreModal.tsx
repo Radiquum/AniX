@@ -30,6 +30,11 @@ export const FiltersGenreModal = ({
   const [newGenres, setNewGenres] = useState(genres);
   const [newExclusionMode, setNewExclusionMode] = useState(exclusionMode);
 
+  const genresLength =
+    FilterGenre.uncategorized.genres.length +
+    FilterGenre.audience.genres.length +
+    FilterGenre.theme.genres.length;
+
   function toggleGenre(string: string) {
     if (newGenres.includes(string)) {
       setNewGenres(newGenres.filter((genre) => genre != string));
@@ -44,7 +49,7 @@ export const FiltersGenreModal = ({
   }, [genres, exclusionMode]);
 
   return (
-    <Modal show={isOpen} onClose={() => setIsOpen(false)} dismissible>
+    <Modal show={isOpen} onClose={() => setIsOpen(false)} dismissible size="6xl">
       <ModalHeader>Жанры</ModalHeader>
       <ModalBody>
         <div>
@@ -115,6 +120,18 @@ export const FiltersGenreModal = ({
               color="blue"
             >
               Применить
+            </Button>
+            <Button
+              onClick={() => {
+                if (newGenres.length != genresLength) {
+                  setNewGenres(Object.entries(FilterGenre).map(([key, value]) => value.genres.map((genre) => genre)).flat());
+                } else {
+                  setNewGenres([]);
+                }
+              }}
+              color="light"
+            >
+              {newGenres.length >= genresLength ? "Снять все" : "Выбрать все"}
             </Button>
           </div>
         </div>

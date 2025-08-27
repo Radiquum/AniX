@@ -6,6 +6,8 @@ import {
   FilterCountry,
   FilterDefault,
   FilterProfileListIdToString,
+  FilterSource,
+  FilterStudio,
 } from "#/api/utils";
 import {
   Button,
@@ -131,23 +133,97 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
                 Рекомендуется выбирать не более 3 жанров
               </p>
             </div>
-            {userStore.isAuth ? <div className="space-y-2">
-              <p>Исключить закладки</p>
+            {userStore.isAuth ?
+              <div className="space-y-2">
+                <p>Исключить закладки</p>
+                <Button
+                  color={"blue"}
+                  className="w-full min-h-10 h-fit"
+                  onClick={() => setIsListExcludeModalOpen(true)}
+                >
+                  {newFilter.profile_list_exclusions.length > 0 ?
+                    newFilter.profile_list_exclusions
+                      .map((id) => FilterProfileListIdToString[id])
+                      .join(", ")
+                  : "Неважно"}
+                </Button>
+                <p className="text-sm">
+                  Исключит из выдачи релизы, входящие в указанные закладки
+                </p>
+              </div>
+            : ""}
+            <div className="space-y-2">
+              <p>Варианты озвучек</p>
               <Button
                 color={"blue"}
                 className="w-full min-h-10 h-fit"
-                onClick={() => setIsListExcludeModalOpen(true)}
+                // onClick={() => setIsGenreModalOpen(true)}
               >
-                {newFilter.profile_list_exclusions.length > 0 ?
-                  newFilter.profile_list_exclusions
-                    .map((id) => FilterProfileListIdToString[id])
-                    .join(", ")
-                : "Неважно"}
+                {/* {newFilter.genres.length > 0 ? */}
+                {/* newFilter.genres.join(", ") */}
+                {/* : "Неважно"} */}
               </Button>
-              <p className="text-sm">
-                Исключит из выдачи релизы, входящие в указанные закладки
-              </p>
-            </div> : ""}
+            </div>
+            <div className="space-y-2">
+              <p>Студия</p>
+              <Dropdown
+                label={newFilter.studio ? newFilter.studio : "Неважно"}
+                color="blue"
+                className="w-full overflow-y-auto max-h-64"
+              >
+                <DropdownItem
+                  key={`filter-modal-studio-none`}
+                  onClick={() => setNewFilter({ ...newFilter, studio: null })}
+                >
+                  Неважно
+                </DropdownItem>
+                {FilterStudio.map((value) => {
+                  return (
+                    <DropdownItem
+                      key={`filter-modal-studio-${value}`}
+                      onClick={() =>
+                        setNewFilter({
+                          ...newFilter,
+                          studio: value,
+                        })
+                      }
+                    >
+                      {value}
+                    </DropdownItem>
+                  );
+                })}
+              </Dropdown>
+            </div>
+            <div className="space-y-2">
+              <p>Первоисточник</p>
+              <Dropdown
+                label={newFilter.source ? newFilter.source : "Неважно"}
+                color="blue"
+                className="w-full overflow-y-auto max-h-64"
+              >
+                <DropdownItem
+                  key={`filter-modal-source-none`}
+                  onClick={() => setNewFilter({ ...newFilter, source: null })}
+                >
+                  Неважно
+                </DropdownItem>
+                {FilterSource.map((value) => {
+                  return (
+                    <DropdownItem
+                      key={`filter-modal-source-${value}`}
+                      onClick={() =>
+                        setNewFilter({
+                          ...newFilter,
+                          source: value,
+                        })
+                      }
+                    >
+                      {value}
+                    </DropdownItem>
+                  );
+                })}
+              </Dropdown>
+            </div>
           </div>
         </ModalBody>
         <ModalFooter></ModalFooter>
@@ -160,13 +236,13 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
         save={saveGenres}
       />
       <FiltersListExcludeModal
-          isOpen={isListExcludeModalOpen}
-          setIsOpen={setIsListExcludeModalOpen}
-          lists={newFilter.profile_list_exclusions}
-          setLists={(profile_list_exclusions) =>
-            setNewFilter({ ...newFilter, profile_list_exclusions })
-          }
-        />
+        isOpen={isListExcludeModalOpen}
+        setIsOpen={setIsListExcludeModalOpen}
+        lists={newFilter.profile_list_exclusions}
+        setLists={(profile_list_exclusions) =>
+          setNewFilter({ ...newFilter, profile_list_exclusions })
+        }
+      />
     </>
   );
 };

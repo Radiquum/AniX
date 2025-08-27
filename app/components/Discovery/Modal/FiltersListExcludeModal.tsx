@@ -8,7 +8,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader
+  ModalHeader,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
 
@@ -81,7 +81,27 @@ export const FiltersListExcludeModal = ({
         >
           Применить
         </Button>
+        <Button
+          onClick={() => {
+            if (
+              newList.length != Object.keys(FilterProfileListIdToString).length
+            ) {
+              setNewList(
+                Object.keys(FilterProfileListIdToString).map((key) =>
+                  Number(key)
+                )
+              );
+            } else {
+              setNewList([]);
+            }
+          }}
+          color="light"
+        >
+          {newList.length >= Object.keys(FilterProfileListIdToString).length ?
+            "Снять все"
+          : "Выбрать все"}
+        </Button>
       </ModalFooter>
     </Modal>
   );
-}
+};
