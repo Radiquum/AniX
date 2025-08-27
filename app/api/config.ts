@@ -81,5 +81,6 @@ export const ENDPOINTS = {
     watching: `${API_PREFIX}/discover/watching`,
     recommendations: `${API_PREFIX}/discover/recommendations`,
     collections: `${API_PREFIX}/collection/all`,
+    schedule: `${API_PREFIX}/schedule`,
   }
 };

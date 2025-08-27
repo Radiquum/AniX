@@ -3,6 +3,7 @@ import { CollectionsOfTheWeek } from "#/components/Discovery/CollectionsOfTheWee
 import { DiscussingToday } from "#/components/Discovery/DiscussingToday";
 import { InterestingCarousel } from "#/components/Discovery/InterestingCarousel";
 import { PopularModal } from "#/components/Discovery/Modal/PopularModal";
+import { ScheduleModal } from "#/components/Discovery/Modal/ScheduleModal";
 import { RecommendedCarousel } from "#/components/Discovery/RecommendedCarousel";
 import { WatchingNowCarousel } from "#/components/Discovery/WatchingNowCarousel";
 import { Button } from "flowbite-react";
@@ -12,6 +13,7 @@ import { useState } from "react";
 export const DiscoverPage = () => {
   const router = useRouter();
   const [PopularModalOpen, setPopularModalOpen] = useState(false);
+  const [ScheduleModalOpen, setScheduleModalOpen] = useState(false);
 
   return (
     <>
@@ -25,7 +27,11 @@ export const DiscoverPage = () => {
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--fire"></span>
           <span>Популярное</span>
         </Button>
-        <Button size="xl" color="blue">
+        <Button
+          size="xl"
+          color="blue"
+          onClick={() => setScheduleModalOpen(true)}
+        >
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--calendar-month"></span>
           <span>Расписание</span>
         </Button>
@@ -48,6 +54,10 @@ export const DiscoverPage = () => {
       <CollectionsOfTheWeek />
 
       <PopularModal isOpen={PopularModalOpen} setIsOpen={setPopularModalOpen} />
+      <ScheduleModal
+        isOpen={ScheduleModalOpen}
+        setIsOpen={setScheduleModalOpen}
+      />
     </>
   );
 };
