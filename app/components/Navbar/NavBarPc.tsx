@@ -17,6 +17,12 @@ const NavbarItems = [
     auth: false,
   },
   {
+    title: "Обзор",
+    icon: "mdi--compass",
+    href: "/discovery",
+    auth: false,
+  },
+  {
     title: "Поиск",
     icon: "mdi--search",
     href: "/search",
@@ -44,12 +50,6 @@ const NavbarItems = [
     title: "История",
     icon: "mdi--history",
     href: "/history",
-    auth: true,
-  },
-  {
-    title: "Обзор",
-    icon: "mdi--compass",
-    href: "/discovery",
     auth: true,
   },
 ];

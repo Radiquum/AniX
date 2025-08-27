@@ -96,7 +96,7 @@ export const PosterWithStuff = (props: {
             </p>
           )}
           {props.title_original && (
-            <p className="hidden mt-2 text-sm leading-none text-gray-300 sm:block md:text-base line-clamp-2">
+            <p className="hidden mt-2 text-sm leading-none text-gray-300 sm:[display:-webkit-box] md:text-base line-clamp-2">
               {props.title_original}
             </p>
           )}

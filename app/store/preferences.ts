@@ -40,7 +40,7 @@ export const usePreferencesStore = create<preferencesState>()(
       flags: {
         saveWatchHistory: true,
         showChangelog: true,
-        showFifthButton: null,
+        showFifthButton: "discovery",
       },
       params: {
         isFirstLaunch: true,

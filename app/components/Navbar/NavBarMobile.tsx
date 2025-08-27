@@ -54,7 +54,7 @@ const FifthButton = {
     title: "Обзор",
     icon: "mdi--compass",
     href: "/discovery",
-    auth: true,
+    auth: false,
   },
 };
 
@@ -81,19 +81,27 @@ export const NavBarMobile = (props: { setIsSettingModalOpen: any }) => {
               </Link>
             );
           })}
-          {userStore.isAuth && preferenceStore.flags.showFifthButton ?
-            <Link
-              href={FifthButton[preferenceStore.flags.showFifthButton].href}
-              key={`navbar-mobile-${FifthButton[preferenceStore.flags.showFifthButton].title}`}
-              className="flex flex-col items-center justify-center gap-1"
-            >
-              <span
-                className={`iconify ${FifthButton[preferenceStore.flags.showFifthButton].icon} w-6 h-6`}
-              ></span>
-              <span className="text-sm">
-                {FifthButton[preferenceStore.flags.showFifthButton].title}
-              </span>
-            </Link>
+          {preferenceStore.flags.showFifthButton ?
+            <>
+              {(
+                !userStore.isAuth &&
+                FifthButton[preferenceStore.flags.showFifthButton].auth
+              ) ?
+                <></>
+              : <Link
+                  href={FifthButton[preferenceStore.flags.showFifthButton].href}
+                  key={`navbar-mobile-${FifthButton[preferenceStore.flags.showFifthButton].title}`}
+                  className="flex flex-col items-center justify-center gap-1"
+                >
+                  <span
+                    className={`iconify ${FifthButton[preferenceStore.flags.showFifthButton].icon} w-6 h-6`}
+                  ></span>
+                  <span className="text-sm">
+                    {FifthButton[preferenceStore.flags.showFifthButton].title}
+                  </span>
+                </Link>
+              }
+            </>
           : ""}
           <Dropdown
             arrowIcon={false}
