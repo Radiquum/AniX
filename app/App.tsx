@@ -16,6 +16,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import { NavBarPc } from "./components/Navbar/NavBarPc";
 import { NavBarMobile } from "./components/Navbar/NavBarMobile";
 import { SettingsModal } from "./components/SettingsModal/SettingsModal";
+import { ThemeInit } from "../.flowbite-react/init";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -131,6 +132,7 @@ export const App = (props) => {
         isOpen={isSettingModalOpen}
         setIsOpen={setIsSettingModalOpen}
       />
+      <ThemeInit />
     </body>
   );
 };
