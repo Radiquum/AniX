@@ -5,9 +5,15 @@ import {
   FilterCategoryIdToString,
   FilterCountry,
   FilterDefault,
+  FilterEpisodeCount,
+  FilterEpisodeDuration,
   FilterProfileListIdToString,
+  FilterSeasonIdToString,
+  FilterSortToString,
   FilterSource,
+  FilterStatusIdToString,
   FilterStudio,
+  FilterYear,
 } from "#/api/utils";
 import {
   Button,
@@ -215,6 +221,250 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
                         setNewFilter({
                           ...newFilter,
                           source: value,
+                        })
+                      }
+                    >
+                      {value}
+                    </DropdownItem>
+                  );
+                })}
+              </Dropdown>
+            </div>
+            <div className="space-y-2">
+              <p>Года</p>
+              <div className="flex items-center gap-2">
+                <p>С</p>
+                <Dropdown
+                  label={
+                    newFilter.start_year ? newFilter.start_year : "Неважно"
+                  }
+                  color="blue"
+                  className="mr-2 overflow-y-auto max-h-64"
+                >
+                  <DropdownItem
+                    key={`filter-modal-year-start-none`}
+                    onClick={() =>
+                      setNewFilter({ ...newFilter, start_year: null })
+                    }
+                  >
+                    Неважно
+                  </DropdownItem>
+                  {FilterYear.map((value) => {
+                    return (
+                      <DropdownItem
+                        key={`filter-modal-year-start-${value}`}
+                        onClick={() =>
+                          setNewFilter({
+                            ...newFilter,
+                            start_year: value,
+                          })
+                        }
+                      >
+                        {value}
+                      </DropdownItem>
+                    );
+                  })}
+                </Dropdown>
+                <p>По</p>
+                <Dropdown
+                  label={newFilter.end_year ? newFilter.end_year : "Неважно"}
+                  color="blue"
+                  className="mr-2 overflow-y-auto max-h-64"
+                >
+                  <DropdownItem
+                    key={`filter-modal-year-end-none`}
+                    onClick={() =>
+                      setNewFilter({ ...newFilter, end_year: null })
+                    }
+                  >
+                    Неважно
+                  </DropdownItem>
+                  {FilterYear.map((value) => {
+                    return (
+                      <DropdownItem
+                        key={`filter-modal-year-end-${value}`}
+                        onClick={() =>
+                          setNewFilter({
+                            ...newFilter,
+                            end_year: value,
+                          })
+                        }
+                      >
+                        {value}
+                      </DropdownItem>
+                    );
+                  })}
+                </Dropdown>
+                <p>Сезон</p>
+                <Dropdown
+                  label={
+                    newFilter.season ?
+                      FilterSeasonIdToString[newFilter.season]
+                    : "Неважно"
+                  }
+                  color="blue"
+                  className="mr-2 overflow-y-auto max-h-64"
+                >
+                  <DropdownItem
+                    key={`filter-modal-year-end-none`}
+                    onClick={() => setNewFilter({ ...newFilter, season: null })}
+                  >
+                    Неважно
+                  </DropdownItem>
+                  {Object.entries(FilterSeasonIdToString).map(
+                    ([key, value]) => {
+                      return (
+                        <DropdownItem
+                          key={`filter-modal-season-${value}`}
+                          onClick={() =>
+                            setNewFilter({
+                              ...newFilter,
+                              season: Number(key),
+                            })
+                          }
+                        >
+                          {value}
+                        </DropdownItem>
+                      );
+                    }
+                  )}
+                </Dropdown>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <p>Эпизодов</p>
+                  <Dropdown
+                    label={
+                      FilterEpisodeCount.find(
+                        (episode) =>
+                          episode.episodes_from === newFilter.episodes_from &&
+                          episode.episodes_to === newFilter.episodes_to
+                      ).name
+                    }
+                    color="blue"
+                    className="w-full overflow-y-auto max-h-64"
+                  >
+                    {FilterEpisodeCount.map((value) => {
+                      return (
+                        <DropdownItem
+                          key={`filter-modal-episode-count-${value.name}`}
+                          onClick={() =>
+                            setNewFilter({
+                              ...newFilter,
+                              episodes_from: value.episodes_from,
+                              episodes_to: value.episodes_to,
+                            })
+                          }
+                        >
+                          {value.name}
+                        </DropdownItem>
+                      );
+                    })}
+                  </Dropdown>
+                </div>
+                <div className="space-y-2">
+                  <p>Длительность эпизода</p>
+                  <Dropdown
+                    label={
+                      FilterEpisodeDuration.find(
+                        (episode) =>
+                          episode.episode_duration_from ===
+                            newFilter.episode_duration_from &&
+                          episode.episode_duration_to ===
+                            newFilter.episode_duration_to
+                      ).name
+                    }
+                    color="blue"
+                    className="w-full overflow-y-auto max-h-64"
+                  >
+                    {FilterEpisodeDuration.map((value) => {
+                      return (
+                        <DropdownItem
+                          key={`filter-modal-episode-duration-${value.name}`}
+                          onClick={() =>
+                            setNewFilter({
+                              ...newFilter,
+                              episode_duration_from:
+                                value.episode_duration_from,
+                              episode_duration_to: value.episode_duration_to,
+                            })
+                          }
+                        >
+                          {value.name}
+                        </DropdownItem>
+                      );
+                    })}
+                  </Dropdown>
+                </div>
+                <div className="space-y-2">
+                  <p>Статус</p>
+                  <Dropdown
+                    label={
+                      newFilter.status_id ?
+                        FilterStatusIdToString[newFilter.status_id]
+                      : "Неважно"
+                    }
+                    color="blue"
+                    className="w-full overflow-y-auto max-h-64"
+                  >
+                    <DropdownItem
+                      key={`filter-modal-status-none`}
+                      onClick={() =>
+                        setNewFilter({ ...newFilter, status_id: null })
+                      }
+                    >
+                      Неважно
+                    </DropdownItem>
+                    {Object.entries(FilterStatusIdToString).map(
+                      ([key, value]) => {
+                        return (
+                          <DropdownItem
+                            key={`filter-modal-status-${value}`}
+                            onClick={() =>
+                              setNewFilter({
+                                ...newFilter,
+                                status_id: Number(key),
+                              })
+                            }
+                          >
+                            {value}
+                          </DropdownItem>
+                        );
+                      }
+                    )}
+                  </Dropdown>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p>Возрастное ограничение</p>
+              <Button
+                color={"blue"}
+                className="w-full min-h-10 h-fit"
+                // onClick={() => setIsGenreModalOpen(true)}
+              >
+                {/* {newFilter.genres.length > 0 ?
+                  newFilter.genres.join(", ")
+                : "Неважно"} */}
+              </Button>
+            </div>
+            <div className="space-y-2">
+              <p>Сортировка</p>
+              <Dropdown
+                label={FilterSortToString[newFilter.sort]}
+                color="blue"
+                className="w-full overflow-y-auto max-h-64"
+              >
+                {Object.entries(FilterSortToString).map(([key, value]) => {
+                  return (
+                    <DropdownItem
+                      key={`filter-modal-sort-${value}`}
+                      onClick={() =>
+                        setNewFilter({
+                          ...newFilter,
+                          sort: Number(key),
                         })
                       }
                     >
