@@ -51,6 +51,7 @@ export const ENDPOINTS = {
     }
   },
   filter: `${API_PREFIX}/filter`,
+  filterTypes: `${API_PREFIX}/type/all`,
   search: {
     profileList: `${API_PREFIX}/search/profile/list`,
     profileHistory: `${API_PREFIX}/search/history`,

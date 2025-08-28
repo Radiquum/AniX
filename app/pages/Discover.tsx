@@ -45,7 +45,11 @@ export const DiscoverPage = () => {
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--collections-bookmark"></span>
           <span>Коллекции</span>
         </Button>
-        <Button size="xl" color="green">
+        <Button
+          size="xl"
+          color="green"
+          onClick={() => setFiltersModalOpen(true)}
+        >
           <span className="flex-shrink-0 inline-block w-8 h-8 mr-2 iconify mdi--mixer-settings"></span>
           <span>Фильтр</span>
         </Button>

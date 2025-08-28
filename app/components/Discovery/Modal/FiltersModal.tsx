@@ -2,6 +2,7 @@
 
 import {
   Filter,
+  FilterAgeRatingToString,
   FilterCategoryIdToString,
   FilterCountry,
   FilterDefault,
@@ -14,6 +15,7 @@ import {
   FilterStatusIdToString,
   FilterStudio,
   FilterYear,
+  tryCatchAPI,
 } from "#/api/utils";
 import {
   Button,
@@ -24,10 +26,14 @@ import {
   ModalFooter,
   ModalHeader,
 } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiltersGenreModal } from "./FiltersGenreModal";
 import { useUserStore } from "#/store/auth";
 import { FiltersListExcludeModal } from "./FiltersListExcludeModal";
+import { ENDPOINTS } from "#/api/config";
+import { FiltersTypesModal } from "./FiltersTypesModal";
+import { FiltersAgeRatingModal } from "./FiltersAgeRatingModal";
+import { useRouter } from "next/navigation";
 
 type ModalProps = {
   isOpen: boolean;
@@ -37,20 +43,46 @@ type ModalProps = {
 
 export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
   const userStore = useUserStore();
+  const router = useRouter();
 
   const [newFilter, setNewFilter] = useState(filter || FilterDefault);
   const [isGenreModalOpen, setIsGenreModalOpen] = useState(false);
   const [isListExcludeModalOpen, setIsListExcludeModalOpen] = useState(false);
+  const [isTypeModalOpen, setIsTypeModalOpen] = useState(false);
+  const [isAgeRatingModalOpen, setIsAgeRatingModalOpen] = useState(false);
+
+  const [types, setTypes] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setError(null);
+
+      const { data, error } = await tryCatchAPI(fetch(ENDPOINTS.filterTypes));
+
+      if (error) {
+        setError(error);
+      } else {
+        setTypes(data.types);
+      }
+    };
+    fetchData();
+  }, []);
 
   function saveGenres(genres, is_genres_exclude_mode_enabled) {
     setNewFilter({ ...newFilter, genres, is_genres_exclude_mode_enabled });
   }
 
+  function saveFilter() {
+    const _filter = JSON.stringify(newFilter);
+    router.push(`/discovery/filter?filter=${_filter}`);
+    setIsOpen(false);
+  }
+
   return (
     <>
       <Modal
-        // show={isOpen}
-        show={true}
+        show={isOpen}
         onClose={() => setIsOpen(false)}
         size="4xl"
         dismissible
@@ -163,11 +195,15 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
               <Button
                 color={"blue"}
                 className="w-full min-h-10 h-fit"
-                // onClick={() => setIsGenreModalOpen(true)}
+                onClick={() => setIsTypeModalOpen(true)}
               >
-                {/* {newFilter.genres.length > 0 ? */}
-                {/* newFilter.genres.join(", ") */}
-                {/* : "Неважно"} */}
+                {error ?
+                  error.message
+                : newFilter.types.length > 0 ?
+                  newFilter.types
+                    .map((type) => types.find((t) => t.id === type).name)
+                    .join(", ")
+                : "Неважно"}
               </Button>
             </div>
             <div className="space-y-2">
@@ -443,11 +479,13 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
               <Button
                 color={"blue"}
                 className="w-full min-h-10 h-fit"
-                // onClick={() => setIsGenreModalOpen(true)}
+                onClick={() => setIsAgeRatingModalOpen(true)}
               >
-                {/* {newFilter.genres.length > 0 ?
-                  newFilter.genres.join(", ")
-                : "Неважно"} */}
+                {newFilter.age_ratings.length > 0 ?
+                  newFilter.age_ratings
+                    .map((age_rating) => FilterAgeRatingToString[age_rating])
+                    .join(", ")
+                : "Неважно"}
               </Button>
             </div>
             <div className="space-y-2">
@@ -476,7 +514,11 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
             </div>
           </div>
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter>
+          <Button color="blue" onClick={saveFilter}>
+            Применить
+          </Button>
+        </ModalFooter>
       </Modal>
       <FiltersGenreModal
         isOpen={isGenreModalOpen}
@@ -491,6 +533,21 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
         lists={newFilter.profile_list_exclusions}
         setLists={(profile_list_exclusions) =>
           setNewFilter({ ...newFilter, profile_list_exclusions })
+        }
+      />
+      <FiltersTypesModal
+        isOpen={isTypeModalOpen}
+        setIsOpen={setIsTypeModalOpen}
+        typesData={types}
+        types={newFilter.types}
+        setTypes={(types) => setNewFilter({ ...newFilter, types })}
+      />
+      <FiltersAgeRatingModal
+        isOpen={isAgeRatingModalOpen}
+        setIsOpen={setIsAgeRatingModalOpen}
+        ageRatings={newFilter.age_ratings}
+        setAgeRatings={(age_ratings) =>
+          setNewFilter({ ...newFilter, age_ratings })
         }
       />
     </>
