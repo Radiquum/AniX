@@ -226,7 +226,9 @@ app.get("/*path", async (req, res) => {
   if (
     !apiResponse ||
     !apiResponse.ok ||
-    apiResponse.headers.get("content-type") != "application/json"
+    (apiResponse.headers.get("content-type") != "application/json" &&
+      apiResponse.headers.get("content-type") !=
+        "application/json;charset=UTF-8")
   ) {
     logger.error(
       `Failed to fetch: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
@@ -277,7 +279,7 @@ app.post("/*path", async (req, res) => {
     "application/json",
     "application/x-www-form-urlencoded",
     "multipart/form-data",
-    "x-unknown/unknown"
+    "x-unknown/unknown",
   ];
 
   const isSupported = supportedContentTypes.includes(
@@ -335,7 +337,9 @@ app.post("/*path", async (req, res) => {
   if (
     !apiResponse ||
     !apiResponse.ok ||
-    apiResponse.headers.get("content-type") != "application/json"
+    (apiResponse.headers.get("content-type") != "application/json" &&
+      apiResponse.headers.get("content-type") !=
+        "application/json;charset=UTF-8")
   ) {
     logger.error(
       `Failed to post: '${url.protocol}//${url.hostname}${url.pathname}', Path probably doesn't exist`
