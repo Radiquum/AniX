@@ -1,4 +1,5 @@
-const withFlowbiteReact = require("flowbite-react/plugin/nextjs");
+import withFlowbiteReact from "flowbite-react/plugin/nextjs";
+
 /** @type {import('next').NextConfig} */
 const NextConfig = {
   output: "standalone",
@@ -80,6 +81,4 @@ const NextConfig = {
   },
 };
 
-const config = withFlowbiteReact(NextConfig);
-
-module.exports = config;
+export default withFlowbiteReact(NextConfig);

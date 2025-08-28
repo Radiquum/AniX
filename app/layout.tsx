@@ -2,6 +2,7 @@ import "./globals.css";
 import { App } from "./App";
 import { ThemeModeScript } from "flowbite-react";
 import { PublicEnvScript } from 'next-runtime-env';
+import { ThemeInit } from "../.flowbite-react/init";
 
 export const metadata = {
   metadataBase: new URL("https://anix.wah.su"),
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <PublicEnvScript />
+        <ThemeInit />
         <ThemeModeScript />
       </head>
       <App>{children}</App>
