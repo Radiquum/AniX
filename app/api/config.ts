@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION = "3.8.0";
+export const CURRENT_APP_VERSION = "3.9.0";
 import { env } from "next-runtime-env";
 
 const NEXT_PUBLIC_API_URL = env("NEXT_PUBLIC_API_URL") || null;
