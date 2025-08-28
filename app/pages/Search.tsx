@@ -243,7 +243,7 @@ export function SearchPage() {
     return [url, JSON.stringify({ query, searchBy })];
   };
 
-  const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite(
+  const { data, error, isLoading, size, setSize } = useSWRInfinite(
     getKey,
     ([url, payload]) => postFetcher(url, payload),
     { initialSize: 2 }

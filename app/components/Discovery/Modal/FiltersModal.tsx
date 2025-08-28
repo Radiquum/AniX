@@ -39,9 +39,15 @@ type ModalProps = {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   filter?: Filter;
+  setFilter?: (filter: Filter) => void;
 };
 
-export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
+export const FiltersModal = ({
+  isOpen,
+  setIsOpen,
+  filter,
+  setFilter,
+}: ModalProps) => {
   const userStore = useUserStore();
   const router = useRouter();
 
@@ -75,7 +81,11 @@ export const FiltersModal = ({ isOpen, setIsOpen, filter }: ModalProps) => {
 
   function saveFilter() {
     const _filter = JSON.stringify(newFilter);
-    router.push(`/discovery/filter?filter=${_filter}`);
+    if (setFilter) {
+      setFilter(newFilter);
+    } else {
+      router.push(`/discovery/filter?filter=${_filter}`);
+    }
     setIsOpen(false);
   }
 
