@@ -10,19 +10,28 @@ export default async function middleware(
   request: Request,
   context: NextFetchEvent
 ) {
-  if (request.method == "GET") {
-    const url = new URL(request.url);
-    const isApiV2 = url.searchParams.get("API-Version") == "v2" || false;
-    if (isApiV2) {
-      url.searchParams.delete("API-Version");
-    }
-    let path = url.pathname.match(/\/api\/proxy\/(.*)/)?.[1] + url.search;
+  const url = new URL(request.url);
+  let path = url.pathname.match(/\/api\/proxy\/(.*)/)?.[1] + url.search;
 
+  let isApiV2 = false;
+  if (
+    url.searchParams.get("API-Version") &&
+    url.searchParams.get("API-Version") == "v2"
+  ) {
+    isApiV2 = true;
+    url.searchParams.delete("API-Version");
+  } else if (
+    request.headers.get("api-version") &&
+    request.headers.get("api-version") == "v2"
+  ) {
+    isApiV2 = true;
+  }
+
+  if (request.method == "GET") {
     const { data, error } = await fetchDataViaGet(
       `${API_URL}/${path}`,
       isApiV2
     );
-
     if (error) {
       return new Response(JSON.stringify(error), {
         status: 500,
@@ -31,7 +40,6 @@ export default async function middleware(
         },
       });
     }
-
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
@@ -41,13 +49,6 @@ export default async function middleware(
   }
 
   if (request.method == "POST") {
-    const url = new URL(request.url);
-    const isApiV2 = url.searchParams.get("API-Version") == "v2" || false;
-    if (isApiV2) {
-      url.searchParams.delete("API-Version");
-    }
-    const path = url.pathname.match(/\/api\/proxy\/(.*)/)?.[1] + url.search;
-
     const ReqContentTypeHeader = request.headers.get("Content-Type") || "";
     const ReqSignHeader = request.headers.get("Sign") || null;
     let ResContentTypeHeader = "";
