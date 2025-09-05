@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { trimTrailingSlash } from 'hono/trailing-slash'
 import { asciiHTML, separatorHTML } from "./utils/info.js";
-import config from "./config.json" with { type: "json" };
+import { appVersion } from "./config.js";
 
 const app = new Hono({ strict: true });
 app.use(trimTrailingSlash())
@@ -49,14 +49,14 @@ app.get("/health", (c) => {
     ${asciiHTML()}
     ${separatorHTML()}
     <p id="status">Status: OK</p>
-    <p>Version: ${config.appVersion}</p>
+    <p>Version: ${appVersion}</p>
   </body>
 </html>
 `);
 });
 
 app.get("/health/json", (c) => {
-  return c.json({"status": "OK", "version": config.appVersion});
+  return c.json({"status": "OK", "version": appVersion});
 });
 
 export default app;
