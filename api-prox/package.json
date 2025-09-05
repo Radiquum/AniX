@@ -1,20 +1,15 @@
 {
-  "name": "anix-api-proxy",
-  "version": "1.0.0",
-  "description": "Proxy and Hook requests from anix to anixart api",
-  "main": "index.ts",
+  "name": "anixart-serverless-api-proxy",
+  "type": "module",
   "scripts": {
-    "serve": "npx tsx ./index.ts"
-  },
-  "author": "Radiquum",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.0.4",
-    "typescript": "^5.8.3"
+    "cf-dev": "wrangler dev",
+    "cf-deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "tsx": "^4.20.3"
+    "hono": "^4.9.6"
+  },
+  "devDependencies": {
+    "wrangler": "^4.4.0"
   }
 }
