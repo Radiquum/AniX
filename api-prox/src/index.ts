@@ -1,8 +1,10 @@
 import { Hono } from "hono";
+import { trimTrailingSlash } from 'hono/trailing-slash'
 import { asciiHTML, separatorHTML } from "./utils/info.js";
 import config from "./config.json" with { type: "json" };
 
-const app = new Hono();
+const app = new Hono({ strict: true });
+app.use(trimTrailingSlash())
 
 app.get("/", (c) => {
   return c.html(`
