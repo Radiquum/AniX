@@ -1,10 +1,13 @@
 import { Hono } from "hono";
-import { trimTrailingSlash } from 'hono/trailing-slash'
+import { logger } from "hono/logger";
+import { RouteLogger } from "./utils/logger.js";
+import { trimTrailingSlash } from "hono/trailing-slash";
 import { asciiHTML, separatorHTML } from "./utils/info.js";
 import { appVersion } from "./config.js";
 
 const app = new Hono({ strict: true });
-app.use(trimTrailingSlash())
+app.use(trimTrailingSlash());
+app.use(logger(RouteLogger));
 
 app.get("/", (c) => {
   return c.html(`
@@ -56,7 +59,7 @@ app.get("/health", (c) => {
 });
 
 app.get("/health/json", (c) => {
-  return c.json({"status": "OK", "version": appVersion});
+  return c.json({ status: "OK", version: appVersion });
 });
 
 export default app;

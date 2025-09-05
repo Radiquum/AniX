@@ -10,7 +10,12 @@ type Failure<E> = {
 
 type Result<T, E = Error> = Success<T> | Failure<E>;
 
-export async function tryCatch<T, E = Error>(
+type TCError = {
+  message: string;
+  code: number;
+}
+
+export async function tryCatch<T, E = TCError>(
   promise: Promise<T>
 ): Promise<Result<T, E>> {
   try {
@@ -21,15 +26,15 @@ export async function tryCatch<T, E = Error>(
   }
 }
 
-function generateError(message: string, code: number) {
-    return {message: message, code: code}
+function generateError(message: string, code: number): TCError {
+    return { message: message, code: code }
 }
 
-export async function tryCatchAPI<T, E = Error>(
+export async function tryCatchAPI<T>(
   promise: Promise<any>
-): Promise<Result<object | null, object | null>> {
+): Promise<Result<T | null, TCError| null>> {
     const { data, error }: Awaited<Result<Response | null, Error | null>> = await tryCatch(promise);
-    if (!data || error) return { data: null, error: error };
+    if (!data || error) return { data: null, error: generateError("No data returned", 500) };
 
     if (
       data.headers.get("content-length") &&
