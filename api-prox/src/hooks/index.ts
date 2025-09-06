@@ -4,7 +4,7 @@ export type Hook = {
   hook: (url: URL, data: any, method: "GET" | "POST") => any;
 };
 
-import testHook from "./test.ts";
+import testHook from "./test.js";
 
 export const hookList: Hook[] = sortHooks([testHook]);
 

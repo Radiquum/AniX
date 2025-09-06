@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { InfoLogger, RouteLogger } from "./utils/logger.ts";
+import { InfoLogger, RouteLogger } from "./utils/logger.js";
 import {
   asciiHTML,
   getRunningEnvironment,
   separatorHTML,
-} from "./utils/info.ts";
-import { ANIXART_HEADERS, appVersion, BASE_URLS } from "./config.ts";
-import { tryCatchAPI } from "./utils/tryCatch.ts";
-import { hookList, runHooks } from "./hooks/index.ts";
+} from "./utils/info.js";
+import { ANIXART_HEADERS, appVersion, BASE_URLS } from "./config.js";
+import { tryCatchAPI } from "./utils/tryCatch.js";
+import { hookList, runHooks } from "./hooks/index.js";
 
 const app = new Hono({ strict: false });
 app.use(logger(RouteLogger));

@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "bun-dev": "bun run --hot src/index.ts",
-    "deno-dev": "deno serve --unstable-hmr src/index.ts",
+    "deno-dev": "deno serve --sloppy-imports --unstable-hmr src/index.ts",
     "vc-dev": "vercel dev",
     "vc-deploy": "vercel deploy",
     "cf-dev": "wrangler dev",
