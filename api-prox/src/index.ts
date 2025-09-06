@@ -1,9 +1,10 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { RouteLogger } from "./utils/logger.js";
+import { InfoLogger, RouteLogger } from "./utils/logger.js";
 import { asciiHTML, separatorHTML } from "./utils/info.js";
 import { ANIXART_HEADERS, appVersion, BASE_URLS } from "./config.js";
 import { tryCatchAPI } from "./utils/tryCatch.js";
+import { hookList, runHooks } from "./hooks/index.ts";
 
 const app = new Hono({ strict: false });
 app.use(logger(RouteLogger));
@@ -63,33 +64,42 @@ app.get("/health/json", (c) => {
 
 app.get("/favicon.ico", (c) => {
   return c.text("", 404);
-})
+});
 
 app.get("/*", async (c) => {
-  console.log("--- Trying to proxy `GET` request")
+  InfoLogger("index.ts", "Trying to proxy `GET` request");
 
   const url = new URL(c.req.url);
-  const currentBaseURL = new URL(BASE_URLS[Math.floor(Math.random() * BASE_URLS.length)]);
+  const currentBaseURL = new URL(
+    BASE_URLS[Math.floor(Math.random() * BASE_URLS.length)]
+  );
   url.protocol = currentBaseURL.protocol;
   url.host = currentBaseURL.host;
   url.port = currentBaseURL.port;
-  if (url.searchParams.get("API-Version") == "v2" || c.req.header("API-Version") == "v2") {
+  if (
+    url.searchParams.get("API-Version") == "v2" ||
+    c.req.header("API-Version") == "v2"
+  ) {
     ANIXART_HEADERS["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
 
-  console.log("--- URL:", `${url.protocol}//${url.host}${url.pathname}`);
-  const { data, error } = await tryCatchAPI(fetch(url.toString(), {
-    method: "GET",
-    headers: ANIXART_HEADERS
-  }));
+  InfoLogger("index.ts", "URL:", `${url.protocol}//${url.host}${url.pathname}`);
+  const { data, error } = await tryCatchAPI(
+    fetch(url.toString(), {
+      method: "GET",
+      headers: ANIXART_HEADERS,
+    })
+  );
 
   if (error) {
     return c.json(error);
   }
 
+  await runHooks(hookList, url, data);
+
   //@ts-ignore
   return c.json(data);
-})
+});
 
 export default app;

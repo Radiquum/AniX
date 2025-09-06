@@ -2,6 +2,7 @@
   "name": "anixart-serverless-api-proxy",
   "type": "module",
   "scripts": {
+    "vc-dev": "vercel dev",
     "cf-dev": "wrangler dev",
     "cf-deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
@@ -10,8 +11,14 @@
     "hono": "^4.9.6"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "wrangler": "^4.4.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vercel": "^47.0.5",
+    "wrangler": "^4.4.0"
+  },
+  "overrides": {
+    "@vercel/node": {
+      "ts-node": "10.9.2",
+      "typescript": "5.9.2"
+    }
   }
 }

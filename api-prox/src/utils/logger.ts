@@ -17,3 +17,7 @@ export const RouteLogger = (message: string) => {
     );
   }
 };
+
+export const InfoLogger = (module: string, ...rest: string[]) => {
+  console.log(`--- [${module}] ${rest.join(" ")}`);
+};
