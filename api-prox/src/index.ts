@@ -1,7 +1,11 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { InfoLogger, RouteLogger } from "./utils/logger.js";
-import { asciiHTML, separatorHTML } from "./utils/info.js";
+import {
+  asciiHTML,
+  getRunningEnvironment,
+  separatorHTML,
+} from "./utils/info.js";
 import { ANIXART_HEADERS, appVersion, BASE_URLS } from "./config.js";
 import { tryCatchAPI } from "./utils/tryCatch.js";
 import { hookList, runHooks } from "./hooks/index.ts";
@@ -52,14 +56,21 @@ app.get("/health", (c) => {
     ${asciiHTML()}
     ${separatorHTML()}
     <p id="status">Status: OK</p>
+    <p>Request Time: ${new Date().toLocaleString("ru-RU")}</p>
     <p>Version: ${appVersion}</p>
+    <p>Runner: ${getRunningEnvironment()}</p>
   </body>
 </html>
 `);
 });
 
 app.get("/health/json", (c) => {
-  return c.json({ status: "OK", version: appVersion });
+  return c.json({
+    status: "OK",
+    time: new Date().getTime(),
+    version: appVersion,
+    runner: getRunningEnvironment(),
+  });
 });
 
 app.get("/favicon.ico", (c) => {

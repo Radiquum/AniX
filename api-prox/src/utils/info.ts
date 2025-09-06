@@ -4,7 +4,7 @@
 //  / ___ |/ / / / />  </ /_/ / /  / /_   / ___ |/ ____// /   / ____/ /  / /_/ />  </ /_/ /
 // /_/  |_/_/ /_/_/_/|_|\__,_/_/   \__/  /_/  |_/_/   /___/  /_/   /_/   \____/_/|_|\__, /
 //                                                                                 /____/
-
+import { getRuntimeKey } from 'hono/adapter';
 export function asciiHTML() {
     const stringBuilder = [];
     stringBuilder.push(`<pre>`);
@@ -24,4 +24,11 @@ export function separatorHTML() {
     stringBuilder.push("-".repeat(92))
     stringBuilder.push(`</pre>`);
     return stringBuilder.join("\n");
+}
+
+export function getRunningEnvironment() {
+    const runtime = getRuntimeKey();
+    if (runtime == "workerd") return "CloudFlare Workers";
+    if (runtime == "node") return "Node.js";
+    return runtime;
 }
