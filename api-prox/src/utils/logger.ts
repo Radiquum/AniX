@@ -1,11 +1,18 @@
+function hideQueryParam(param: string, url: URL) {
+  if (url.searchParams.get(param)) {
+    url.searchParams.set(param, "***");
+  }
+}
+
 export const RouteLogger = (message: string) => {
   const args = message.split(" ");
   const direction = args[0];
   const method = args[1];
   const url = new URL("http://example.com" + args[2]);
-  if (url.searchParams.get("token")) {
-    url.searchParams.set("token", "***");
-  }
+
+  hideQueryParam("token", url);
+  hideQueryParam("login", url);
+  hideQueryParam("password", url);
 
   if (direction == "<--") {
     console.log(`--> REQ | ${method} ${url.pathname}${url.search}`);

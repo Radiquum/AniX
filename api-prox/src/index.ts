@@ -96,7 +96,76 @@ app.get("/*", async (c) => {
     return c.json(error);
   }
 
-  await runHooks(hookList, url, data);
+  await runHooks(hookList, url, data, "GET");
+
+  //@ts-ignore
+  return c.json(data);
+});
+
+app.post("/*", async (c) => {
+  InfoLogger("index.ts", "Trying to proxy `POST` request");
+
+  const url = new URL(c.req.url);
+  const currentBaseURL = new URL(
+    BASE_URLS[Math.floor(Math.random() * BASE_URLS.length)]
+  );
+  url.protocol = currentBaseURL.protocol;
+  url.host = currentBaseURL.host;
+  url.port = currentBaseURL.port;
+  if (
+    url.searchParams.get("API-Version") == "v2" ||
+    c.req.header("API-Version") == "v2"
+  ) {
+    ANIXART_HEADERS["Api-Version"] = "v2";
+    url.searchParams.delete("API-Version");
+  }
+
+  let reqContentType =
+    c.req.header("content-type") ?
+      c.req.header("content-type")?.split(";")[0].toLowerCase()
+    : "application/json";
+
+  InfoLogger("index.ts", "URL:", `${url.protocol}//${url.host}${url.pathname}`);
+  InfoLogger("index.ts", "Content-Type:", `${reqContentType}`);
+
+  let data = null;
+  let error = null;
+
+  switch (reqContentType) {
+    case "multipart/form-data":
+      ({ data, error } = await tryCatchAPI(
+        fetch(url.toString(), {
+          method: "POST",
+          headers: ANIXART_HEADERS,
+          body: await c.req.formData(),
+        })
+      ));
+      break;
+    case "application/x-www-form-urlencoded":
+      ({ data, error } = await tryCatchAPI(
+        fetch(url.toString(), {
+          method: "POST",
+          headers: ANIXART_HEADERS,
+          body: null,
+        })
+      ));
+      break;
+    default:
+      ({ data, error } = await tryCatchAPI(
+        fetch(url.toString(), {
+          method: "POST",
+          headers: ANIXART_HEADERS,
+          body: await c.req.json(),
+        })
+      ));
+      break;
+  }
+
+  if (error) {
+    return c.json(error);
+  }
+
+  await runHooks(hookList, url, data, "POST");
 
   //@ts-ignore
   return c.json(data);
