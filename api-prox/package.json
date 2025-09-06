@@ -2,6 +2,8 @@
   "name": "anixart-serverless-api-proxy",
   "type": "module",
   "scripts": {
+    "deno-dev": "deno serve --unstable-hmr src/index.ts",
+    "bun-dev": "bun run --hot src/index.ts",
     "vc-dev": "vercel dev",
     "cf-dev": "wrangler dev",
     "cf-deploy": "wrangler deploy --minify",
@@ -11,6 +13,9 @@
     "hono": "^4.9.6"
   },
   "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "latest",
+    "@types/deno": "latest",
     "typescript": "^5.9.2",
     "vercel": "^47.0.5",
     "wrangler": "^4.4.0"
