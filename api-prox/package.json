@@ -2,14 +2,19 @@
   "name": "anixart-serverless-api-proxy",
   "type": "module",
   "scripts": {
-    "bun-dev": "bun run --hot src/index.ts",
+    "node-dev": "tsx watch node.ts",
+    "node-run": "npx tsx node.ts",
+    "bun-dev": "bun run --hot bun.ts",
+    "bun-run": "bun run bun.ts",
     "vc-dev": "vercel dev",
     "vc-deploy": "vercel deploy",
     "cf-dev": "wrangler dev",
     "cf-deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.9.6"
+    "@hono/node-server": "^1.19.0",
+    "hono": "^4.9.6",
+    "tsx": "^4.20.3"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -14,10 +14,12 @@
     ],
     "packageJson": {
       "dependencies": [
+        "npm:@hono/node-server@^1.19.0",
         "npm:@types/bun@latest",
         "npm:@types/deno@latest",
         "npm:@types/node@latest",
         "npm:hono@^4.9.6",
+        "npm:tsx@^4.20.3",
         "npm:typescript@^5.9.2",
         "npm:vercel@^47.0.5",
         "npm:wrangler@^4.4.0"
