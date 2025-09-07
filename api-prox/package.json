@@ -8,6 +8,7 @@
     "bun-run": "bun run bun.ts",
     "vc-dev": "vercel dev",
     "vc-deploy": "vercel deploy",
+    "vc-prod": "vercel --prod",
     "cf-dev": "wrangler dev",
     "cf-deploy": "wrangler deploy --minify"
   },
