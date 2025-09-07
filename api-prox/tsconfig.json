@@ -3,8 +3,6 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -16,6 +14,6 @@
     "jsxImportSource": "hono/jsx",
     "outDir": "./dist"
   },
-  "include": ["src/**/*.ts", "src/**/*.json"],
+  "include": ["src/**/*.ts", "deno.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
-import { Hook } from ".";
-import thirdPartyReleaseRatingHook from "./show3rdPartyReleaseRating.js"; // Импортирует .ts как .js
+import { Hook } from "./index.js";
+import thirdPartyReleaseRatingHook from "./show3rdPartyReleaseRating.js";
 
 export const enabledHooks: Hook[] = [thirdPartyReleaseRatingHook];
 export default enabledHooks;

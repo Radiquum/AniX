@@ -1,4 +1,4 @@
-import { enabledHooks } from "./enabledHooks";
+import { enabledHooks } from "./enabledHooks.js";
 
 export type Hook = {
   title: string;

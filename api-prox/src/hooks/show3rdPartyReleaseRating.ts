@@ -1,6 +1,6 @@
 // хук добавляет рейтинг Shikimori и MAL в поле note релиза
-import { InfoLogger } from "../utils/logger";
-import { tryCatch } from "../utils/tryCatch";
+import { InfoLogger } from "../utils/logger.js";
+import { tryCatch } from "../utils/tryCatch.js";
 
 const title = "show3rdPartyReleaseRating.ts";
 const description = "Добавление рейтингов от Shikimori и MAL на страницу релиза";

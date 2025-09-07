@@ -4,10 +4,15 @@
   },
   "tasks": {
     "deno-run": "deno run --sloppy-imports --allow-net deno.ts",
-    "deno-dev": "deno run --sloppy-imports --unstable-hmr --allow-net deno.ts"
+    "deno-dev": "deno run --sloppy-imports --unstable-hmr --allow-net deno.ts",
+    "deno-deploy": "./node_modules/.bin/tsc && deployctl deploy"
   },
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
+  },
+  "deploy": {
+    "include": ["dist", "deno.json"],
+    "entrypoint": "dist/deno.js"
   }
 }
