@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@hono/hono@^4.9.6": "4.9.6"
+  },
+  "jsr": {
+    "@hono/hono@4.9.6": {
+      "integrity": "b85abb0013d167a290b1808d1d4d542dee269df31d4f47122023259fdd7e184b"
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@hono/hono@^4.9.6"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:@types/bun@latest",
+        "npm:@types/deno@latest",
+        "npm:@types/node@latest",
+        "npm:hono@^4.9.6",
+        "npm:typescript@^5.9.2",
+        "npm:vercel@^47.0.5",
+        "npm:wrangler@^4.4.0"
+      ]
+    }
+  }
+}
