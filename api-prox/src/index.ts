@@ -21,8 +21,8 @@ app.get("/", (c) => {
   <body>
     <style>
       ul{list-style:none;padding-left:1rem;font-size:16px}
-      p{font-size:14px}
       li::before{content:">";color:white;display:inline-block;width:1.25rem;margin-left:-1rem;margin-bottom:0.25rem;}
+      p{font-size:14px}
       a,a:visited{color:white;}
       a:hover{color:gray;}
     </style>
@@ -49,9 +49,9 @@ app.get("/health", (c) => {
   <head></head>
   <body>
     <style>
+      ul{list-style:none;padding-left:1rem;font-size:16px}
+      li::before{content:">";color:white;display:inline-block;width:1.25rem;margin-left:-1rem;margin-bottom:0.25rem;}
       p{font-size:14px;margin-bottom:-0.5rem;}
-      a,a:visited{color:white;}
-      a:hover{color:gray;}
     </style>
     ${asciiHTML()}
     ${separatorHTML()}
@@ -59,6 +59,10 @@ app.get("/health", (c) => {
     <p>Request Time: ${new Date().toLocaleString("ru-RU")}</p>
     <p>Version: ${appVersion}</p>
     <p>Runner: ${getRunningEnvironment()}</p>
+    <p>Enabled Hooks:</p>
+    <ul>
+      ${hookList.map((hook) => `<li>${hook.title}: ${hook.description}</li>`).join("")}
+    </ul>
   </body>
 </html>
 `);
@@ -70,6 +74,10 @@ app.get("/health/json", (c) => {
     time: new Date().getTime(),
     version: appVersion,
     runner: getRunningEnvironment(),
+    enabledHooks: hookList.map((hook) => ({
+      title: hook.title,
+      description: hook.description,
+    })),
   });
 });
 
