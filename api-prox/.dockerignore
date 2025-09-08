@@ -1,5 +1,11 @@
-episode
-hooks
+.vercel
+vercel.json
+.wrangler
+wrangler.json
 node_modules
+deno.ts
+deno.lock
+bun.ts
+bun.lock
 README.md
 README.RU.md

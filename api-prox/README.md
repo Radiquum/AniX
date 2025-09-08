@@ -1,49 +1,164 @@
-
 # AniX - Api Proxy
 
 This sub-project allows proxying requests to the Anixart API and modifying their responses using hooks.
 
-It can be used both for the main AniX project and as a standalone service for the Android app with a modified API link.
+It can be used both for the main AniX project and as a standalone service for the Android app with a modified API link via [anixart-patcher](https://github.com/radiquum/anixart-patcher).
 
-License: [MIT](../LICENSE)
+License: [MIT](./LICENSE)
 
-## Available Hooks
+## Structure
 
-- release.ts: adds a rating from Shikimori to the additional info line
-- profile.example.ts: changes the nickname of the official Anixart account (an example of using a hook)
-- profile.sponsor.ts: enables sponsorship (disables ads) after logging into the account in the Android app
-- toggles.ts: replaces the configuration response; if the `HOST_URL` environment variable is present, it replaces the web player link with an embedded one; when used together with the `PLAYER_PARSER_URL` variable, enables the custom web player, as in the AniX web client
-- episode.disabled.ts: allows modifying/adding voiceovers, sources, and episodes using a JSON file in the `episode` folder.
+This project has the following structure
+
+```md
+.
+├── src
+│   ├── hooks
+│   │   ├── index.ts - functions for running the hooks
+│   │   ├── enabledHooks.ts - list of enabled hooks
+│   │   ├── hook1.ts - hook file(s)
+│   │   ├── ...
+│   ├── json
+│   │   └── file.json - json files to import in hook to use as a data storage
+│   ├── utils
+│   │   ├── info.ts - info functions for api-prox
+│   │   ├── logger.ts - logger functions for api-prox
+│   │   └── tryCatch.ts - tryCatch wrapper for async functions like fetch
+│   ├── config.ts - config of api-prox
+│   └── index.ts - entrypoint and route handling
+├── .dockerignore
+├── .gitignore
+├── .vercelignore
+├── bun.lock
+├── bun.ts - file to run with bun
+├── deno.json
+├── deno.lock
+├── deno.ts - file to run with deno
+├── Dockerfile
+├── LICENSE
+├── node.ts - file to run with node
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.json
+├── vercel.json
+└── wrangler.jsonc
+```
+
+In coding of this project used a Hono framework to make it run on multiple serverless platforms
+
+Tested with following platforms:
+
+- CloudFlare Workers
+- Vercel Functions
+- Deno Deploy
 
 ## Usage
 
-In the web browser address bar, enter:
+To access the main page enter the url of your deployed project: `<http|https>://<ip|domain><:port>/<ENDPOINT>[?<QUERY_PARAMS>]`
 
-`<http|https>://<ip|domain><:port>/<ENDPOINT>[?<QUERY_PARAMS>]`
+Available endpoints:
+
+- `GET /` - main page, how to get started with your deploy
+- `GET /health` - health page, version info and enabled hooks
+- `GET /health/json` - same as before, but in json format
+- `GET|POST /*` - proxy the pathname and query to anixart server
 
 Response:
 
-- 500: an error occurred, see the `reason` field in the response body for more details
-- 200: request was successful (if there was an error on the Anixart API side, see the `code` field)
+- 200: request to proxy was successful
+
+if page is not found: returned a json with `{"message": <reason>, "code": 404}`
+
+if API returned a non zero code: returned a json with `{"message": <reason>, "code": <code from api response>}`
+
+## Hooks
+
+Hooks are a functions with a matcher that modify the API response
+
+Type:
+
+```ts
+export type Hook = {
+  title: string;
+  description: string | null;
+  priority: number;
+  match: (url: URL, method: "GET" | "POST") => boolean;
+  hook: (url: URL, data: any, method: "GET" | "POST") => Promise<any>;
+};
+```
+
+Title and Descriptions will be used to show an enabled hook at a `/health` endpoint
+
+To view how to write a hook, you can see the build-in hooks as a reference:
+
+- [addUserRoles.ts](./src/hooks/addUserRoles.ts)
+- [show3rdPartyReleaseRating.ts](./src/hooks/show3rdPartyReleaseRating.ts)
+
+To enable the hook, you need to import it inside [enabledHooks.ts](./src/hooks/enabledHooks.ts), and add it to `enabledHooks` list inside
 
 ## Deployment
+
+### Cloud Platforms
+
+1. Clone the repository
+
+    ```sh
+    git clone https://github.com/Radiquum/AniX.git
+    ```
+
+2. Install the dependencies
+
+    For CloudFlare workers / Vercel functions
+
+    ```sh
+    npm install
+    ```
+
+    For Deno deploy
+
+    ```sh
+    deno install
+    ```
+
+3. If needed modify the config and hooks (same as in docker from step 6)
+
+4. Deploy
+
+    CloudFlare workers
+
+    ```sh
+    npm run cf-deploy
+    ```
+
+    Vercel functions
+
+    ```sh
+    npm run vc-deploy
+    ```
+
+    Deno deploy
+
+    ```sh
+    deno run deno-deploy
+    ```
 
 ### Docker
 
 Requirements:
 
-- [docker](https://docs.docker.com/engine/install/)
+- [docker engine](https://docs.docker.com/engine/install/)
+- Linux based system or WSL
 
-### Pre-built
+#### Pre-Build
 
 1. Run the command:
 
-`docker run -d --name anix-api -p 7001:7001 radiquum/anix-api-prox:latest`
+```sh
+docker run -d --restart always --name anix-api -p 7001:7001 radiquum/anix-api-prox:latest
+```
 
-To use hooks, create a `hooks` folder and add the flag `-v ./hooks:/app/hooks` before the `-p` flag.
-(The same applies to the `episode` folder if needed)
-
-### Manual Build
+#### Manual Build
 
 Additional Requirements:
 
@@ -53,60 +168,99 @@ Additional Requirements:
 2. Navigate to the repository directory: `cd AniX`
 3. Navigate to the service directory: `cd api-prox`
 4. Run the command: `docker build -t anix-api-prox .`
-5. After completion, run: `docker run -d --restart always --name anix-player -p 7001:7001 anix-api-prox`
+5. After completion, run: `docker run -d --restart always --name anix-api-prox -p 7001:7001 anix-api-prox`
 
-To use hooks, add the flag `-v ./hooks:/app/hooks` before the `-p` flag.
-(The same applies to the `episode` folder if needed)
+#### How To use hooks
 
-### docker/Flags
+1. create a `hooks` folder and add the flag
 
-- -d - run the container in background
-- --restart always - always start after server reboot
-- --name - container name
-- -p - container port that will be accessible from outside. PORT:7000
-- -v - mount a folder from host into the container
+    `-v ./hooks:/app/src/hooks/custom`
 
-### docker/After Deployment
+    before the `-p` flag.
 
-The service will be available at: `http://<YOUR IP><:YOUR PORT>/`
+2. do the same for json folder
 
-### docker/Note
+    `-v ./json:/app/src/json/custom`
 
-To use your own domain and support HTTPS, you can use Traefik or another reverse proxy with an SSL certificate.
+3. create a `enabledHooks.ts` file with the following content and link it to container with
 
-Useful links:
+    `-v ./enabledHooks.ts:/app/src/hooks/enabledHooks.ts`
 
-- [Converter from docker run command to docker compose syntax](https://it-tools.tech/docker-run-to-docker-compose-converter)
-- [How to setup Traefik + custom domain + SSL](https://letmegooglethat.com/?q=how+to+setup+traefik+with+custom+domain+and+ssl+certificate+from+lets+encrypt%3F)
+    ``` ts
+    import { Hook } from "./index.js";
 
-### pm2
+    export const enabledHooks: Hook[] = [];
+    export default enabledHooks;
+    ```
 
-Requirements:
+    This will disable bundled hooks
 
-- [git](https://git-scm.com/)
-- [nodejs 23+ with npm](http://nodejs.org/)
-- [pm2](https://pm2.keymetrics.io/)
+4. Place your hooks to hooks directory at host
 
-Instructions:
+5. Place your json files to json directory at host
 
-1. Clone the repository: `git clone https://github.com/Radiquum/AniX`
-2. Navigate to the repository directory: `cd AniX`
-3. Navigate to the service directory: `cd api-prox`
-4. Run: `npm install`
-5. After completion, run: `pm2 start index.ts -n anix-api-prox`
+6. Import hook to enabledHooks.ts
 
-### pm2/Flags
+    ```ts
+    import MyHook from "./custom/MyHook.js"
+    ```
 
-- -n - service name in pm2
+    To import a json files inside a hook:
 
-### pm2/After Deployment
+    ```ts
+    import MyJson from "../../json/custom/MyJson.json" with {"type": "json"};
+    ```
 
-The service will be available at: `http://<YOUR IP>:7001/`
+7. Add your hook to list of enabled hooks inside `enabledHooks.ts`:
 
-### pm2/Note
+    ```ts
+    ...
+    export const enabledHooks: Hook[] = [MyHook];
+    ...
+    ```
 
-For automatic app startup, it is recommended to set up pm2 autostart using the command: `pm2 startup`
+8. Start or Restart the container
 
-Useful links:
+## Development
 
-- [PM2: a smart approach to process management @ Habr](https://habr.com/ru/articles/480670/)
+This project provides multiple development commands
+
+Cloudflare workers:
+
+```sh
+npm run cf-dev
+```
+
+Vercel Functions:
+
+```sh
+npm run vc-dev
+```
+
+Bun
+
+```sh
+bun run bun-dev
+```
+
+Deno
+
+```sh
+deno run deno-dev
+```
+
+Node
+
+```sh
+npm run node-dev
+```
+
+## Issue report
+
+To report a bug or a feature reques use the Issues tab of the main repository with the following title:
+
+`API-PROX/<BUG|REQUEST>: <Your Title Here>`
+
+## Contributing
+
+We welcome any contributions to this project! If you have any bug fixes, improvements, or new features, please feel free to create a pull request or an issue.

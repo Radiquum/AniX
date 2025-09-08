@@ -7,11 +7,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY *.ts ./
+ADD src ./src
+COPY node.ts ./
 COPY tsconfig.json ./
-
-RUN mkdir -p /app/hooks
 
 EXPOSE 7001
 
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "node-run"]
