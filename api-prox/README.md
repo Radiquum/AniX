@@ -208,7 +208,7 @@ Additional Requirements:
     To import a json files inside a hook:
 
     ```ts
-    import MyJson from "../json/custom/MyJson.json" with {"type": "json"};
+    import MyJson from "../../json/custom/MyJson.json" with {"type": "json"};
     ```
 
 7. Add your hook to list of enabled hooks inside `enabledHooks.ts`:
