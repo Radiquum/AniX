@@ -131,11 +131,14 @@ app.post("/*", async (c) => {
   url.protocol = currentBaseURL.protocol;
   url.host = currentBaseURL.host;
   url.port = currentBaseURL.port;
+
+  let headers = structuredClone(ANIXART_HEADERS);
+
   if (
     url.searchParams.get("API-Version") == "v2" ||
     c.req.header("API-Version") == "v2"
   ) {
-    ANIXART_HEADERS["Api-Version"] = "v2";
+    headers["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
 
@@ -155,7 +158,7 @@ app.post("/*", async (c) => {
       ({ data, error } = await tryCatchAPI(
         fetch(url.toString(), {
           method: "POST",
-          headers: ANIXART_HEADERS,
+          headers: headers,
           body: await c.req.formData(),
         })
       ));
@@ -164,7 +167,7 @@ app.post("/*", async (c) => {
       ({ data, error } = await tryCatchAPI(
         fetch(url.toString(), {
           method: "POST",
-          headers: ANIXART_HEADERS,
+          headers: headers,
           body: null,
         })
       ));
@@ -173,8 +176,8 @@ app.post("/*", async (c) => {
       ({ data, error } = await tryCatchAPI(
         fetch(url.toString(), {
           method: "POST",
-          headers: ANIXART_HEADERS,
-          body: await c.req.json(),
+          headers: headers,
+          body: JSON.stringify(await c.req.json()),
         })
       ));
       break;

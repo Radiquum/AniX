@@ -223,7 +223,7 @@ Additional Requirements:
 
 ## Development
 
-This project provides a multiple of development commands
+This project provides multiple development commands
 
 Cloudflare workers:
 
