@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Dynamically set 'tag' environment variable
         run: |
-            echo "APP_VERSION=$(sed -n "3p" src/config.ts | sed 's/=/\\r/g' | tr -d "[a-z]\";")" >> $GITHUB_ENV
+            echo "APP_VERSION=$(sed -n "3p" ./api-prox/src/config.ts | sed 's/=/\\r/g' | tr -d "[a-z]\";")" >> $GITHUB_ENV
             echo "IMAGE_DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
       - name: Build Image
         run: |
