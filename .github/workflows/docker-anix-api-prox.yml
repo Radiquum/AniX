@@ -5,10 +5,10 @@ on:
     branches:
       - V3
     paths:
-      - "api-prox/*.ts"
-      - "!api-prox/hooks/*"
-      - "!api-prox/episode/*"
       - "api-prox/Dockerfile"
+      - "api-prox/node.ts"
+      - "api-prox/src/**/*.ts"
+      - "api-prox/src/**/*.json"
   workflow_dispatch:
 
 jobs:
@@ -18,14 +18,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Dynamically set 'tag' environment variable
-        run: echo "tag=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
+        run: |
+            echo "APP_VERSION=$(sed -n "3p" src/config.ts | sed 's/=/\\r/g' | tr -d "[a-z]\";")" >> $GITHUB_ENV
+            echo "IMAGE_DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
       - name: Build Image
         run: |
           cd ./api-prox
           docker build . -t radiquum/anix-api-prox:latest
-          docker tag radiquum/anix-api-prox:latest radiquum/anix-api-prox:${{ env.tag }}
+          docker tag radiquum/anix-api-prox:latest radiquum/anix-api-prox:${{ env.APP_VERSION }}-${{ env.IMAGE_DATE }}
       - name: Publish Image
         run: |
           docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push radiquum/anix-api-prox:latest
-          docker push radiquum/anix-api-prox:${{ env.tag }}
+          docker push radiquum/anix-api-prox:${{ env.APP_VERSION }}-${{ env.IMAGE_DATE }}
