@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
+import { cors } from 'hono/cors'
 import { InfoLogger, RouteLogger } from "./utils/logger.js";
 import {
   asciiHTML,
@@ -12,6 +13,13 @@ import { hookList, runHooks } from "./hooks/index.js";
 
 const app = new Hono({ strict: false });
 app.use(logger(RouteLogger));
+app.use('/*', cors({
+  origin: (origin) => {
+    return origin || "*"
+  },
+  allowMethods: ["GET", "HEAD", "POST", "OPTIONS"],
+  allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Sign", "Allow", "User-Agent", "Api-Version"]
+}))
 
 app.get("/", (c) => {
   return c.html(`
@@ -95,11 +103,13 @@ app.get("/*", async (c) => {
   url.protocol = currentBaseURL.protocol;
   url.host = currentBaseURL.host;
   url.port = currentBaseURL.port;
+
+  let headers = structuredClone(ANIXART_HEADERS);
   if (
     url.searchParams.get("API-Version") == "v2" ||
     c.req.header("API-Version") == "v2"
   ) {
-    ANIXART_HEADERS["Api-Version"] = "v2";
+    headers["Api-Version"] = "v2";
     url.searchParams.delete("API-Version");
   }
 
@@ -107,7 +117,7 @@ app.get("/*", async (c) => {
   const { data, error } = await tryCatchAPI(
     fetch(url.toString(), {
       method: "GET",
-      headers: ANIXART_HEADERS,
+      headers: headers,
     })
   );
 
@@ -133,7 +143,6 @@ app.post("/*", async (c) => {
   url.port = currentBaseURL.port;
 
   let headers = structuredClone(ANIXART_HEADERS);
-
   if (
     url.searchParams.get("API-Version") == "v2" ||
     c.req.header("API-Version") == "v2"
