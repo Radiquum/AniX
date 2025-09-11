@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION = "3.9.0";
+export const CURRENT_APP_VERSION = "3.9.1";
 
 export const API_URL = "https://api-s.anixsekai.com";
 // sourcery skip: binary-operator-identity
