@@ -23,8 +23,10 @@ export async function generateMetadata(
   return {
     title: data.release.title_ru,
     description: data.release.description,
+    keywords: data.release.genres,
     openGraph: {
       ...previousOG,
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/release/${id}`,
       images: [
         {
           url: data.release.image, // Must be an absolute URL

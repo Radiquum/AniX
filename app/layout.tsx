@@ -4,8 +4,8 @@ import { ThemeModeScript } from "flowbite-react";
 import { ThemeInit } from "../.flowbite-react/init";
 
 export const metadata = {
-  metadataBase: new URL("https://anix.wah.su"),
-  keywords: ["anix", "anixart", "anime", "аниксарт", "аниме"],
+  metadataBase: new URL(process.env.METADATA_BASE_URL || "https://example.com"),
+  keywords: [],
   formatDetection: {
     email: false,
     address: false,
@@ -15,9 +15,10 @@ export const metadata = {
     template: "AniX | %s",
     default: "AniX | Домашняя",
   },
-  description: "Неофициальное приложение для anixart.tv",
+  description: "Неофициальное приложение для anixart-app.com",
 
   openGraph: {
+    url: process.env.METADATA_BASE_URL || "https://example.com",
     images: [
       {
         url: "/opengraph.png", // Must be an absolute URL

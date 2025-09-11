@@ -25,6 +25,7 @@ export async function generateMetadata(
     description: data.profile.status,
     openGraph: {
       ...previousOG,
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/profile/${id}`,
       images: [
         {
           url: data.profile.avatar, // Must be an absolute URL

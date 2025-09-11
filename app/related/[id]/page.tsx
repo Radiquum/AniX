@@ -33,6 +33,7 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
     description: firstRelease.release.description,
     openGraph: {
       ...previousOG,
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/related/${id}`,
       images: [
         {
           url: firstRelease.release.image, // Must be an absolute URL

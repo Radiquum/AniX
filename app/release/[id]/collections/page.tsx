@@ -23,15 +23,11 @@ export async function generateMetadata(
   return {
     title: data.release.title_ru + " - в коллекциях",
     description: data.release.description,
+    keywords: data.release.genres,
     openGraph: {
       ...previousOG,
-      images: [
-        {
-          url: data.release.image, // Must be an absolute URL
-          width: 600,
-          height: 800,
-        },
-      ],
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/release/${id}/collections`,
+      images: [],
     },
   };
 }

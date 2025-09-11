@@ -28,6 +28,7 @@ export async function generateMetadata(
     description: data.collection && data.collection.description,
     openGraph: {
       ...previousOG,
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/collection/${id}`,
       images: [
         {
           url: data.collection && data.collection.image, // Must be an absolute URL

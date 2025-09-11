@@ -33,13 +33,8 @@ export async function generateMetadata(
     description: "Закладки Пользователя - " + data.profile.login + " - " + SectionTitleMapping[params.slug],
     openGraph: {
       ...previousOG,
-      images: [
-        {
-          url: data.profile.avatar, // Must be an absolute URL
-          width: 600,
-          height: 600,
-        },
-      ],
+      url: `${process.env.METADATA_BASE_URL || "https://example.com"}/profile/${id}/bookmarks/${params.slug}`,
+      images: [],
     },
   };
 }
