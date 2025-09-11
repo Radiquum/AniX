@@ -1,5 +1,6 @@
 import { tryCatchPlayer, tryCatchAPI } from "#/api/utils";
-import { env } from "next-runtime-env";
+// sourcery skip: use-object-destructuring
+const ENV_PLAYER_PARSER_URL = process.env.NEXT_PUBLIC_PLAYER_PARSER_URL;
 
 export async function _fetchAPI(
   url: string,
@@ -66,8 +67,7 @@ export const _fetchKodikManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL");
-  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
+  if (!ENV_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
       detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
@@ -76,7 +76,7 @@ export const _fetchKodikManifest = async (
   }
 
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${url}&player=kodik`,
+    `${ENV_PLAYER_PARSER_URL}/?url=${url}&player=kodik`,
     setPlayerError
   );
 
@@ -97,8 +97,7 @@ export const _fetchAnilibriaManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL");
-  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
+  if (!ENV_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
       detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
@@ -107,7 +106,7 @@ export const _fetchAnilibriaManifest = async (
   }
 
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${encodeURIComponent(url)}&player=libria`,
+    `${ENV_PLAYER_PARSER_URL}/?url=${encodeURIComponent(url)}&player=libria`,
     setPlayerError
   );
 
@@ -125,8 +124,7 @@ export const _fetchSibnetManifest = async (
   url: string,
   setPlayerError: (state) => void
 ) => {
-  const NEXT_PUBLIC_PLAYER_PARSER_URL = env("NEXT_PUBLIC_PLAYER_PARSER_URL");
-  if (!NEXT_PUBLIC_PLAYER_PARSER_URL) {
+  if (!ENV_PLAYER_PARSER_URL) {
     setPlayerError({
       message: "Плеер не настроен",
       detail: "переменная 'NEXT_PUBLIC_PLAYER_PARSER_URL' не обнаружена",
@@ -135,7 +133,7 @@ export const _fetchSibnetManifest = async (
   }
 
   const data = await _fetchPlayer(
-    `${NEXT_PUBLIC_PLAYER_PARSER_URL}/?url=${url}&player=sibnet`,
+    `${ENV_PLAYER_PARSER_URL}/?url=${url}&player=sibnet`,
     setPlayerError
   );
 

@@ -1,7 +1,6 @@
 import "./globals.css";
 import { App } from "./App";
 import { ThemeModeScript } from "flowbite-react";
-import { PublicEnvScript } from 'next-runtime-env';
 import { ThemeInit } from "../.flowbite-react/init";
 
 export const metadata = {
@@ -35,7 +34,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <PublicEnvScript />
         <ThemeInit />
         <ThemeModeScript />
       </head>

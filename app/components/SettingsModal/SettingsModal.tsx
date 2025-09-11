@@ -16,8 +16,6 @@ import {
   useThemeMode,
 } from "flowbite-react";
 import Link from "next/link";
-import { env } from "next-runtime-env";
-import { useEffect, useState } from "react";
 
 const HomeCategory = {
   last: "Последние релизы",
@@ -47,15 +45,6 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
   const userStore = useUserStore();
 
   const { computedMode, setMode } = useThemeMode();
-  const [isPlayerConfigured, setIsPlayerConfigured] = useState(false);
-
-  useEffect(() => {
-    const NEXT_PUBLIC_PLAYER_PARSER_URL =
-      env("NEXT_PUBLIC_PLAYER_PARSER_URL") || null;
-    if (NEXT_PUBLIC_PLAYER_PARSER_URL) {
-      setIsPlayerConfigured(true);
-    }
-  }, []);
 
   return (
     <Modal
@@ -266,7 +255,6 @@ export const SettingsModal = (props: { isOpen: boolean; setIsOpen: any }) => {
                 })
               }
               checked={preferenceStore.params.experimental.newPlayer}
-              disabled={!isPlayerConfigured}
             />
           </div>
         </div>
