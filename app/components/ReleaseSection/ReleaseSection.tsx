@@ -14,7 +14,7 @@ export const ReleaseSection = (props: {
         </div>
       )}
       <div className="m-4">
-        <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 2xl:grid-cols-5">
           {props.content.map((release) => {
             return (
               <div key={release.id} className="w-full h-full">

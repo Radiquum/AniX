@@ -41,7 +41,9 @@ export const ReleaseChips = ({
   };
 
   return (
-    <div className={`${chipSettings.enabled ? "flex" : "hidden"} gap-1 flex-wrap`}>
+    <div
+      className={`${chipSettings.enabled ? "flex" : "hidden"} gap-1 flex-wrap`}
+    >
       {!chipSettings.gradeHidden && grade ?
         <Chip
           className="w-12"
@@ -58,9 +60,7 @@ export const ReleaseChips = ({
           name={`${grade}`}
         />
       : ""}
-      {!chipSettings.listHidden && user_list && (
-        <Chip bg_color={user_list.bg_color} name={user_list.name} />
-      )}
+
       {!chipSettings.statusHidden && status ?
         <Chip name={status.name} />
       : status_id != 0 && (
@@ -81,7 +81,12 @@ export const ReleaseChips = ({
           devider="/"
         />
       )}
-      {!chipSettings.categoryHidden && category && <Chip name={category.name} />}
+      {!chipSettings.categoryHidden && category && (
+        <Chip name={category.name} />
+      )}
+      {!chipSettings.listHidden && user_list && (
+        <Chip bg_color={user_list.bg_color} name={user_list.name} />
+      )}
       {!chipSettings.favHidden && is_favorite && (
         <div className="flex items-center justify-center bg-pink-500 rounded-sm">
           <span className="w-3 px-4 py-2.5 text-white sm:px-4 sm:py-3 xl:px-6 xl:py-4 iconify mdi--heart"></span>
