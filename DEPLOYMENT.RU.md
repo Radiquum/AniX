@@ -30,6 +30,7 @@
 
    - NEXT_PUBLIC_PLAYER_PARSER_URL
    - NEXT_PUBLIC_API_URL
+   - METADATA_BASE_URL (установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
 
     на те которые вы получили, если развёртывали [anix-player-parser](./player-parser/README.RU.md) и/или [anix-api-prox](./api-prox/README.RU.md)
 
@@ -78,6 +79,7 @@
 
    - NEXT_PUBLIC_PLAYER_PARSER_URL
    - NEXT_PUBLIC_API_URL
+   - METADATA_BASE_URL (установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
 
     на те которые вы получили, если развёртывали [anix-player-parser](./player-parser/README.RU.md) и/или [anix-api-prox](./api-prox/README.RU.md)
 
@@ -122,7 +124,7 @@
 - -p - порт контейнера который будет доступен извне. ПОРТ:3000
 
 > [!NOTE]
-> для переменных которые вы получили, если развёртывали [anix-player-parser](./player-parser/README.RU.md) и/или [anix-api-prox](./api-prox/README.RU.md), необходимо использовать `-e ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ` до последнего слова anix
+> для переменных которые вы получили, если развёртывали [anix-player-parser](https://github.com/AniX-org/anix-player-parser) и/или [anix-api-prox](https://github.com/AniX-org/anix-api-prox), необходимо использовать `-e ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ` до последнего слова anix
 
 [команда docker run](https://docs.docker.com/reference/cli/docker/container/run/)
 
@@ -152,7 +154,7 @@
 1. Клонируйте репозиторий `git clone https://github.com/Radiquum/AniX`
 2. Переместитесь в директорию репозитория `cd AniX`
 3. Выполните команду `npm install`
-4. (опционально) скопируйте .env.sample как .env и заполните его переменными которые вы получили, если развёртывали [anix-player-parser](./player-parser/README.RU.md) и/или [anix-api-prox](./api-prox/README.RU.md)
+4. (опционально) скопируйте .env.sample как .env и заполните его переменными которые вы получили, если развёртывали [anix-player-parser](https://github.com/AniX-org/anix-player-parser) и/или [anix-api-prox](https://github.com/AniX-org/anix-api-prox)
 5. Выполните команду `npm run build`
 6. создайте новую директорию (далее будем использовать `<имя_новой_директории>` как её имя)
 7. переместите в созданную директорию (`<имя_новой_директории>`)
