@@ -53,6 +53,14 @@ Please note that AniX is an unofficial project and is not affiliated with the de
 
 </details>
 
+## Public demo
+
+> [!WARNING]
+> I don't responsible for your account, use the public instances at your discretion, otherwise deploy one yourself!
+
+- https://anixart.netlify.app/ (No sub-services)
+- https://anix.wowlikon.tech/ (Full deploy, Login: anime, Pass: just_watch)
+
 ## Contributing
 
 We welcome contributions to this project! If you have any bug fixes, improvements, or new features, please feel free to create a pull request.
