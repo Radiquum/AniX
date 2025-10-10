@@ -8,13 +8,11 @@ interface UserSocialProps {
 export const UserSocial = ({ nickname, icon, color }: UserSocialProps) => {
   return (
     <div
-      className={`border border-[var(--color)] rounded-md`}
+      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--color)] hover:bg-[var(--color)] group transition-colors"
       style={{ "--color": `#${color}` } as React.CSSProperties}
     >
-      <div className="flex gap-1 items-center px-1.5 py-1">
-          <span className={`iconify w-6 h-6 bg-[var(--color)] ${icon}`}></span>
-          <p>{nickname}</p>
-      </div>
+      <span className={`iconify w-6 h-6 bg-[var(--color)] ${color == "ffffff" ? "group-hover:invert" : ""} group-hover:bg-white ${icon} transition-colors`}></span>
+      <p className={`${color == "ffffff" ? "group-hover:invert" : ""} group-hover:text-white`}>{nickname}</p>
     </div>
   );
 };
