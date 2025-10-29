@@ -237,6 +237,7 @@ export function BookmarksCategoryPage(props: any) {
           color={"blue"}
           size={"sm"}
           theme={DropdownTheme}
+          className="z-40"
         >
           {sort.values.map((item, index) => (
             <DropdownItem key={index} onClick={() => setSelectedSort(index)}>

@@ -126,6 +126,7 @@ export function FavoritesPage() {
           arrowIcon={false}
           color={"blue"}
           theme={DropdownTheme}
+          className="z-40"
         >
           {sort.values.map((item, index) => (
             <DropdownItem key={index} onClick={() => setSelectedSort(index)}>
