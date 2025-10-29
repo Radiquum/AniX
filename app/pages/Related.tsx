@@ -9,6 +9,16 @@ import { useSWRfetcher } from "#/api/utils";
 import { ReleaseChips } from "#/components/ReleasePoster/Chips";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Button,
+  Timeline,
+  TimelineBody,
+  TimelineContent,
+  TimelineItem,
+  TimelinePoint,
+  TimelineTime,
+  TimelineTitle,
+} from "flowbite-react";
 
 const profile_lists = {
   // 0: "Не смотрю",
@@ -64,7 +74,7 @@ export function RelatedPage(props: { id: number | string; title: string }) {
         </h1>
       </div>
       <div className="container mx-auto my-4">
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+        {/* <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
           {content ?
             content.map((release, index) => {
               const genres = [];
@@ -147,7 +157,74 @@ export function RelatedPage(props: { id: number | string; title: string }) {
               <p>В франшизе пока ничего нет...</p>
             </div>
           }
-        </div>
+        </div> */}
+        <Timeline
+          horizontal
+          className="!grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 !gap-2"
+        >
+          {content ?
+            content.map((release) => {
+              const grade =
+                release.grade ? Number(release.grade.toFixed(1)) : null;
+              const profile_list_status = release.profile_list_status || null;
+              let user_list = null;
+              if (profile_list_status != null || profile_list_status != 0) {
+                user_list = profile_lists[profile_list_status];
+              }
+
+              return (
+                <TimelineItem
+                  key={`related-release-${release.id}`}
+                  className="p-2 border-2 border-black border-opacity-25 rounded-lg dark:border-opacity-25 dark:border-white"
+                >
+                  <TimelineContent>
+                    <TimelineTime>
+                      {release.season ? YearSeason[release.season] : ""}
+                      {release.season ? ", " : ""}
+                      {release.year ? `${release.year}г.` : ""} |{" "}
+                      {release.genres}
+                    </TimelineTime>
+                    <TimelineTitle>
+                      {release.title_ru || release.title_original}
+                    </TimelineTitle>
+                    <TimelineBody>
+                      <div className="flex flex-col gap-4 my-2">
+                        <div className="flex justify-center gap-2">
+                          <Image
+                            src={release.image}
+                            width={9 * 24}
+                            height={16 * 24}
+                            alt=""
+                            className="object-cover aspect-[12/16] rounded-lg"
+                          />
+                          <div className="flex flex-col w-full">
+                            <ReleaseChips
+                              {...release}
+                              user_list={user_list}
+                              grade={grade}
+                              settings={{ column: true }}
+                            />
+                            <Link href={`/release/${release.id}`}  className="w-full mt-auto">
+                              <Button color={"blue"} className="w-full">
+                                <span className="mr-2">Перейти</span>
+                                <span className="w-6 h-6 iconify mdi--arrow-right"></span>
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                        <p className="line-clamp-3">{release.description}</p>
+                      </div>
+                    </TimelineBody>
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            })
+          : isLoading ?
+            <div className="flex flex-col items-center justify-center min-w-full min-h-screen sm:col-span-2">
+              <Spinner />
+            </div>
+          : ""}
+        </Timeline>
       </div>
       {data &&
         data[data.length - 1].current_page <

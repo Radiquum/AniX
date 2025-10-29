@@ -13,6 +13,7 @@ interface ChipProps {
   is_favorite?: any;
   last_view_episode?: any;
   last_view_timestamp?: any;
+  column?: any;
 }
 
 export const ReleaseChips = ({
@@ -27,6 +28,7 @@ export const ReleaseChips = ({
   is_favorite,
   last_view_episode,
   last_view_timestamp,
+  column
 }: ChipProps) => {
   const chipSettings = {
     enabled: true,
@@ -37,16 +39,17 @@ export const ReleaseChips = ({
     listHidden: false,
     favHidden: false,
     lastWatchedHidden: true,
+    column: false,
     ...settings,
   };
 
   return (
     <div
-      className={`${chipSettings.enabled ? "flex" : "hidden"} gap-1 flex-wrap`}
+      className={`${chipSettings.enabled ? "flex" : "hidden"} ${chipSettings.column ? "flex-col" : "flex-row"} gap-1 flex-wrap`}
     >
       {!chipSettings.gradeHidden && grade ?
         <Chip
-          className="w-12"
+          className={`${chipSettings.column ? "" : "w-12"}`}
           bg_color={
             grade == 0 ? "hidden"
             : grade < 2 ?
