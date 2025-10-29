@@ -28,11 +28,10 @@ Requirements:
 
 5. (optional) Add variable to use your own player and/or api-proxy:
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL
-   - NEXT_PUBLIC_API_URL
-   - METADATA_BASE_URL (set this to your deployed domain, will not work if auth required before accessing the client)
-
-    Use the ones you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md)
+   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
+   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
+   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
+   - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
 
     ![vercel project settings](./docs/deploy/vercel_project.png)
 
@@ -77,11 +76,10 @@ Requirements:
 
 7. (optional) Add variables to use your own player and/or api-proxy:
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL
-   - NEXT_PUBLIC_API_URL
-   - METADATA_BASE_URL (set this to your deployed domain, will not work if auth required before accessing the client)
-
-    Use the ones you received if you deployed [anix-player-parser](./player-parser/README.md) and/or [anix-api-prox](./api-prox/README.md)
+   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
+   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
+   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
+   - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
 
     1. ![alt text](./docs/deploy/netlify_env_1.png)
 
@@ -124,7 +122,14 @@ Additional Requirements:
 - -p - container port to be exposed externally. PORT:3000
 
 > [!NOTE]
-> For variables you received if you deployed [anix-player-parser](https://github.com/AniX-org/anix-player-parser) and/or [anix-api-prox](https://github.com/AniX-org/anix-api-prox), you need to use `-e VARIABLE=VALUE` before the last word anix
+> Available env vars
+>
+> - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
+> - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
+> - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
+> - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
+>
+> HINT: you need to use `-e VARIABLE=VALUE` before the last word anix, to set the environment variables for docker deployment
 
 [docker run command](https://docs.docker.com/reference/cli/docker/container/run/)
 
@@ -154,7 +159,7 @@ Instructions:
 1. Clone the repository `git clone https://github.com/Radiquum/AniX`
 2. Navigate to the repository directory `cd AniX`
 3. Run the command `npm install`
-4. (optional) copy `.env.sample` as `.env` and fill it with variables you received if you deployed [anix-player-parser](https://github.com/AniX-org/anix-player-parser) and/or [anix-api-prox](https://github.com/AniX-org/anix-api-prox)
+4. (optional) copy `.env.sample` as `.env` and fill it with variables you received if you deployed [player-parser](https://github.com/AniX-org/anix-player-parser), [api-prox](https://github.com/AniX-org/anix-api-prox), [anix-preview](https://github.com/AniX-org/anix-preview)
 5. Run the command `npm run build`
 6. Create a new directory (next we will be refer to its name as `<new_dir>`)
 7. Move the following files into the new directory (`<new_dir>`):
