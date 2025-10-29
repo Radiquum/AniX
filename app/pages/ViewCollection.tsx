@@ -14,6 +14,7 @@ import { CollectionInfoControls } from "#/components/CollectionInfo/CollectionIn
 import { CommentsMain } from "#/components/Comments/Comments.Main";
 
 import { useSWRfetcher } from "#/api/utils";
+import { ShareButton } from "#/components/ShareButton/ShareButton";
 
 export const ViewCollectionPage = (props: { id: number }) => {
   const userStore = useUserStore();
@@ -152,6 +153,7 @@ export const ViewCollectionPage = (props: { id: number }) => {
                 content={content}
               />
             )}
+            <ShareButton text={`Коллекция '${collectionInfo.collection.title}' на Anixart`} />
           </>
         )
       }

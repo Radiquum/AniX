@@ -19,6 +19,7 @@ import { InfoLists } from "#/components/InfoLists/InfoLists";
 import { ENDPOINTS } from "#/api/config";
 import { usePreferencesStore } from "#/store/preferences";
 import { ContinueWatching } from "#/components/ContinueWatching/ContinueWatching";
+import { ShareButton } from "#/components/ShareButton/ShareButton";
 
 export const ReleasePage = (props: any) => {
   const userStore = useUserStore();
@@ -119,7 +120,13 @@ export const ReleasePage = (props: any) => {
             data.release.status.name.toLowerCase() != "анонс" && (
               <>
                 {preferenceStore.params.experimental.newPlayer ?
-                  <ReleasePlayerCustom id={props.id} token={userStore.token} title={data.release.title_ru || data.release.title_original || ""} />
+                  <ReleasePlayerCustom
+                    id={props.id}
+                    token={userStore.token}
+                    title={
+                      data.release.title_ru || data.release.title_original || ""
+                    }
+                  />
                 : <ReleasePlayer id={props.id} />}
               </>
             )}
@@ -178,6 +185,9 @@ export const ReleasePage = (props: any) => {
           </div>
         </div>
       </div>
+      <ShareButton
+        text={`Смотреть '${data.release.title_ru || data.release.title_original} (${data.release.year || "?"}г.)' на Anixart`}
+      />
     </div>
   );
 };
