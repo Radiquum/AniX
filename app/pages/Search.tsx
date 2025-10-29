@@ -315,6 +315,7 @@ export function SearchPage() {
               required
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              autoFocus={true}
             />
           </div>
           <div className="flex gap-2 mt-2 lg:ml-2 lg:mt-0">
