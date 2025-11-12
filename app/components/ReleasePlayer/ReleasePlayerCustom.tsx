@@ -46,6 +46,76 @@ import {
 } from "./ReleasePlayer";
 import { usePreferencesStore } from "#/store/preferences";
 
+const VideoElement = ({
+  type,
+  src,
+  poster,
+  defaultPlaybackRate,
+  setDefaultPlaybackRate,
+}: {
+  type: "hls" | "mp4" | null;
+  src: string | null;
+  poster: string | null;
+  defaultPlaybackRate: number;
+  setDefaultPlaybackRate: (state) => void;
+}) => {
+  const [el, setEl] = useState(null);
+  const [elPrev, setElPrev] = useState(null);
+
+  useEffect(() => {
+    if (document) {
+      setEl(document.getElementById("video-element"));
+    }
+  }, [src]);
+
+  useEffect(() => {
+    setElPrev(el);
+    // sourcery skip: merge-nested-ifs
+    if (elPrev) {
+      if (elPrev.tagName == "HLS-VIDEO") {
+        elPrev.api.detachMedia();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [el]);
+
+  return (
+    <>
+      {type == "hls" ?
+        <HlsVideo
+          className={"object-contain h-full aspect-video"}
+          src={src}
+          poster={poster}
+          slot="media"
+          id="video-element"
+          defaultPlaybackRate={defaultPlaybackRate}
+          onRateChangeCapture={(e) =>
+            // @ts-ignore
+            setDefaultPlaybackRate(e.target.playbackRate || 1)
+          }
+        />
+      : type == "mp4" ?
+        <VideoJS
+          className={"object-contain h-full aspect-video"}
+          src={src}
+          poster={poster}
+          slot="media"
+          id="video-element"
+          defaultPlaybackRate={defaultPlaybackRate}
+          onRateChangeCapture={(e) =>
+            // @ts-ignore
+            setDefaultPlaybackRate(e.target.playbackRate || 1)
+          }
+        />
+      : <video
+          className={"object-contain h-full aspect-video"}
+          slot="media"
+        ></video>
+      }
+    </>
+  );
+};
+
 export const ReleasePlayerCustom = (props: {
   id: number;
   title: string;
@@ -261,41 +331,21 @@ export const ReleasePlayerCustom = (props: {
           className={`relative w-full overflow-hidden ${Styles["media-controller"]}`}
           onPlayCapture={() => saveEpisodeToHistory()}
         >
-          {playerProps.type == "hls" && playerProps.src && (
-            <HlsVideo
-              className="object-contain h-full aspect-video"
-              slot="media"
+          {playerProps.type != null && playerProps.src != null ?
+            <VideoElement
+              type={playerProps.type}
               src={playerProps.src}
               poster={playerProps.poster}
               defaultPlaybackRate={playbackRate}
-              onRateChange={(e) => {
-                // @ts-ignore
-                setPlaybackRate(e.target.playbackRate || 1);
-              }}
-            />
-          )}
-          {playerProps.type == "mp4" && playerProps.src && (
-            <VideoJS
-              className="object-contain h-full aspect-video"
-              slot="media"
-              src={playerProps.src}
-              poster={playerProps.poster}
-              defaultPlaybackRate={playbackRate}
-              onRateChange={(e) => {
-                // @ts-ignore
-                setPlaybackRate(e.target.playbackRate || 1);
-              }}
-            ></VideoJS>
-          )}
+              setDefaultPlaybackRate={setPlaybackRate}
+            ></VideoElement>
+          : ""}
           {playerProps.type == null || playerProps.src == null ?
             <>
-              {/* <MediaPosterImage src="https://wallpapers.com/images/featured/cute-red-panda-pictures-sererbq0fdjum7rn.jpg"></MediaPosterImage> */}
-              <VideoJS
-                src={null}
+              <video
+                className={"object-contain h-full aspect-video"}
                 slot="media"
-                poster={null}
-                className="object-contain h-full aspect-video"
-              ></VideoJS>
+              ></video>
               {!playerError && (
                 <svg
                   {...({ slot: "centered-chrome" } as any)}
