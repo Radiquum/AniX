@@ -507,8 +507,8 @@
   width: calc(10 * var(--base));
   height: var(--base);
   padding: 0;
-  border-radius: calc(0.25 * var(--base));
-  overflow: hidden;
+  /* border-radius: calc(0.25 * var(--base)); */
+  /* overflow: hidden !important; */
   background: rgba(0, 0, 0, 0.2);
 
   --media-range-bar-color: var(--media-accent-color);
