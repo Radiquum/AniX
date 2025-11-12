@@ -3,43 +3,38 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { CURRENT_APP_VERSION } from "../config";
 
+export function compare(a: string, b: string) {
+  const aElement = a.replace(".x.md", "").split(".");
+  const bElement = b.replace(".x.md", "").split(".");
+
+  if (Number(bElement[0] || 0) != Number(aElement[0] || 0)) {
+    return Number(bElement[0] || 0) - Number(aElement[0] || 0);
+  } else if (Number(bElement[1] || 0) != Number(aElement[1] || 0)) {
+    return Number(bElement[1] || 0) - Number(aElement[1] || 0);
+  } else {
+    return 0;
+  }
+}
+
+export function splitVersionNumber(version: string) {
+  const versionArray = version.split(".");
+  return {
+    major: Number(versionArray[0] || 0),
+    minor: Number(versionArray[1] || 0),
+    patch: Number(versionArray[2] || 0),
+  };
+}
+
 export async function GET() {
   const directoryPath = path.join(process.cwd(), "public/changelog");
-  const files = fs.readdirSync(directoryPath);
-  const current = CURRENT_APP_VERSION;
-  const previous = [];
-  files.forEach((file) => {
-    if (file != `${current}.md`) {
-      previous.push(file.replace(".md", ""));
-    }
-  });
+  const changelogs = fs.readdirSync(directoryPath);
 
-  function compare(a: string, b: string) {
-    const aElement = a.split(".");
-    const bElement = b.split(".");
-
-    const aLength = aElement.length;
-    const bLength = bElement.length;
-
-    let order = 0;
-
-    for (let i = 0; i < Math.max(aLength, bLength); i++) {
-      const aNum = Number(aElement[i] || 0);
-      const bNum = Number(bElement[i] || 0);
-      if (aNum !== bNum) {
-        if (a > b) {
-          order += -1;
-        }
-        if (a < b) {
-          order += 1;
-        }
-      }
-    }
-    return order;
-  }
+  changelogs.sort(compare);
+  changelogs.shift();
 
   return NextResponse.json({
-    version: current,
-    previous: previous.sort(compare),
+    version: CURRENT_APP_VERSION,
+    version_changelog: `${splitVersionNumber(CURRENT_APP_VERSION).major}.${splitVersionNumber(CURRENT_APP_VERSION).minor}.x.md`,
+    previous_changelogs: changelogs,
   });
 }

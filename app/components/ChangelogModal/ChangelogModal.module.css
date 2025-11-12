@@ -18,3 +18,10 @@
 .markdown a {
     text-decoration: underline;
 }
+
+.markdown hr {
+    margin-block: 8px;
+    opacity: 0.5;
+    border-width: 1px;
+    border-radius: 8px;
+}

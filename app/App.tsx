@@ -23,8 +23,11 @@ export const App = (props) => {
   const preferencesStore = usePreferencesStore();
   const userStore = useUserStore((state) => state);
   const [showChangelog, setShowChangelog] = useState(false);
-  const [currentVersion, setCurrentVersion] = useState("");
-  const [previousVersions, setPreviousVersions] = useState([]);
+  const [versionResponse, setVersionResponse] = useState({
+    version: "",
+    version_changelog: "",
+    previous_changelogs: [],
+  });
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
 
   useEffect(() => {
@@ -34,8 +37,7 @@ export const App = (props) => {
 
       if (data.version !== preferencesStore.params.version) {
         setShowChangelog(true);
-        setCurrentVersion(data.version);
-        setPreviousVersions(data.previous);
+        setVersionResponse(data);
       }
     }
 
@@ -79,10 +81,9 @@ export const App = (props) => {
         isOpen={showChangelog && preferencesStore.flags.showChangelog}
         setIsOpen={() => {
           setShowChangelog(false);
-          preferencesStore.setParams({ version: currentVersion });
+          preferencesStore.setParams({ version: versionResponse.version });
         }}
-        version={currentVersion}
-        previousVersions={previousVersions}
+        versionResponse={versionResponse}
       />
       <Modal
         show={preferencesStore.params.isFirstLaunch}

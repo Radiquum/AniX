@@ -6,43 +6,24 @@ import Image from "next/image";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { CURRENT_APP_VERSION } from "#/api/config";
-import Styles from "../components/ChangelogModal/ChangelogModal.module.css";
-import Markdown from "markdown-to-jsx";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionPanel,
-  AccordionTitle,
-} from "flowbite-react";
 import Link from "next/link";
+import { ChangelogAccordion, ChangelogMarkdown } from "#/components/ChangelogModal/Changelog";
+import { compare, splitVersionNumber } from "#/api/version/route";
 
 export const AboutPage = () => {
   const directoryPath = path.join(process.cwd(), "public/changelog");
-  const files = fs.readdirSync(directoryPath);
-  const current = {
-    version: CURRENT_APP_VERSION,
-    changelog: `#${CURRENT_APP_VERSION}\r\nНет списка изменений`,
-  };
-  const previous = [];
+  const changelogFiles = fs.readdirSync(directoryPath);
+  const changelogs: Record<string, string> = {};
+  const currentVersionName = `${splitVersionNumber(CURRENT_APP_VERSION).major}.${splitVersionNumber(CURRENT_APP_VERSION).minor}.x`
 
-  if (files.includes(`${CURRENT_APP_VERSION}.md`)) {
-    const changelog = fs.readFileSync(
-      path.join(directoryPath, `${CURRENT_APP_VERSION}.md`),
-      "utf8"
-    );
-    current.changelog = changelog;
-  }
+  changelogFiles.sort(compare);
+  changelogFiles.forEach((file) => {
+    const changelog = fs.readFileSync(path.join(directoryPath, file), "utf8");
+    changelogs[file.replace(".md", "")] = changelog;
+  })
 
-  files.forEach((file) => {
-    if (file != `${CURRENT_APP_VERSION}.md`) {
-      const changelog = fs.readFileSync(path.join(directoryPath, file), "utf8");
-      previous.push({
-        version: file.replace(".md", ""),
-        changelog: changelog,
-      });
-    }
-  });
+  const currentChangelog = changelogs[currentVersionName];
+  delete changelogs[currentVersionName];
 
   return (
     <div className="grid grid-cols-1 gap-2 mb-4 md:grid-cols-2">
@@ -62,9 +43,11 @@ export const AboutPage = () => {
             <p className="max-w-[900px]">
               AniX - это неофициальный веб-клиент для Android-приложения
               Anixart. Он позволяет вам получать доступ к своей учетной записи
-              Anixart и управлять ею из веб-браузера компьютера или телефона.
-              В клиенте доступна синхронизация с аккаунтом и управление его списками и избранным.
-              А самое главное - это возможность смотреть все доступные аниме из базы Anixart даже недоступные на территории РФ.
+              Anixart и управлять ею из веб-браузера компьютера или телефона. В
+              клиенте доступна синхронизация с аккаунтом и управление его
+              списками и избранным. А самое главное - это возможность смотреть
+              все доступные аниме из базы Anixart даже недоступные на территории
+              РФ.
             </p>
           </div>
         </div>
@@ -96,20 +79,14 @@ export const AboutPage = () => {
         </Card>
       </Link>
       <Card className="md:col-span-2">
-        <h1 className="text-2xl font-bold">Список изменений</h1>
-        <Markdown className={Styles.markdown}>{current.changelog}</Markdown>
-        <Accordion collapseAll={true}>
-          {previous.reverse().map((changelog) => (
-            <AccordionPanel key={changelog.version}>
-              <AccordionTitle>v{changelog.version}</AccordionTitle>
-              <AccordionContent>
-                <Markdown className={Styles.markdown}>
-                  {changelog.changelog}
-                </Markdown>
-              </AccordionContent>
-            </AccordionPanel>
-          ))}
-        </Accordion>
+        <div>
+          <h1 className="text-2xl font-bold">Список изменений</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-200">
+            текущая версия: v{CURRENT_APP_VERSION}
+          </p>
+        </div>
+        <ChangelogMarkdown content={currentChangelog} />
+        <ChangelogAccordion contents={changelogs} ></ChangelogAccordion>
       </Card>
     </div>
   );

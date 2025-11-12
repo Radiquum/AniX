@@ -1,32 +1,26 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionPanel,
-  AccordionTitle,
-  Modal,
-  ModalBody,
-  ModalHeader,
-} from "flowbite-react";
-import Markdown from "markdown-to-jsx";
+import { Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { useEffect, useState } from "react";
-import Styles from "./ChangelogModal.module.css";
 import { tryCatch } from "#/api/utils";
+import { ChangelogAccordion, ChangelogMarkdown } from "./Changelog";
 
 export const ChangelogModal = (props: {
   isOpen: boolean;
   setIsOpen: any;
-  version: string;
-  previousVersions: Array<string>;
+  versionResponse: {
+    version: string;
+    version_changelog: string;
+    previous_changelogs: Array<string>;
+  };
 }) => {
   const [currentVersionChangelog, setCurrentVersionChangelog] = useState("");
   const [previousVersionsChangelog, setPreviousVersionsChangelog] = useState<
     Record<string, string>
   >({});
 
-  async function _fetchVersionChangelog(version: string) {
-    const { data, error } = await tryCatch(fetch(`/changelog/${version}.md`));
+  async function _fetchVersionChangelog(filename: string) {
+    const { data, error } = await tryCatch(fetch(`/changelog/${filename}`));
     if (error) {
       return "Нет списка изменений";
     }
@@ -34,54 +28,55 @@ export const ChangelogModal = (props: {
   }
 
   useEffect(() => {
-    if (props.version != "" && currentVersionChangelog == "") {
+    if (
+      props.versionResponse.version_changelog != "" &&
+      currentVersionChangelog == ""
+    ) {
       setCurrentVersionChangelog("Загрузка ...");
-      _fetchVersionChangelog(props.version).then((data) => {
-        setCurrentVersionChangelog(data);
+      _fetchVersionChangelog(props.versionResponse.version_changelog).then(
+        (data) => {
+          setCurrentVersionChangelog(data);
+        }
+      );
+    }
+    if (props.versionResponse.previous_changelogs.length > 0) {
+      props.versionResponse.previous_changelogs.forEach((version_changelog) => {
+        const version = version_changelog.replace(".md", "");
+        if (!previousVersionsChangelog.hasOwnProperty(version)) {
+          previousVersionsChangelog[version] = "";
+        }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.version]);
+  }, [props.versionResponse]);
+
+  function accordionCallback(version_changelog: string) {
+    if (
+      !previousVersionsChangelog.hasOwnProperty(version_changelog) ||
+      previousVersionsChangelog[version_changelog] == ""
+    ) {
+      _fetchVersionChangelog(`${version_changelog}.md`).then((data) => {
+        setPreviousVersionsChangelog((prev) => {
+          return {
+            ...prev,
+            [version_changelog]: data,
+          };
+        });
+      });
+    }
+  }
 
   return (
     <Modal show={props.isOpen} onClose={() => props.setIsOpen(false)}>
-      <ModalHeader>Список изменений v{props.version}</ModalHeader>
+      <ModalHeader>
+        Список изменений v{props.versionResponse.version}
+      </ModalHeader>
       <ModalBody>
-        <Markdown className={Styles.markdown}>
-          {currentVersionChangelog}
-        </Markdown>
-        <Accordion collapseAll={true} className="mt-4">
-          {props.previousVersions.length > 0 &&
-            props.previousVersions.map((version) => {
-              return (
-                <AccordionPanel key={version}>
-                  <AccordionTitle
-                    onClickCapture={(e) => {
-                      if (!previousVersionsChangelog.hasOwnProperty(version)) {
-                        _fetchVersionChangelog(version).then((data) => {
-                          setPreviousVersionsChangelog((prev) => {
-                            return {
-                              ...prev,
-                              [version]: data,
-                            };
-                          });
-                        });
-                      }
-                    }}
-                  >
-                    Список изменений v{version}
-                  </AccordionTitle>
-                  <AccordionContent>
-                    {previousVersionsChangelog.hasOwnProperty(version) ?
-                      <Markdown className={Styles.markdown}>
-                        {previousVersionsChangelog[version]}
-                      </Markdown>
-                    : <div>Загрузка ...</div>}
-                  </AccordionContent>
-                </AccordionPanel>
-              );
-            })}
-        </Accordion>
+        <ChangelogMarkdown content={currentVersionChangelog} />
+        <ChangelogAccordion
+          callback={(value) => accordionCallback(value)}
+          contents={previousVersionsChangelog}
+        />
       </ModalBody>
     </Modal>
   );
