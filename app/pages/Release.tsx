@@ -21,6 +21,7 @@ import { usePreferencesStore } from "#/store/preferences";
 import { ContinueWatching } from "#/components/ContinueWatching/ContinueWatching";
 import { ShareButton } from "#/components/FloatingToolbar/ShareButton";
 import { FloatingToolbar } from "#/components/FloatingToolbar/FloatingToolbar";
+import { DownloadButton } from "#/components/FloatingToolbar/DownloadButton";
 
 export const ReleasePage = (props: any) => {
   const userStore = useUserStore();
@@ -190,6 +191,7 @@ export const ReleasePage = (props: any) => {
         <ShareButton
           text={`Смотреть '${data.release.title_ru || data.release.title_original} (${data.release.year || "?"}г.)' на Anixart`}
         />
+        <DownloadButton release_id={props.id} release_title={data.release.title_ru || data.release.title_original} />
       </FloatingToolbar>
     </div>
   );
