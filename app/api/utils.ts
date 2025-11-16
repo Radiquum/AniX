@@ -819,3 +819,25 @@ export function formatBytes(bytes, decimals = 2) {
 
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
+
+export function compare(a: string, b: string) {
+  const aElement = a.replace(".x.md", "").split(".");
+  const bElement = b.replace(".x.md", "").split(".");
+
+  if (Number(bElement[0] || 0) != Number(aElement[0] || 0)) {
+    return Number(bElement[0] || 0) - Number(aElement[0] || 0);
+  } else if (Number(bElement[1] || 0) != Number(aElement[1] || 0)) {
+    return Number(bElement[1] || 0) - Number(aElement[1] || 0);
+  } else {
+    return 0;
+  }
+}
+
+export function splitVersionNumber(version: string) {
+  const versionArray = version.split(".");
+  return {
+    major: Number(versionArray[0] || 0),
+    minor: Number(versionArray[1] || 0),
+    patch: Number(versionArray[2] || 0),
+  };
+}

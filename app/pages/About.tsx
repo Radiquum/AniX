@@ -8,7 +8,7 @@ import * as path from "node:path";
 import { CURRENT_APP_VERSION } from "#/api/config";
 import Link from "next/link";
 import { ChangelogAccordion, ChangelogMarkdown } from "#/components/ChangelogModal/Changelog";
-import { compare, splitVersionNumber } from "#/api/version/route";
+import { compare, splitVersionNumber } from "#/api/utils";
 
 export const AboutPage = () => {
   const directoryPath = path.join(process.cwd(), "public/changelog");
