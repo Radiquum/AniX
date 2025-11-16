@@ -16,7 +16,8 @@ import { ProfileActions } from "#/components/Profile/Profile.Actions";
 import { ProfileReleaseRatings } from "#/components/Profile/Profile.ReleaseRatings";
 import { ProfileReleaseHistory } from "#/components/Profile/Profile.ReleaseHistory";
 import { ProfileEditModal } from "#/components/Profile/Profile.EditModal";
-import { ShareButton } from "#/components/ShareButton/ShareButton";
+import { ShareButton } from "#/components/FloatingToolbar/ShareButton";
+import { FloatingToolbar } from "#/components/FloatingToolbar/FloatingToolbar";
 
 export const ProfilePage = (props: any) => {
   const authUser = useUserStore();
@@ -192,9 +193,9 @@ export const ProfilePage = (props: any) => {
         token={authUser.token}
         profile_id={user.id}
       />
-      <ShareButton
-        text={`Профиль '${user.login}' на Anixart`}
-      />
+      <FloatingToolbar>
+        <ShareButton text={`Профиль '${user.login}' на Anixart`} />
+      </FloatingToolbar>
     </>
   );
 };

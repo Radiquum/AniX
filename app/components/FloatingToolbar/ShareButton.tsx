@@ -2,7 +2,6 @@
 
 import { SHARE_PREFIX } from "#/api/config";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type ShareButtonProps = {
@@ -10,15 +9,7 @@ type ShareButtonProps = {
 };
 
 export const ShareButton = ({ text }: ShareButtonProps) => {
-  const [FooterH, setFooterH] = useState(null);
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (window) {
-      setFooterH(document.querySelector("footer").clientHeight + 80);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   function copyShareLink() {
     const url = `${SHARE_PREFIX}${pathname}`;
@@ -41,9 +32,8 @@ export const ShareButton = ({ text }: ShareButtonProps) => {
 
   return (
     <button
-      className="fixed z-50 right-4 lg:bottom-4 bottom-[var(--footer-height)] flex items-center justify-center p-4 bg-slate-200 dark:bg-gray-800 hover:bg-slate-300 dark:hover:bg-gray-700 rounded-full transition-colors"
+      className="flex items-center justify-center px-4 py-2 transition-colors first:rounded-l-full last:rounded-r-full hover:bg-gray-300 hover:dark:bg-slate-500"
       onClick={copyShareLink}
-      style={{ "--footer-height": `${FooterH}px` } as React.CSSProperties}
     >
       <span className="w-6 h-6 sm:w-8 sm:h-8 iconify mdi--share-variant-outline"></span>
     </button>

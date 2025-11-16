@@ -19,7 +19,8 @@ import { InfoLists } from "#/components/InfoLists/InfoLists";
 import { ENDPOINTS } from "#/api/config";
 import { usePreferencesStore } from "#/store/preferences";
 import { ContinueWatching } from "#/components/ContinueWatching/ContinueWatching";
-import { ShareButton } from "#/components/ShareButton/ShareButton";
+import { ShareButton } from "#/components/FloatingToolbar/ShareButton";
+import { FloatingToolbar } from "#/components/FloatingToolbar/FloatingToolbar";
 
 export const ReleasePage = (props: any) => {
   const userStore = useUserStore();
@@ -185,9 +186,11 @@ export const ReleasePage = (props: any) => {
           </div>
         </div>
       </div>
-      <ShareButton
-        text={`Смотреть '${data.release.title_ru || data.release.title_original} (${data.release.year || "?"}г.)' на Anixart`}
-      />
+      <FloatingToolbar>
+        <ShareButton
+          text={`Смотреть '${data.release.title_ru || data.release.title_original} (${data.release.year || "?"}г.)' на Anixart`}
+        />
+      </FloatingToolbar>
     </div>
   );
 };
