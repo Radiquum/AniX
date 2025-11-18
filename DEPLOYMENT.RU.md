@@ -1,5 +1,13 @@
 # Развёртывание приложения AniX
 
+## Доступные переменные окружения
+
+- NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) суб-сервис, если был развёрнут)
+- NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) суб-сервис, если был развёрнут)
+- NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) суб-сервис, если был развёрнут, не указывайте, для использования официальной ссылки anixart "Поделится")
+- METADATA_BASE_URL (DEPRECATED: используйте anix-preview | установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
+- NEXT_PUBLIC_ANILIBRIA_API_URL - Ссылка на API Anilibria, заполняется если основной домен не доступен, используется для поиска торрентов анилибрии
+
 ## Vercel
 
 Требования:
@@ -28,10 +36,7 @@
 
 5. (опционально) добавьте переменные для использования своего плеера и\или API прокси:
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) суб-сервис, если был развёрнут)
-   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) суб-сервис, если был развёрнут)
-   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) суб-сервис, если был развёрнут, не указывайте, для использования официальной ссылки anixart "Поделится")
-   - METADATA_BASE_URL (DEPRECATED: используйте anix-preview | установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
+    [Доступные переменные окружения](#доступные-переменные-окружения)
 
     ![vercel project settings](./docs/deploy/vercel_project.png)
 
@@ -76,10 +81,7 @@
 
 7. (опционально) добавьте переменную для использования своего плеера и\или API прокси::
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) суб-сервис, если был развёрнут)
-   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) суб-сервис, если был развёрнут)
-   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) суб-сервис, если был развёрнут, не указывайте, для использования официальной ссылки anixart "Поделится")
-   - METADATA_BASE_URL (DEPRECATED: используйте anix-preview | установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
+    [Доступные переменные окружения](#доступные-переменные-окружения)
 
     1. ![alt text](./docs/deploy/netlify_env_1.png)
 
@@ -122,14 +124,9 @@
 - -p - порт контейнера который будет доступен извне. ПОРТ:3000
 
 > [!NOTE]
-> Доступные переменные
->
-> - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) суб-сервис, если был развёрнут)
-> - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) суб-сервис, если был развёрнут)
-> - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) суб-сервис, если был развёрнут, не указывайте, для использования официальной ссылки anixart "Поделится")
-> - METADATA_BASE_URL (DEPRECATED: используйте anix-preview | установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
->
 > ПОДСКАЗКА: для установки переменных, необходимо использовать `-e ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ` до последнего слова anix
+
+[Доступные переменные окружения](#доступные-переменные-окружения)
 
 [команда docker run](https://docs.docker.com/reference/cli/docker/container/run/)
 
@@ -159,7 +156,7 @@
 1. Клонируйте репозиторий `git clone https://github.com/Radiquum/AniX`
 2. Переместитесь в директорию репозитория `cd AniX`
 3. Выполните команду `npm install`
-4. (опционально) скопируйте .env.sample как .env и заполните его переменными которые вы получили, если развёртывали [player-parser](https://github.com/AniX-org/anix-player-parser), [api-prox](https://github.com/AniX-org/anix-api-prox), [anix-preview](https://github.com/AniX-org/anix-preview)
+4. (опционально) скопируйте .env.sample как .env и заполните его переменными из [Доступные переменные окружения](#доступные-переменные-окружения)
 5. Выполните команду `npm run build`
 6. создайте новую директорию (далее будем использовать `<имя_новой_директории>` как её имя)
 7. переместите в созданную директорию (`<имя_новой_директории>`)

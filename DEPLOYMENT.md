@@ -1,5 +1,13 @@
 # AniX Application Deployment
 
+## Available environment variables
+
+- NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
+- NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
+- NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
+- METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
+- NEXT_PUBLIC_ANILIBRIA_API_URL - Base url for Anilibria API, set if main Anilibria domain is unavailable, used to search torrents for Anilibria releases
+
 ## Vercel
 
 Requirements:
@@ -28,10 +36,7 @@ Requirements:
 
 5. (optional) Add variable to use your own player and/or api-proxy:
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
-   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
-   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
-   - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
+    [Available environment variables](#available-environment-variables)
 
     ![vercel project settings](./docs/deploy/vercel_project.png)
 
@@ -76,10 +81,7 @@ Requirements:
 
 7. (optional) Add variables to use your own player and/or api-proxy:
 
-   - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
-   - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
-   - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
-   - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
+    [Available environment variables](#available-environment-variables)
 
     1. ![alt text](./docs/deploy/netlify_env_1.png)
 
@@ -122,14 +124,9 @@ Additional Requirements:
 - -p - container port to be exposed externally. PORT:3000
 
 > [!NOTE]
-> Available env vars
->
-> - NEXT_PUBLIC_PLAYER_PARSER_URL ([player-parser](https://github.com/AniX-org/anix-player-parser) subservice, if deployed)
-> - NEXT_PUBLIC_API_URL ([api-prox](https://github.com/AniX-org/anix-api-prox) subservice, if deployed)
-> - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
-> - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
->
 > HINT: you need to use `-e VARIABLE=VALUE` before the last word anix, to set the environment variables for docker deployment
+
+[Available environment variables](#available-environment-variables)
 
 [docker run command](https://docs.docker.com/reference/cli/docker/container/run/)
 
@@ -159,7 +156,7 @@ Instructions:
 1. Clone the repository `git clone https://github.com/Radiquum/AniX`
 2. Navigate to the repository directory `cd AniX`
 3. Run the command `npm install`
-4. (optional) copy `.env.sample` as `.env` and fill it with variables you received if you deployed [player-parser](https://github.com/AniX-org/anix-player-parser), [api-prox](https://github.com/AniX-org/anix-api-prox), [anix-preview](https://github.com/AniX-org/anix-preview)
+4. (optional) copy `.env.sample` as `.env` and fill it with variables from [Available environment variables](#available-environment-variables)
 5. Run the command `npm run build`
 6. Create a new directory (next we will be refer to its name as `<new_dir>`)
 7. Move the following files into the new directory (`<new_dir>`):
