@@ -1,12 +1,8 @@
 "use client";
 
-import { ANILIBRIA_API_URL } from "#/api/config";
+import { ANILIBRIA_API_URL, TORAPI_API_URL } from "#/api/config";
 import { formatBytes } from "#/api/utils";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-} from "flowbite-react";
+import { Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { TabItem, Tabs } from "flowbite-react";
 
@@ -33,6 +29,27 @@ export const DownloadButton = ({ release_id, release_title }: Props) => {
           <Tabs variant="underline">
             <TabItem active title="Anilibria">
               <AnilibriaTorrentTab release_title={release_title} />
+            </TabItem>
+            <TabItem title="Rutracker">
+              <TorApiTorrentTab
+                release_title={release_title}
+                service="rutracker"
+              />
+            </TabItem>
+            <TabItem title="Rutor">
+              <TorApiTorrentTab release_title={release_title} service="rutor" />
+            </TabItem>
+            <TabItem title="Kinozal">
+              <TorApiTorrentTab
+                release_title={release_title}
+                service="kinozal"
+              />
+            </TabItem>
+            <TabItem title="NoNameClub">
+              <TorApiTorrentTab
+                release_title={release_title}
+                service="nonameclub"
+              />
             </TabItem>
           </Tabs>
         </ModalBody>
@@ -67,10 +84,12 @@ const TorrentItem = ({
 }: TorrentItemProps) => {
   return (
     <div>
-      <p>{title}</p>
-      <p className="text-xs text-gray-500 dark:text-gray-300">{filename}</p>
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
+      <p className="leading-none">{title}</p>
+      <p className="my-1 text-xs text-gray-500 dark:text-gray-300">
+        {filename}
+      </p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-wrap items-start gap-2">
           {codec != null && (
             <p className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg">
               {codec}
@@ -92,7 +111,7 @@ const TorrentItem = ({
             </p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           {magnet && (
             <a
               className="px-2 py-1 text-white transition-colors bg-green-600 rounded hover:bg-green-800"
@@ -139,7 +158,7 @@ const AnilibriaTorrentTab = ({ release_title }: { release_title: string }) => {
         setAnilibria((state) => ({
           isLoading: false,
           error: true,
-          errorDesc: "Не удалось найти аниме на Anilibria",
+          errorDesc: "Не удалось найти релиз",
           data: null,
         }));
         return;
@@ -150,7 +169,7 @@ const AnilibriaTorrentTab = ({ release_title }: { release_title: string }) => {
         setAnilibria((state) => ({
           isLoading: false,
           error: true,
-          errorDesc: "Не удалось найти аниме на Anilibria",
+          errorDesc: "Не удалось найти релиз",
           data: null,
         }));
         return;
@@ -163,7 +182,7 @@ const AnilibriaTorrentTab = ({ release_title }: { release_title: string }) => {
         setAnilibria((state) => ({
           isLoading: false,
           error: true,
-          errorDesc: "Не удалось найти торренты на Anilibria",
+          errorDesc: "Торренты не нашлись",
           data: null,
         }));
         return;
@@ -199,6 +218,127 @@ const AnilibriaTorrentTab = ({ release_title }: { release_title: string }) => {
             codec={item.codec.value || null}
             quality={item.quality.value || null}
             filename={`${item.filename}`}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+type TorAPIRequest = {
+  type: "title" | "id";
+  service: "rutracker" | "rutor" | "kinozal" | "nonameclub";
+  query: string;
+  category?: number;
+  year?: number;
+};
+
+const fetchTorAPI = async ({
+  type,
+  service,
+  query,
+  category,
+  year,
+}: TorAPIRequest) => {
+  const url = new URL(`${TORAPI_API_URL}/api/search/${type}/${service}`);
+  url.searchParams.append("query", query);
+  if (category) {
+    url.searchParams.append("category", category.toString());
+  }
+  if (year) {
+    url.searchParams.append("year", year.toString());
+  }
+
+  const res = await fetch(url.toString());
+  if (!res.ok) {
+    return null;
+  }
+  return await res.json();
+};
+
+const TorApiTorrentTab = ({
+  release_title,
+  service,
+}: {
+  release_title: string;
+  service: "rutracker" | "rutor" | "kinozal" | "nonameclub";
+}) => {
+  const [torApi, setTorApi] = useState<any>({
+    isLoading: true,
+    error: false,
+    errorDesc: "",
+    data: null,
+  });
+
+  useEffect(() => {
+    async function _getData() {
+      setTorApi((state) => ({
+        isLoading: true,
+        error: false,
+        errorDesc: "",
+        data: null,
+      }));
+
+      const RutrackerQueryRes = await fetchTorAPI({
+        type: "title",
+        service,
+        query: release_title,
+      });
+
+      if (!RutrackerQueryRes || RutrackerQueryRes.Result) {
+        setTorApi((state) => ({
+          isLoading: false,
+          error: true,
+          errorDesc: "Торренты не нашлись",
+          data: null,
+        }));
+        return;
+      }
+
+      const data = [];
+      for (let i = 0; i < RutrackerQueryRes.length; i++) {
+        const torrent = await fetchTorAPI({
+          type: "id",
+          service,
+          query: RutrackerQueryRes[i].Id,
+        });
+        if (torrent && torrent.length > 0) {
+          data.push({
+            ...RutrackerQueryRes[i],
+            ...torrent[0],
+          });
+        }
+      }
+
+      setTorApi((state) => ({
+        isLoading: false,
+        error: false,
+        errorDesc: "",
+        data,
+      }));
+    }
+    _getData();
+  }, [release_title, service]);
+
+  if (torApi.isLoading) return <p>Загрузка...</p>;
+  if (torApi.error) return <p>{torApi.errorDesc}</p>;
+  if (torApi.data.length === 0) return <p>Торренты не нашлись</p>;
+
+  return (
+    <div className="flex flex-col gap-4">
+      {torApi.data.map((item: any) => {
+        return (
+          <TorrentItem
+            key={`rutracker-torrent-${item.Hash}`}
+            title={item.Name}
+            filename={item.Duration}
+            codec={item.Video || null}
+            quality={item.Quality || null}
+            size={item.Size}
+            leechers={item.Peers}
+            seeders={item.Seeds}
+            magnet={item.Magnet}
+            file={item.Torrent}
           />
         );
       })}
