@@ -7,6 +7,7 @@
 - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) subservice, if deployed, leave default to use official link preview)
 - METADATA_BASE_URL (DEPRECATED: use anix-preview instead | set this to your deployed domain, will not work if auth required before accessing the client)
 - NEXT_PUBLIC_ANILIBRIA_API_URL - Base url for Anilibria API, set if main Anilibria domain is unavailable, used to search torrents for Anilibria releases
+- NEXT_PUBLIC_TORAPI_API_URL - Base url for [torApi](https://github.com/Lifailon/TorAPI), used to search torrents for rutracker, rutor, kinozal, nonameclub
 
 ## Vercel
 

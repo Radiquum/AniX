@@ -7,6 +7,7 @@
 - NEXT_PUBLIC_SHARE_PREFIX ([anix-preview](https://github.com/AniX-org/anix-preview) суб-сервис, если был развёрнут, не указывайте, для использования официальной ссылки anixart "Поделится")
 - METADATA_BASE_URL (DEPRECATED: используйте anix-preview | установите значение на домен по которому будет доступен клиент, превью не будет работать, если требуется доступ с авторизацией перед заходом на сайт)
 - NEXT_PUBLIC_ANILIBRIA_API_URL - Ссылка на API Anilibria, заполняется если основной домен не доступен, используется для поиска торрентов анилибрии
+- NEXT_PUBLIC_TORAPI_API_URL - Ссылка на [torApi](https://github.com/Lifailon/TorAPI), используется для поиска торрентов rutracker, rutor, kinozal, nonameclub
 
 ## Vercel
 
