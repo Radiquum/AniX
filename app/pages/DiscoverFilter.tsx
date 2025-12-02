@@ -3,6 +3,7 @@
 import { ENDPOINTS } from "#/api/config";
 import { FilterDefault, tryCatchAPI } from "#/api/utils";
 import { FiltersModal } from "#/components/Discovery/Modal/FiltersModal";
+import { FloatingToolbar } from "#/components/FloatingToolbar/FloatingToolbar";
 import { ReleaseSection } from "#/components/ReleaseSection/ReleaseSection";
 import { Spinner } from "#/components/Spinner/Spinner";
 import { useScrollPosition } from "#/hooks/useScrollPosition";
@@ -35,7 +36,6 @@ export const DiscoverFilterPage = () => {
   const router = useRouter();
   const [filter, setFilter] = useState(null);
   const [content, setContent] = useState(null);
-  const [FooterH, setFooterH] = useState(null);
   const [FiltersModalOpen, setFiltersModalOpen] = useState(false);
 
   useEffect(() => {
@@ -55,9 +55,6 @@ export const DiscoverFilterPage = () => {
       setFilter(FilterDefault);
     }
 
-    if (window) {
-      setFooterH(document.querySelector("footer").clientHeight + 16);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,15 +122,14 @@ export const DiscoverFilterPage = () => {
           <Spinner />
         </div>
       : ""}
-      <Button
-        color="green"
-        pill
-        className="fixed bottom-[var(--header-height)] right-4"
-        style={{ "--header-height": `${FooterH}px` } as React.CSSProperties}
-        onClick={() => setFiltersModalOpen(true)}
-      >
-        <span className="flex-shrink-0 inline-block w-8 h-8 iconify mdi--mixer-settings"></span>
-      </Button>
+      <FloatingToolbar>
+        <Button
+          className="flex items-center justify-center px-4 py-2 transition-colors first:rounded-l-full last:rounded-r-full hover:bg-gray-300 hover:dark:bg-slate-500"
+          onClick={() => setFiltersModalOpen(true)}
+        >
+          <span className="flex-shrink-0 inline-block w-8 h-8 iconify mdi--mixer-settings"></span>
+        </Button>
+      </FloatingToolbar>
       <FiltersModal
         isOpen={FiltersModalOpen}
         setIsOpen={setFiltersModalOpen}
