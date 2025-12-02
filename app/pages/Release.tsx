@@ -191,7 +191,11 @@ export const ReleasePage = (props: any) => {
         <ShareButton
           text={`Смотреть '${data.release.title_ru || data.release.title_original} (${data.release.year || "?"}г.)' на Anixart`}
         />
-        <DownloadButton release_id={props.id} release_title={data.release.title_ru || data.release.title_original} />
+        <DownloadButton
+          release_id={props.id}
+          release_title_ru={data.release.title_ru}
+          release_title_en={data.release.title_original}
+        />
       </FloatingToolbar>
     </div>
   );

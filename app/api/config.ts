@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION = "3.10.1";
+export const CURRENT_APP_VERSION = "3.10.2";
 
 export const API_URL = "https://api-s.anixsekai.com";
 export const ANILIBRIA_API_URL = process.env.NEXT_PUBLIC_ANILIBRIA_API_URL || "https://anilibria.top";

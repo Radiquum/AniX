@@ -5,13 +5,19 @@ import { formatBytes } from "#/api/utils";
 import { Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { TabItem, Tabs } from "flowbite-react";
+import { Dropdown, DropdownItem } from "flowbite-react";
 
 type Props = {
   release_id: number;
-  release_title: string;
+  release_title_ru: string;
+  release_title_en: string;
 };
 
-export const DownloadButton = ({ release_id, release_title }: Props) => {
+export const DownloadButton = ({
+  release_id,
+  release_title_ru,
+  release_title_en,
+}: Props) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
@@ -22,39 +28,60 @@ export const DownloadButton = ({ release_id, release_title }: Props) => {
       >
         <span className="w-6 h-6 sm:w-8 sm:h-8 iconify mdi--download"></span>
       </button>
-      <Modal show={openModal} onClose={() => setOpenModal(false)} dismissible>
-        <ModalHeader>Загрузка релиза</ModalHeader>
-        <ModalBody>
-          <p className="text-xl font-bold">Торренты</p>
-          <Tabs variant="underline">
-            <TabItem active title="Anilibria">
-              <AnilibriaTorrentTab release_title={release_title} />
-            </TabItem>
-            <TabItem title="Rutracker">
-              <TorApiTorrentTab
-                release_title={release_title}
-                service="rutracker"
-              />
-            </TabItem>
-            <TabItem title="Rutor">
-              <TorApiTorrentTab release_title={release_title} service="rutor" />
-            </TabItem>
-            <TabItem title="Kinozal">
-              <TorApiTorrentTab
-                release_title={release_title}
-                service="kinozal"
-              />
-            </TabItem>
-            <TabItem title="NoNameClub">
-              <TorApiTorrentTab
-                release_title={release_title}
-                service="nonameclub"
-              />
-            </TabItem>
-          </Tabs>
-        </ModalBody>
-      </Modal>
+      <DownloadModal
+        release_title_ru={release_title_ru}
+        release_title_en={release_title_en}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
     </>
+  );
+};
+
+const DownloadModal = ({
+  release_title_ru,
+  release_title_en,
+  openModal,
+  setOpenModal,
+}) => {
+  const [releaseTitle, setReleaseTitle] = useState(release_title_ru);
+
+  return (
+    <Modal show={openModal} onClose={() => setOpenModal(false)} dismissible>
+      <ModalHeader>Поиск торрентов</ModalHeader>
+      <ModalBody>
+        <div className="flex items-center gap-2">
+          <span>Искать по:</span>
+          <Dropdown color={"blue"} size="sm" label={releaseTitle == release_title_ru ? "Русскому названию" : "Оригинальному названию"} dismissOnClick={true}>
+            <DropdownItem onClick={() => setReleaseTitle(release_title_ru)}>Русскому названию</DropdownItem>
+            <DropdownItem onClick={() => setReleaseTitle(release_title_en)}>Оригинальному названию</DropdownItem>
+          </Dropdown>
+        </div>
+        <Tabs variant="underline">
+          <TabItem active title="Anilibria">
+            <AnilibriaTorrentTab release_title={releaseTitle} />
+          </TabItem>
+          <TabItem title="Rutracker">
+            <TorApiTorrentTab
+              release_title={releaseTitle}
+              service="rutracker"
+            />
+          </TabItem>
+          <TabItem title="Rutor">
+            <TorApiTorrentTab release_title={releaseTitle} service="rutor" />
+          </TabItem>
+          <TabItem title="Kinozal">
+            <TorApiTorrentTab release_title={releaseTitle} service="kinozal" />
+          </TabItem>
+          <TabItem title="NoNameClub">
+            <TorApiTorrentTab
+              release_title={releaseTitle}
+              service="nonameclub"
+            />
+          </TabItem>
+        </Tabs>
+      </ModalBody>
+    </Modal>
   );
 };
 
@@ -329,8 +356,8 @@ const TorApiTorrentTab = ({
       {torApi.data.map((item: any) => {
         return (
           <TorrentItem
-            key={`rutracker-torrent-${item.Hash}`}
-            title={item.Name}
+            key={`torapi-torrent-${item.Hash}`}
+            title={item.Name || item.Files[0].Name}
             filename={item.Duration}
             codec={item.Video || null}
             quality={item.Quality || null}
