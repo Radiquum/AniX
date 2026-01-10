@@ -19,19 +19,13 @@ export const ProfileReleaseHistory = (props: any) => {
       <h1 className="text-2xl font-bold">Недавно просмотренные</h1>
       <div className="flex flex-col gap-4">
         {props.history.map((release) => {
-          const genres = [];
           const grade = release.grade ? Number(release.grade.toFixed(1)) : null;
           const profile_list_status = release.profile_list_status || null;
           let user_list = null;
           if (profile_list_status != null || profile_list_status != 0) {
             user_list = profile_lists[profile_list_status];
           }
-          if (release.genres) {
-            const genres_array = release.genres.split(",");
-            genres_array.forEach((genre) => {
-              genres.push(genre.trim());
-            });
-          }
+
           return (
             <Link href={`/release/${release.id}`} key={`history-${release.id}`}>
               <div className="flex gap-2">
@@ -44,27 +38,14 @@ export const ProfileReleaseHistory = (props: any) => {
                     user_list={user_list}
                     grade={grade}
                   />
-                  <div>
-                    {genres.length > 0 &&
-                      genres.map((genre: string, index: number) => {
-                        return (
-                          <span
-                            key={`release_${props.id}_genre_${genre}_${index}`}
-                            className="text-sm font-light dark:text-white"
-                          >
-                            {index > 0 && ", "}
-                            {genre}
-                          </span>
-                        );
-                      })}
-                  </div>
+                  <p className="line-clamp-1">{release.genres || ""}</p>
                   {release.title_ru && (
-                    <p className="text-lg font-bold dark:text-white">
+                    <p className="text-lg font-bold dark:text-white line-clamp-2">
                       {release.title_ru}
                     </p>
                   )}
                   {release.title_original && (
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="hidden text-sm text-gray-600 dark:text-gray-300 md:block">
                       {release.title_original}
                     </p>
                   )}

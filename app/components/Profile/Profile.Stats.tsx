@@ -118,14 +118,14 @@ export const ProfileStats = (props: {
               <span>
                 {props.preferred_genres.map((item, index) => {
                   return (
-                    <div key={`preferred-genres-${item.name}`} className="inline">
+                    <span key={`preferred-genres-${item.name}`} className="inline">
                       {index > 0 && ", "}
                       <ReleaseInfoSearchLink
                         title={item.name}
                         searchBy={"tag"}
                       />{" "}
                       <span className="text-sm text-gray-700 dark:text-gray-300">{item.percentage}%</span>
-                    </div>
+                    </span>
                   );
                 })}
               </span>
@@ -135,14 +135,14 @@ export const ProfileStats = (props: {
               <span>
                 {props.preferred_audiences.map((item, index) => {
                   return (
-                    <div key={`preferred-audiences-${item.name}`} className="inline">
+                    <span key={`preferred-audiences-${item.name}`} className="inline">
                       {index > 0 && ", "}
                       <ReleaseInfoSearchLink
                         title={item.name}
                         searchBy={"tag"}
                       />{" "}
                       <span className="text-sm text-gray-700 dark:text-gray-300">{item.percentage}%</span>
-                    </div>
+                    </span>
                   );
                 })}
               </span>
@@ -152,14 +152,14 @@ export const ProfileStats = (props: {
               <span>
                 {props.preferred_themes.map((item, index) => {
                   return (
-                    <div key={`preferred-themes-${item.name}`} className="inline">
+                    <span key={`preferred-themes-${item.name}`} className="inline">
                       {index > 0 && ", "}
                       <ReleaseInfoSearchLink
                         title={item.name}
                         searchBy={"tag"}
                       />{" "}
                       <span className="text-sm text-gray-700 dark:text-gray-300">{item.percentage}%</span>
-                    </div>
+                    </span>
                   );
                 })}
               </span>
