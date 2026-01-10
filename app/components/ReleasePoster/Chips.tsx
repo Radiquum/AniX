@@ -1,3 +1,4 @@
+import { stat } from "fs";
 import { Chip } from "../Chip/Chip";
 
 interface ChipProps {
@@ -12,6 +13,13 @@ interface ChipProps {
   is_favorite?: any;
   column?: any;
 }
+
+const STATUS_ID_TO_STR = {
+  0: null,
+  1: "Вышел",
+  2: "Выходит",
+  3: "Анонс",
+};
 
 export const ReleaseChips = ({
   settings,
@@ -37,6 +45,12 @@ export const ReleaseChips = ({
     ...settings,
   };
 
+  const status_name =
+    status_id != 0 ? STATUS_ID_TO_STR[status_id] : STATUS_ID_TO_STR[status.id];
+  const ep_rel = episodes_released || "?";
+  const ep_tot = episodes_total || "?";
+  const episode_count = `${ep_rel}${ep_rel == "?" ? "" : "/"}${ep_tot} эп.`;
+
   return (
     <div
       className={`${chipSettings.enabled ? "flex" : "hidden"} ${chipSettings.column ? "flex-col" : "flex-row"} gap-1 flex-wrap`}
@@ -58,26 +72,6 @@ export const ReleaseChips = ({
         />
       : ""}
 
-      {!chipSettings.statusHidden && status ?
-        <Chip name={status.name} />
-      : status_id != 0 && (
-          <Chip
-            name={
-              status_id == 1 ? "Завершено"
-              : status_id == 2 ?
-                "Онгоинг"
-              : status_id == 3 && "Анонс"
-            }
-          />
-        )
-      }
-      {!chipSettings.episodesHidden && (
-        <Chip
-          name={episodes_released && episodes_released}
-          name_2={episodes_total ? episodes_total + " эп." : "? эп."}
-          devider="/"
-        />
-      )}
       {!chipSettings.categoryHidden && category && (
         <Chip name={category.name} />
       )}
@@ -88,6 +82,17 @@ export const ReleaseChips = ({
         <div className="flex items-center justify-center bg-pink-500 rounded-sm">
           <span className="w-3 px-4 py-2.5 text-white sm:px-4 sm:py-3 xl:px-6 xl:py-4 iconify mdi--heart"></span>
         </div>
+      )}
+
+      {!chipSettings.statusHidden && status && (
+        <Chip
+          name={status_name}
+          name_2={
+            status_name == "Вышел" || status_name == "Анонс" ?
+              `${ep_tot} эп.`
+            : episode_count
+          }
+        />
       )}
     </div>
   );

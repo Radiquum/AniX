@@ -21,7 +21,9 @@ export const ReleaseSection = (props: {
                 <ReleaseLink
                   {...release}
                   lastWatchedHidden={
-                    props.sectionTitle.toLowerCase() != "история"
+                    props.sectionTitle ?
+                      props.sectionTitle.toLowerCase() != "история"
+                    : true
                   }
                 />
               </div>
