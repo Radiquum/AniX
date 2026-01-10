@@ -809,15 +809,25 @@ export function b64toBlob(
 }
 
 export function formatBytes(bytes, decimals = 2) {
-    if (!+bytes) return '0 Bytes'
+  if (!+bytes) return "0 Bytes";
 
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = [
+    "Bytes",
+    "KiB",
+    "MiB",
+    "GiB",
+    "TiB",
+    "PiB",
+    "EiB",
+    "ZiB",
+    "YiB",
+  ];
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 export function compare(a: string, b: string) {
@@ -840,4 +850,22 @@ export function splitVersionNumber(version: string) {
     minor: Number(versionArray[1] || 0),
     patch: Number(versionArray[2] || 0),
   };
+}
+
+export function getFixedGrade(grade: number | null) {
+  return grade ? Number(grade.toFixed(1)) : null;
+}
+
+const PROFILE_LISTS = {
+  0: null, // "Не смотрю",
+  1: { name: "Смотрю", bg_color: "bg-green-500" },
+  2: { name: "В планах", bg_color: "bg-purple-500" },
+  3: { name: "Просмотрено", bg_color: "bg-blue-500" },
+  4: { name: "Отложено", bg_color: "bg-yellow-500" },
+  5: { name: "Брошено", bg_color: "bg-red-500" },
+};
+
+export function getUserList(profile_list_status: number | null) {
+  if (!profile_list_status) return null;
+  return PROFILE_LISTS[profile_list_status];
 }

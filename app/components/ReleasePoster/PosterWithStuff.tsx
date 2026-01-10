@@ -1,15 +1,6 @@
 import { Poster } from "./Poster";
 import { ReleaseChips } from "./Chips";
-import { sinceUnixDate } from "#/api/utils";
-
-const profile_lists = {
-  // 0: "Не смотрю",
-  1: { name: "Смотрю", bg_color: "bg-green-500" },
-  2: { name: "В планах", bg_color: "bg-purple-500" },
-  3: { name: "Просмотрено", bg_color: "bg-blue-500" },
-  4: { name: "Отложено", bg_color: "bg-yellow-500" },
-  5: { name: "Брошено", bg_color: "bg-red-500" },
-};
+import { getFixedGrade, getUserList, sinceUnixDate } from "#/api/utils";
 
 export const PosterWithStuff = (props: {
   image: string;
@@ -47,7 +38,6 @@ export const PosterWithStuff = (props: {
   last_view_episode?: any;
   last_view_timestamp?: number;
 }) => {
-  const genres = [];
   const settings = {
     showGenres: true,
     showDescription: true,
@@ -55,18 +45,9 @@ export const PosterWithStuff = (props: {
   };
   const chipsSettings = props.chipsSettings || {};
 
-  const grade = props.grade ? Number(props.grade.toFixed(1)) : null;
+  const grade = getFixedGrade(props.grade);
   const profile_list_status = props.profile_list_status || null;
-  let user_list = null;
-  if (profile_list_status != null || profile_list_status != 0) {
-    user_list = profile_lists[profile_list_status];
-  }
-  if (props.genres) {
-    const genres_array = props.genres.split(",");
-    genres_array.forEach((genre) => {
-      genres.push(genre.trim());
-    });
-  }
+  const user_list = getUserList(profile_list_status);
 
   const showLastWatched =
     (!props.lastWatchedHidden && props.last_view_episode) || false;
@@ -104,19 +85,11 @@ export const PosterWithStuff = (props: {
       </div>
       <div className="absolute z-20 bottom-2 left-2 right-2 lg:translate-y-[100%] group-hover:lg:translate-y-0 transition-transform">
         <div className="lg:-translate-y-[calc(100%_+_1rem)] group-hover:lg:translate-y-0 transition-transform">
-          {settings.showGenres &&
-            genres.length > 0 &&
-            genres.map((genre: string, index: number) => {
-              return (
-                <span
-                  key={`release_${props.id}_genre_${genre}_${index}`}
-                  className="hidden font-light leading-none text-white transition-opacity group-hover:opacity-0 sm:inline md:text-sm lg:text-base xl:text-lg"
-                >
-                  {index > 0 && ", "}
-                  {genre}
-                </span>
-              );
-            })}
+          {settings.showGenres && (
+            <span className="hidden font-light leading-none text-white transition-opacity group-hover:opacity-0 sm:inline md:text-sm lg:text-base xl:text-lg">
+              {props.genres}
+            </span>
+          )}
           {props.title_ru && (
             <p className="text-xl font-bold !leading-none text-white md:text-2xl md:py-0 line-clamp-2">
               {props.title_ru}

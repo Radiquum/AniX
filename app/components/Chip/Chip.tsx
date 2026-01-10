@@ -9,7 +9,7 @@ export const Chip = (props: {
   className?: string;
 }) => {
   return (
-    <div className={`${props.bg_color || "bg-gray-500"} rounded-sm flex items-center justify-center ${props.className || ""} bg-opacity-80 backdrop-blur-sm max-w-fit`}>
+    <div className={`${props.bg_color || "bg-gray-500"} rounded-sm flex items-center justify-center ${props.className || ""} bg-opacity-80 backdrop-blur-sm`}>
       {props.icon_name && (
         <span
           className={`iconify w-4 h-4 sm:w-6 sm:h-6 ml-2 ${props.icon_name}`}

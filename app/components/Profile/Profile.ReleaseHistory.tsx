@@ -3,15 +3,7 @@ import { Card } from "flowbite-react";
 import { ReleaseChips } from "../ReleasePoster/Chips";
 import { Poster } from "../ReleasePoster/Poster";
 import Link from "next/link";
-
-const profile_lists = {
-  // 0: "Не смотрю",
-  1: { name: "Смотрю", bg_color: "bg-green-500" },
-  2: { name: "В планах", bg_color: "bg-purple-500" },
-  3: { name: "Просмотрено", bg_color: "bg-blue-500" },
-  4: { name: "Отложено", bg_color: "bg-yellow-500" },
-  5: { name: "Брошено", bg_color: "bg-red-500" },
-};
+import { getFixedGrade, getUserList } from "#/api/utils";
 
 export const ProfileReleaseHistory = (props: any) => {
   return (
@@ -19,12 +11,9 @@ export const ProfileReleaseHistory = (props: any) => {
       <h1 className="text-2xl font-bold">Недавно просмотренные</h1>
       <div className="flex flex-col gap-4">
         {props.history.map((release) => {
-          const grade = release.grade ? Number(release.grade.toFixed(1)) : null;
+          const grade = getFixedGrade(release.grade);
           const profile_list_status = release.profile_list_status || null;
-          let user_list = null;
-          if (profile_list_status != null || profile_list_status != 0) {
-            user_list = profile_lists[profile_list_status];
-          }
+          const user_list = getUserList(profile_list_status);
 
           return (
             <Link href={`/release/${release.id}`} key={`history-${release.id}`}>

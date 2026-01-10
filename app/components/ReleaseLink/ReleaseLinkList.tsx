@@ -1,15 +1,7 @@
 import Link from "next/link";
 import { Poster } from "../ReleasePoster/Poster";
 import { ReleaseChips } from "../ReleasePoster/Chips";
-
-const profile_lists = {
-  // 0: "Не смотрю",
-  1: { name: "Смотрю", bg_color: "bg-green-500" },
-  2: { name: "В планах", bg_color: "bg-purple-500" },
-  3: { name: "Просмотрено", bg_color: "bg-blue-500" },
-  4: { name: "Отложено", bg_color: "bg-yellow-500" },
-  5: { name: "Брошено", bg_color: "bg-red-500" },
-};
+import { getFixedGrade, getUserList } from "#/api/utils";
 
 export const ReleaseLinkList = (props: {
   image: string;
@@ -45,27 +37,16 @@ export const ReleaseLinkList = (props: {
   episodes_total?: string;
   is_favorite?: boolean;
 }) => {
-  const genres = [];
   const settings = {
     showGenres: true,
     showDescription: true,
     showOrigTitle: true,
     ...props.settings,
   };
-  const chipsSettings = props.chipsSettings || {};
 
-  const grade = props.grade ? Number(props.grade.toFixed(1)) : null;
+  const grade = getFixedGrade(props.grade);
   const profile_list_status = props.profile_list_status || null;
-  let user_list = null;
-  if (profile_list_status != null || profile_list_status != 0) {
-    user_list = profile_lists[profile_list_status];
-  }
-  if (props.genres) {
-    const genres_array = props.genres.split(",");
-    genres_array.forEach((genre) => {
-      genres.push(genre.trim());
-    });
-  }
+  const user_list = getUserList(profile_list_status);
 
   return (
     <Link href={`/release/${props.id}`}>
@@ -74,25 +55,13 @@ export const ReleaseLinkList = (props: {
           <Poster image={props.image} className="h-auto" />
         </div>
         <div className="flex flex-col gap-1">
-          <ReleaseChips
-            {...props}
-            user_list={user_list}
-            grade={grade}
-          />
+          <ReleaseChips {...props} user_list={user_list} grade={grade} />
           <div>
-            {settings.showGenres &&
-              genres.length > 0 &&
-              genres.map((genre: string, index: number) => {
-                return (
-                  <span
-                    key={`release_${props.id}_genre_${genre}_${index}`}
-                    className="text-sm font-light leading-none dark:text-white"
-                  >
-                    {index > 0 && ", "}
-                    {genre}
-                  </span>
-                );
-              })}
+            {settings.showGenres && (
+              <span className="text-sm font-light leading-none dark:text-white">
+                {props.genres}
+              </span>
+            )}
           </div>
           {props.title_ru && (
             <p className="text-lg font-bold line-clamp-2 dark:text-white">
