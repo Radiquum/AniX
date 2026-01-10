@@ -20,12 +20,9 @@ export const ReleaseSection = (props: {
               <div key={release.id} className="w-full h-full">
                 <ReleaseLink
                   {...release}
-                  chipsSettings={{
-                    enabled: true,
-                    lastWatchedHidden:
-                      props.sectionTitle &&
-                      props.sectionTitle.toLowerCase() != "история",
-                  }}
+                  lastWatchedHidden={
+                    props.sectionTitle.toLowerCase() != "история"
+                  }
                 />
               </div>
             );

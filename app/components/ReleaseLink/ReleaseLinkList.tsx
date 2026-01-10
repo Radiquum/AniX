@@ -32,7 +32,6 @@ export const ReleaseLinkList = (props: {
     episodesHidden?: boolean;
     listHidden?: boolean;
     favHidden?: boolean;
-    lastWatchedHidden?: boolean;
   };
   profile_list_status?: number;
   status?: {
@@ -79,7 +78,6 @@ export const ReleaseLinkList = (props: {
             {...props}
             user_list={user_list}
             grade={grade}
-            settings={{ lastWatchedHidden: false }}
           />
           <div>
             {settings.showGenres &&

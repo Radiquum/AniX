@@ -7,8 +7,7 @@ export const Poster = (props: {
 }) => {
   return (
     <Image
-      className={`object-cover rounded-lg shadow-md ${props.className}`}
-      // className="w-[285px] max-h-[385px] object-cover border border-gray-200 rounded-lg shadow-md dark:border-gray-700"
+      className={`object-cover rounded-lg shadow-md ${props.className} border border-gray-300 dark:border-gray-700`}
       src={props.image}
       alt={props.alt || ""}
       width={285}

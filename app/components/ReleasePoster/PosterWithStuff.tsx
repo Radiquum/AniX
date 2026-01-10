@@ -1,5 +1,6 @@
 import { Poster } from "./Poster";
 import { ReleaseChips } from "./Chips";
+import { sinceUnixDate } from "#/api/utils";
 
 const profile_lists = {
   // 0: "Не смотрю",
@@ -30,8 +31,8 @@ export const PosterWithStuff = (props: {
     episodesHidden?: boolean;
     listHidden?: boolean;
     favHidden?: boolean;
-    lastWatchedHidden?: boolean;
   };
+  lastWatchedHidden?: boolean;
   profile_list_status?: number;
   status?: {
     name: string;
@@ -43,6 +44,8 @@ export const PosterWithStuff = (props: {
   episodes_released?: string;
   episodes_total?: string;
   is_favorite?: boolean;
+  last_view_episode?: any;
+  last_view_timestamp?: number;
 }) => {
   const genres = [];
   const settings = {
@@ -50,7 +53,7 @@ export const PosterWithStuff = (props: {
     showDescription: true,
     ...props.settings,
   };
-  const chipsSettings = props.chipsSettings || {}
+  const chipsSettings = props.chipsSettings || {};
 
   const grade = props.grade ? Number(props.grade.toFixed(1)) : null;
   const profile_list_status = props.profile_list_status || null;
@@ -65,9 +68,33 @@ export const PosterWithStuff = (props: {
     });
   }
 
+  const showLastWatched =
+    (!props.lastWatchedHidden && props.last_view_episode) || false;
+
   return (
     <div className="relative w-full h-full overflow-hidden rounded-lg group">
-      <div className="absolute z-20 top-2 left-2 right-2">
+      {showLastWatched ?
+        <div className="px-2 pt-2 pb-4 text-xs text-gray-700 bg-gray-100 border border-gray-300 rounded-t-lg dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 iconify mdi--clock-outline"></span>
+            <p className="line-clamp-1">
+              {props.last_view_timestamp &&
+                sinceUnixDate(props.last_view_timestamp)}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 iconify mdi--local-movies"></span>
+            <p className="line-clamp-1">
+              {props.last_view_episode.name ?
+                props.last_view_episode.name
+              : `${props.last_view_episode.position + 1} серия`}
+            </p>
+          </div>
+        </div>
+      : ""}
+      <div
+        className={`absolute z-20 ${showLastWatched ? "top-14" : "top-2"} left-2 right-2`}
+      >
         <ReleaseChips
           {...props}
           user_list={user_list}
@@ -110,7 +137,7 @@ export const PosterWithStuff = (props: {
       <div className="absolute w-full h-full rounded-b-lg bg-gradient-to-t from-black to-transparent"></div>
       <Poster
         image={props.image}
-        className="w-auto h-auto min-w-full min-h-full flex-grow-1"
+        className={`w-auto h-auto min-w-full min-h-full ${showLastWatched ? "-mt-2" : ""} flex-grow-1`}
       ></Poster>
     </div>
   );

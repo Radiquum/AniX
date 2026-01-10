@@ -1,4 +1,3 @@
-import { sinceUnixDate } from "#/api/utils";
 import { Chip } from "../Chip/Chip";
 
 interface ChipProps {
@@ -11,8 +10,6 @@ interface ChipProps {
   episodes_total?: any;
   category?: any;
   is_favorite?: any;
-  last_view_episode?: any;
-  last_view_timestamp?: any;
   column?: any;
 }
 
@@ -26,9 +23,7 @@ export const ReleaseChips = ({
   episodes_total,
   category,
   is_favorite,
-  last_view_episode,
-  last_view_timestamp,
-  column
+  column,
 }: ChipProps) => {
   const chipSettings = {
     enabled: true,
@@ -38,7 +33,6 @@ export const ReleaseChips = ({
     episodesHidden: false,
     listHidden: false,
     favHidden: false,
-    lastWatchedHidden: true,
     column: false,
     ...settings,
   };
@@ -94,17 +88,6 @@ export const ReleaseChips = ({
         <div className="flex items-center justify-center bg-pink-500 rounded-sm">
           <span className="w-3 px-4 py-2.5 text-white sm:px-4 sm:py-3 xl:px-6 xl:py-4 iconify mdi--heart"></span>
         </div>
-      )}
-      {!chipSettings.lastWatchedHidden && last_view_episode && (
-        <Chip
-          name={
-            last_view_episode.name ?
-              last_view_episode.name
-            : `${last_view_episode.position + 1} серия`
-          }
-          name_2={last_view_timestamp && sinceUnixDate(last_view_timestamp)}
-          devider=", "
-        />
       )}
     </div>
   );

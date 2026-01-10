@@ -21,8 +21,8 @@ export const ReleaseLink = (props: {
     episodesHidden?: boolean;
     listHidden?: boolean;
     favHidden?: boolean;
-    lastWatchedHidden?: boolean;
   };
+  lastWatchedHidden?: boolean;
   profile_list_status?: number;
   status?: {
     name: string;

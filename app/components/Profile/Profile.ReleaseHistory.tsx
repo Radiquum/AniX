@@ -43,7 +43,6 @@ export const ProfileReleaseHistory = (props: any) => {
                     {...release}
                     user_list={user_list}
                     grade={grade}
-                    settings={{ lastWatchedHidden: false }}
                   />
                   <div>
                     {genres.length > 0 &&
