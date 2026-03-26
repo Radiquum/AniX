@@ -20,9 +20,26 @@ import { PosterWithStuff } from "#/components/ReleasePoster/PosterWithStuff";
 import { CropModal } from "#/components/CropModal/CropModal";
 import { b64toBlob, tryCatchAPI } from "#/api/utils";
 
-import { useSWRfetcher } from "#/api/utils";
 import { Spinner } from "#/components/Spinner/Spinner";
 import { toast } from "react-toastify";
+
+const postFetcher = async (url: string, payload: string) => {
+  const { data, error } = await tryCatchAPI(
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Api-Version": "v2",
+        "Content-Type": "application/json",
+      },
+      body: payload,
+    })
+  );
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};
 
 export const CreateCollectionPage = () => {
   const userStore = useUserStore();
@@ -517,16 +534,13 @@ export const ReleasesEditModal = (props: {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.releases.length) return null;
 
-    const url = new URL("/api/search", window.location.origin);
-    url.searchParams.set("page", pageIndex.toString());
-    if (!query) return null;
-    url.searchParams.set("q", query);
-    return url.toString();
+    const url = `${ENDPOINTS.search.releases}/${pageIndex}`
+    return [url, JSON.stringify({ query, searchBy: 0 })]
   };
 
   const { data, error, isLoading, size, setSize } = useSWRInfinite(
     getKey,
-    useSWRfetcher,
+    ([url, payload]) => postFetcher(url, payload),
     { initialSize: 2, revalidateFirstPage: false }
   );
 
@@ -684,3 +698,4 @@ export const ReleasesEditModal = (props: {
     </Modal>
   );
 };
+

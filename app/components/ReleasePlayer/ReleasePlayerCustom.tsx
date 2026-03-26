@@ -153,6 +153,8 @@ export const ReleasePlayerCustom = (props: {
 
   useEffect(() => {
     const __getInfo = async () => {
+      const hostname = new URL(episode.selected.url).hostname;
+
       if (source.selected.name == "Kodik") {
         const { manifest, poster } = await _fetchKodikManifest(
           episode.selected.url,
@@ -167,7 +169,8 @@ export const ReleasePlayerCustom = (props: {
         }
         return;
       }
-      if (["Libria", "Liberty"].includes(source.selected.name)) {
+      // if (["Libria", "Liberty", "Liberty (работает нестабильно)"].includes(source.selected.name)) {
+      if (["anixart.libria.fun"].includes(hostname)) {
         const { manifest, poster } = await _fetchAnilibriaManifest(
           episode.selected.url,
           setPlayerError
@@ -181,7 +184,8 @@ export const ReleasePlayerCustom = (props: {
         }
         return;
       }
-      if (source.selected.name == "Sibnet") {
+      // if (source.selected.name == "Sibnet") {
+      if (["video.sibnet.ru"].includes(hostname)) {
         const { manifest, poster } = await _fetchSibnetManifest(
           episode.selected.url,
           setPlayerError
