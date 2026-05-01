@@ -46,7 +46,7 @@ export const ReleaseChips = ({
   };
 
   const status_name =
-    status_id != 0 ? STATUS_ID_TO_STR[status_id] : STATUS_ID_TO_STR[status.id];
+    status_id != 0 ? STATUS_ID_TO_STR[status_id] : status ? STATUS_ID_TO_STR[status.id] : null;
   const ep_rel = episodes_released || "?";
   const ep_tot = episodes_total || "?";
   const episode_count = `${ep_rel}${ep_rel == "?" ? "" : "/"}${ep_tot} эп.`;
